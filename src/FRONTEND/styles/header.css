@@ -1,0 +1,45 @@
+.navbar {
+  background-color: #000;
+  border-bottom: 3px solid #d4af37;
+  padding: 15px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 20px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  letter-spacing: 2px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.navbar #Logo {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #d4af37;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navbar #Logo:hover {
+  text-shadow: 0 0 15px #d4af37, 0 0 15px #d4af37;
+}
+
+.navbar ul{
+  list-style: none;
+  text-decoration: none;
+  display: flex;
+  gap: 30px;
+}
+
+.navbar li {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.navbar li:hover {
+  color: #030000;
+  text-shadow: 0 0 15px #d4af37, 0 0 30px #d4af37;
+  transform: scale(1.05);
+}

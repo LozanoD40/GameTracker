@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Uncial+Antiqua&family=Crimson+Text:wght@400;700&display=swap');
+
+/* Estilos base del body */
+.perfil-aventurero-cuerpo {
+  background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+  font-family: 'Crimson Text', serif;
+}
+
+/* Estilo gótico para títulos principales */
+.titulo-gotico {
+  font-family: 'Cinzel Decorative', serif;
+  text-shadow: 0 0 5px #d4af37;
+  font-weight: 700;
+  color: #ffd700; /* Oro brillante */
+}
+
+/* Estilos para enlaces y botones que usan clases CSS definidas */
+.link {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #d4af37;
+}
+.button {
+    /* Imita el estilo base que me proporcionaste */
+    background: linear-gradient(90deg, #1a1a1a, #000);
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.button:hover {
+    background-color: #d4af37;
+    color: #000;
+    box-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37;
+}
+
+
+/* Clases de elementos de juego para simular texturas (CORREGIDAS) */
+.metal-forjado {
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+    border: 3px solid #d4af37;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+.pergamino-antiguo {
+    background: radial-gradient(circle, #382c16 0%, #1e170c 100%);
+    border: 2px solid #5a4b2b;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+}
+.madera-tallada {
+    background: linear-gradient(180deg, #2b1c00, #180e00);
+    border: 3px ridge #5c4521;
+}
+.cinta-herladica {
+    background: linear-gradient(to right, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+    color: #1a1a1a;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    font-family: 'Cinzel Decorative', serif;
+}

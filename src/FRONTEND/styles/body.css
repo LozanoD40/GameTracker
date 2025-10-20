@@ -1,0 +1,107 @@
+body {
+  font-family: 'Crimson Text', serif;
+  background-color: #0b0b0b;
+  background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+  background-repeat: repeat;
+  color: #d4af37;
+  text-align: center;
+}
+
+/* =========================
+   BOTONES - estilo medieval
+========================= */
+.button {
+  background: linear-gradient(90deg, #1a1a1a, #000);
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: #d4af37;
+  color: #000;
+  box-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37;
+}
+
+/* =========================
+   CARDS - estilo pergamino
+========================= */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 50px;
+}
+
+.card {
+  background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+  border: 3px solid #d4af37;
+  border-radius: 12px;
+  padding: 25px;
+  width: 250px;
+  height: 320px;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  position: relative;
+  outline: 1px solid #fff2;
+  outline-offset: -10px;
+  transition: 0.3s;
+}
+
+.card::before {
+  content: '⚔';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #d4af37;
+  font-size: 22px;
+  font-family: 'Uncial Antiqua', serif;
+}
+
+.card::after {
+  content: '⚔';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #d4af37;
+  font-size: 22px;
+  font-family: 'Uncial Antiqua', serif;
+}
+
+.card h3 {
+  margin-bottom: 15px;
+  font-family: 'Cinzel Decorative', serif;
+  color: #d4af37;
+}
+
+/* Animación de brillo */
+
+.card:hover {
+  animation: glow 2s infinite;
+  transform: scale(1.03);
+}
+
+/* =========================
+   ENLACES Y TEXTO
+========================= */
+.link {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px #d4af37;
+}
