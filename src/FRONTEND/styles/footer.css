@@ -1,8 +1,15 @@
 .footer {
-  border-top: 2px solid #d4af37;
-  padding: 20px;
-  font-size: 16px;
-  background-color: #000;
-  color: #d4af37;
-  text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+  border-top: var(--border-width-normal) solid var(--color-border);
+  padding: var(--padding-footer);
+  font-size: var(--font-size-footer);
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-primary);
+  text-shadow: var(--text-shadow-footer);
+  font-family: var(--font-main);
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }

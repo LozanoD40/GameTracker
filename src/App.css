@@ -3,12 +3,13 @@
 @import url('./FRONTEND/styles/footer.css');
 @import url('./FRONTEND/styles/perfil.css');
 
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-/* Tipografías */
+
+/* Tipografías usada*/
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Uncial+Antiqua&family=Crimson+Text&display=swap');
 
 @keyframes glow {
@@ -20,3 +21,66 @@
     box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
   }
 }
+
+:root {
+  /* Colores */
+  --color-bg-main: #0b0b0b; /* Fondo general del body */
+  --color-bg-secondary: #1a1a1a; /* Fondos degradados o secundarios */
+  --color-bg-accent: #000; /* Fondo de navbar y footer */
+  --color-text-primary: #d4af37; /* Dorado medieval */
+  --color-text-secondary: #fff; /* Blanco para hover o contraste */
+  --color-border: #d4af37; /* Borde principal dorado */
+  --color-outline: #fff2; /* Outline sutil */
+  --color-bg: #0b0b0b;
+  --color-bg-alt: #1a1a1a;
+  --color-text-hover: #fff;
+
+  /*Tipografía*/
+  --font-main: 'Crimson Text', serif; /* Texto general */
+  --font-title: 'Cinzel Decorative', serif; /* Títulos y logo */
+  --font-ornament: 'Uncial Antiqua', serif; /* Iconos o detalles decorativos */
+
+  /*Tamaños de texto*/
+  --font-size-navbar: 20px;
+  --font-size-logo: 30px;
+  --font-size-body: 18px;
+  --font-size-footer: 16px;
+  --font-size-card: 18px;
+  --icon-size: 22px;
+
+  /*Espaciado*/
+  --padding-navbar: 15px 30px;
+  --padding-footer: 20px;
+  --padding-card: 25px;
+  --gap-navbar: 30px;
+  --gap-cards: 25px;
+  --padding-button: 10px 20px;
+  --padding-section: 50px;
+  --gap-lg: 25px;
+
+  /*Bordes*/
+  --border-width-thick: 3px;
+  --border-width-normal: 2px;
+  --border-radius-small: 8px;
+  --border-radius-card: 12px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /*Sombras y efectos*/
+  --box-shadow-navbar: 0 0 15px rgba(212, 175, 55, 0.3);
+  --box-shadow-card: 0 0 20px rgba(212, 175, 55, 0.2);
+  --text-shadow-gold: 0 0 10px rgba(212, 175, 55, 0.6);
+  --text-shadow-footer: 0 0 5px rgba(212, 175, 55, 0.4);
+  --shadow-card: 0 0 20px rgba(212, 175, 55, 0.2);
+  --shadow-glow: 0 0 10px #d4af37, 0 0 20px #d4af37;
+  --text-shadow-hover: 0 0 10px #d4af37;
+
+  /*Transiciones y animaciones*/
+  --transition-fast: 0.3s;
+  --transition-medium: 0.5s;
+
+  /*Otros*/
+  --container-padding: 50px;
+  --bg-pattern: url('./assets/dark-mosaic.png');
+}
+
