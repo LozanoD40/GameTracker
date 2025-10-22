@@ -2,6 +2,9 @@
 @import url('./FRONTEND/styles/header.css');
 @import url('./FRONTEND/styles/footer.css');
 @import url('./FRONTEND/styles/perfil.css');
+@import url('./FRONTEND/styles/SliderCarruselPrincipal.css');
+@import url('./FRONTEND/styles/SliderCarruselSecundario.css');
+@import url('./FRONTEND/styles/CardJuego.css');
 
 *{
   margin: 0;
@@ -71,9 +74,10 @@
   --box-shadow-card: 0 0 20px rgba(212, 175, 55, 0.2);
   --text-shadow-gold: 0 0 10px rgba(212, 175, 55, 0.6);
   --text-shadow-footer: 0 0 5px rgba(212, 175, 55, 0.4);
+  --text-shadow-hover: 0 0 10px #d4af37;
   --shadow-card: 0 0 20px rgba(212, 175, 55, 0.2);
   --shadow-glow: 0 0 10px #d4af37, 0 0 20px #d4af37;
-  --text-shadow-hover: 0 0 10px #d4af37;
+
 
   /*Transiciones y animaciones*/
   --transition-fast: 0.3s;

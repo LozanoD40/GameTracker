@@ -7,9 +7,7 @@
   text-shadow: var(--text-shadow-footer);
   font-family: var(--font-main);
   text-align: center;
-  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
 }

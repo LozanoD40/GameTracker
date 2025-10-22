@@ -1,0 +1,103 @@
+.slider-categoria {
+  margin: 50px 0;
+  position: relative;
+  width: 100%;
+}
+
+.titulo-categoria {
+  font-family: var(--font-title);
+  color: var(--color-text-primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.contenedor-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  /* Añadimos estas propiedades */
+  width: fit-content;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.card-juego {
+  min-width: calc(25% - 10px); /* Ajustamos el ancho para considerar el gap */
+  flex-shrink: 0; /* Evita que las tarjetas se compriman */
+  background-color: var(--color-bg-alt);
+  border: var(--border-width-normal) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.portada {
+  width: 100%;
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+}
+
+.titulo {
+  padding: 10px;
+  text-align: center;
+  font-family: var(--font-main);
+  color: var(--color-text-primary);
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-bg-accent);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  z-index: 10;
+}
+
+.nav-btn:hover {
+  background: var(--color-text-primary);
+  color: var(--color-bg-accent);
+}
+
+.nav-btn.izquierda {
+  left: 0;
+}
+
+.nav-btn.derecha {
+  right: 0;
+}
+
+.botones-categorias {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.categoria-btn {
+  background: var(--color-bg-alt);
+  color: var(--color-text-primary);
+  border: var(--border-width-normal) solid var(--color-border);
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+}
+
+.categoria-btn.activo {
+  background: var(--color-text-primary);
+  color: var(--color-bg-alt);
+}
