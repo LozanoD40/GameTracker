@@ -1,3 +1,5 @@
+import './FRONTEND/styles/CardJuego.css'
+
 function CardJuego({ juego }) {
   return (
     <div className="card-juego">

@@ -1,11 +1,4 @@
 @import url('./FRONTEND/styles/body.css');
-@import url('./FRONTEND/styles/header.css');
-@import url('./FRONTEND/styles/footer.css');
-@import url('./FRONTEND/styles/perfil.css');
-@import url('./FRONTEND/styles/biblioteca.css');
-@import url('./FRONTEND/styles/SliderCarruselPrincipal.css');
-@import url('./FRONTEND/styles/SliderCarruselSecundario.css');
-@import url('./FRONTEND/styles/CardJuego.css');
 
 *{
   margin: 0;
@@ -46,7 +39,6 @@
 
   /*Tamaños de texto*/
   --font-size-navbar: 20px;
-  --font-size-logo: 30px;
   --font-size-body: 18px;
   --font-size-footer: 16px;
   --font-size-card: 18px;

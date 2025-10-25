@@ -1,11 +1,9 @@
-import Headers from '../componentes/componente_General/header'
-import Footer from '../componentes/componente_General/footer'
+import './../styles/perfil.css'
 
 function Perfil() {
   return (
     <>
-      <Headers />
-      <Footer />
+
     </>
   )
 }

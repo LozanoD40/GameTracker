@@ -1,11 +1,31 @@
+import './../../styles/header.css'
 import { Link } from 'react-router-dom'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 function Headers() {
   const [open, setOpen] = useState(false)
+  const navRef = useRef(null)
+
+  // cerrar con ESC y clic fuera
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    function onClickOutside(e) {
+      if (open && navRef.current && !navRef.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onClickOutside)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onClickOutside)
+    }
+  }, [open])
 
   return (
-    <div>
+    <div ref={navRef}>
       <nav className={`navbar ${open ? 'nav-open' : ''}`}>
         <div className="logo">
           <Link to="/" id="Logo" onClick={() => setOpen(false)}>

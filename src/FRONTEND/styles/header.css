@@ -1,3 +1,4 @@
+/* ---------- NAVBAR BASE ---------- */
 .navbar {
   background-color: var(--color-bg-accent);
   border-bottom: var(--border-width-thick) solid var(--color-border);
@@ -11,11 +12,13 @@
   letter-spacing: 2px;
   box-shadow: var(--box-shadow-navbar);
   font-family: var(--font-title);
+  position: relative;
+  z-index: 10;
 }
 
 .navbar #Logo {
   font-family: var(--font-title);
-  font-size: var(--font-size-logo);
+  font-size: clamp(16px, 4vw, 30px);
   font-weight: bold;
   color: var(--color-text-primary);
   text-shadow: var(--text-shadow-gold);
@@ -29,27 +32,31 @@
     0 0 15px var(--color-text-primary);
 }
 
-.navbar ul {
+/* ---------- LINKS (desktop) ---------- */
+.nav-links {
   list-style: none;
-  text-decoration: none;
   display: flex;
   gap: var(--gap-navbar);
+  margin: 0;
+  padding: 0;
 }
 
-.navbar li {
+.navbar .boton-gremio {
   cursor: pointer;
   transition: var(--transition-fast);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   font-family: var(--font-main);
+  text-decoration: none;
 }
 
-.navbar li:hover {
+.navbar .boton-gremio:hover {
   color: var(--color-text-secondary);
   text-shadow: 0 0 15px var(--color-text-primary),
     0 0 30px var(--color-text-primary);
   transform: scale(1.05);
 }
 
+/* ---------- HAMBURGER ---------- */
 .hamburger {
   display: none;
   background: transparent;
@@ -63,6 +70,7 @@
   gap: 6px;
   cursor: pointer;
   z-index: 50;
+  position: relative;
 }
 
 .hamburger span {
@@ -84,20 +92,13 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
-  .navbar {
-    padding: var(--padding-navbar);
-    position: relative;
-  }
-
   .hamburger {
     display: flex;
   }
 
-  .navbar ul {
-    display: none; 
-  }
-
+  /* Ocultar menú por defecto */
   .nav-links {
     display: none;
     position: absolute;
@@ -114,6 +115,7 @@
     z-index: 40;
   }
 
+  /* Mostrar menú al abrir */
   .nav-links.open {
     display: flex;
   }
@@ -134,9 +136,11 @@
     color: var(--color-text-primary);
   }
 
+  /* Asegura que el logo y el botón no se tapen */
   .navbar .logo {
     display: flex;
     align-items: center;
     gap: 8px;
+    z-index: 60;
   }
 }

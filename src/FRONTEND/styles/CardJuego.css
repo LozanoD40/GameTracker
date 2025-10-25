@@ -17,9 +17,9 @@
   background-position: center;
 }
 
-.titulo {
+.titulo-categoria {
   padding: 10px;
   text-align: center;
-  font-family: var(--font-main);
+  font-family: clamp(8px, 2vw, 16px);
   color: var(--color-text-primary);
 }

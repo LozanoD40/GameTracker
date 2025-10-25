@@ -1,4 +1,5 @@
 import SliderCategoria from './SliderCategoria'
+import './../../styles/SliderCarruselSecundario.css'
 import Fornite from '../componente_General/Portadas/Fortnite.jpg'
 import callOfDuty from '../componente_General/Portadas/Call_of_Duty.jpg'
 import Starcraft_2 from '../componente_General/Portadas/Starcraft_2.jpeg'

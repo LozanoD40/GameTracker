@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import './../../styles/SliderCarruselPrincipal.css'
 import callOfDuty from '../componente_General/Portadas/Call_of_Duty.jpg'
 import fortnite from '../componente_General/Portadas/Fortnite.jpg'
 import World_of_Warcraft from '../componente_General/Portadas/World_of_Warcraft.png'
