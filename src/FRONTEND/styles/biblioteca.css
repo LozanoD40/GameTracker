@@ -1,0 +1,257 @@
+/* Contenedor general */
+.biblioteca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(12px, 2.5vw, 32px);
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--color-text-primary);
+  font-family: var(--font-main);
+}
+
+/* Encabezado */
+.biblioteca header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.biblioteca header h1 {
+  font-family: var(--font-title);
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  margin-bottom: 0.25rem;
+}
+
+/* Texto descriptivo */
+.biblioteca .descripcion {
+  text-align: center;
+  width: 100%;
+  color: var(--color-text-secondary);
+}
+
+/* Barra de búsqueda */
+.biblioteca .busqueda {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 720px;
+  align-items: center;
+}
+.biblioteca .busqueda input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--border-radius-small);
+  border: var(--border-width-normal) solid rgba(212,175,55,0.08);
+  background: var(--color-bg-alt);
+  color: var(--color-text-primary);
+  transition: box-shadow var(--transition-fast);
+}
+.biblioteca .busqueda input:focus {
+  outline: none;
+  box-shadow: var(--shadow-card);
+  border-color: var(--color-border);
+}
+.biblioteca .busqueda button {
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-primary);
+  border: var(--border-width-normal) solid var(--color-border);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+.biblioteca .busqueda button:hover { transform: translateY(-2px); }
+
+/* Filtros (details) */
+.biblioteca details {
+  width: 100%;
+  max-width: 720px;
+  border: var(--border-width-normal) solid rgba(212,175,55,0.06);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+}
+.biblioteca summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.biblioteca .contenido-filtros {
+  margin-top: 0.6rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+/* Botones de géneros */
+.biblioteca .grupo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.biblioteca .grupo-botones button {
+  padding: 0.38rem 0.6rem;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid rgba(212,175,55,0.08);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.biblioteca .grupo-botones button.activo,
+.biblioteca .grupo-botones button:hover {
+  background: rgba(212,175,55,0.08);
+  transform: translateY(-2px);
+}
+
+/* Nuevo: estilo para mostrar claramente géneros excluidos */
+.biblioteca .grupo-botones button.excluir {
+  background: rgba(220,80,80,0.12); /* tono rojo suave para excluir */
+  border-color: rgba(220,80,80,0.2);
+  color: rgba(255,200,200,0.95);
+  transform: translateY(-2px);
+}
+
+/* Mantener contraste al hacer hover sobre un botón marcado como excluir */
+.biblioteca .grupo-botones button.excluir:hover {
+  background: rgba(220,80,80,0.16);
+}
+
+/* accesibilidad / foco */
+.biblioteca .grupo-botones button:focus {
+  outline: 2px solid rgba(212,175,55,0.14);
+  outline-offset: 2px;
+}
+
+/* Acciones de filtros */
+.biblioteca .acciones-filtros {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.biblioteca .acciones-filtros button {
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid rgba(212,175,55,0.08);
+  cursor: pointer;
+}
+
+/* Cuadrícula de juegos */
+.biblioteca .grid-juegos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: clamp(10px, 2vw, 20px);
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 0.6rem;
+}
+
+/* Tarjeta de juego */
+.biblioteca .juego {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  border: var(--border-width-normal) solid rgba(212,175,55,0.06);
+  border-radius: var(--border-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+.biblioteca .juego:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--box-shadow-card);
+}
+
+/* Imagen de portada */
+.biblioteca .juego-imagen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+}
+.biblioteca .juego-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botón wishlist (sobre la imagen) */
+.biblioteca .wishlist-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.45);
+  color: var(--color-text-primary);
+  border: 1px solid rgba(212,175,55,0.12);
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.biblioteca .wishlist-btn.activo {
+  background: linear-gradient(90deg, rgba(212,175,55,0.18), rgba(212,175,55,0.06));
+  color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+/* Información y acciones */
+.biblioteca .juego-info {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.biblioteca .juego-info h3 {
+  font-size: 1rem;
+  margin: 0;
+  font-family: var(--font-main);
+  color: var(--color-text-primary);
+}
+.biblioteca .juego-info p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(212,175,55,0.85);
+}
+.biblioteca .acciones-juego {
+  margin-top: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+.biblioteca .acciones-juego button {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.06);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.biblioteca .acciones-juego button:first-child {
+  background: rgba(212,175,55,0.06);
+}
+
+/* Mensajes */
+.biblioteca .sin-resultados {
+  padding: 1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .biblioteca {
+    padding: clamp(10px, 3vw, 18px);
+  }
+  .biblioteca .grid-juegos {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .biblioteca .busqueda { flex-direction: column; align-items: stretch; }
+  .biblioteca details, .biblioteca .busqueda { max-width: 100%; }
+  .biblioteca .grid-juegos { gap: 10px; grid-template-columns: 1fr; }
+  .biblioteca .juego-imagen { aspect-ratio: 16/9; }
+  .biblioteca .wishlist-btn { top: 6px; right: 6px; padding: 5px 6px; }
+}

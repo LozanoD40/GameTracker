@@ -5,6 +5,9 @@ body {
   background-repeat: repeat;
   color: var(--color-text-primary);
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* CARDS - estilo pergamino */
@@ -14,6 +17,7 @@ body {
   justify-content: center;
   gap: var(--gap-lg);
   padding: var(--padding-section);
+  margin: 0 auto;
 }
 
 /* Animación de brillo */
@@ -21,4 +25,3 @@ body {
   animation: glow 2s infinite;
   transform: scale(1.03);
 }
-

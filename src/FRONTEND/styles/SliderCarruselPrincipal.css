@@ -1,40 +1,49 @@
 .slider-carrusel {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 90vh;
   overflow: hidden;
-  display: flex;
+  display: block;
+  align-items: center;
+  box-sizing: border-box;  
+  padding-inline: clamp(12px, 3.5vw, 64px);
 }
 
 .slide {
-  min-width: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
+  overflow: hidden;
   background-size: cover;
   background-position: center;
   transition: transform 1s ease;
   opacity: 0;
   transform: scale(1.05);
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .slide.activo {
   opacity: 1;
   transform: scale(1);
-  z-index: 1;
+  z-index: 2;
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.6);
-  color: var(--color-border);
-  height: 100%;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .overlay h2 {
@@ -43,6 +52,10 @@
   text-shadow: 0 0 8px var(--color-border);
   font-size: 2.5rem;
   margin-bottom: 15px;
+}
+
+.overlay .button {
+  pointer-events: auto;
 }
 
 .overlay .button:hover {
@@ -54,15 +67,21 @@
 
 .nav-btn {
   position: absolute;
-  z-index: 10;
   top: 50%;
   background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  font-size: 2rem;
   cursor: pointer;
-  padding: 10px 15px;
+  border: none;
+  z-index: 10;
+  color: var(--color-text-secondary);
+  font-size: clamp(1rem, 2.2vw, 1.8rem);
+  padding: clamp(8px, 1.6vw, 14px);
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-sizing: content-box;
+  
 }
 
 .nav-btn:hover {
@@ -70,9 +89,26 @@
 }
 
 .nav-btn.izquierda {
-  left: 25px;
+  left: clamp(8px, 2.2vw, 60px);
 }
 
 .nav-btn.derecha {
-  right: 25px;
+  right: clamp(8px, 2.2vw, 60px);
+}
+
+@media (max-width: 480px) {
+  .nav-btn {
+    font-size: 1.1rem;
+    padding: 6px;
+  }
+  .nav-btn.izquierda {
+    left: 6px;
+  }
+  .nav-btn.derecha {
+    right: 6px;
+  }
+  .slider-carrusel {
+    height: 50vh;
+    padding-inline: 8px; 
+  }
 }
