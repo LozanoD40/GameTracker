@@ -1,4 +1,3 @@
-/* ---------- NAVBAR BASE ---------- */
 .navbar {
   background-color: var(--color-bg-accent);
   border-bottom: var(--border-width-thick) solid var(--color-border);
@@ -32,7 +31,6 @@
     0 0 15px var(--color-text-primary);
 }
 
-/* ---------- LINKS (desktop) ---------- */
 .nav-links {
   list-style: none;
   display: flex;
@@ -41,18 +39,34 @@
   padding: 0;
 }
 
+/* ---------- PERFIL Y BOTONES ---------- */
 .navbar .boton-gremio {
   cursor: pointer;
   transition: var(--transition-fast);
   color: var(--color-text-secondary);
   font-family: var(--font-main);
   text-decoration: none;
+  background: none;
+  border: none;
+
+  display: inline-flex; /* ✅ Alinea texto + icono */
+  align-items: center;
+  gap: 6px; /* ✅ Espacio entre texto e ícono */
+  font-size: 1rem;
 }
 
+.navbar .boton-gremio img.img-Icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  object-fit: cover;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* Hover: consistente entre botón y link */
 .navbar .boton-gremio:hover {
-  color: var(--color-text-secondary);
-  text-shadow: 0 0 15px var(--color-text-primary),
-    0 0 30px var(--color-text-primary);
+  color: var(--color-text-primary);
+  text-shadow: 0 0 10px var(--color-text-primary);
   transform: scale(1.05);
 }
 
@@ -92,7 +106,6 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
   .hamburger {
     display: flex;
@@ -111,11 +124,10 @@
     gap: 0;
     padding: 8px 6px;
     width: 220px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
     z-index: 40;
   }
 
-  /* Mostrar menú al abrir */
   .nav-links.open {
     display: flex;
   }
@@ -126,17 +138,19 @@
   }
 
   .nav-links li + li {
-    border-top: 1px solid rgba(212,175,55,0.06);
+    border-top: 1px solid rgba(212, 175, 55, 0.06);
   }
 
   .nav-links .boton-gremio {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     width: 100%;
+    padding: 8px 10px;
     text-decoration: none;
     color: var(--color-text-primary);
   }
 
-  /* Asegura que el logo y el botón no se tapen */
   .navbar .logo {
     display: flex;
     align-items: center;

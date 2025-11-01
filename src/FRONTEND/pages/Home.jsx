@@ -1,5 +1,5 @@
-import SliderCarruselPrincipal from '../componentes/componente_Home/SliderCarruselPrincipal'
-import SliderCarruselSecundario from '../componentes/componente_Home/SliderCarruselSecundario'
+import SliderCarruselPrincipal from '../componentes/componente_Home/CarruselPrin'
+import SliderCarruselSecundario from '../componentes/componente_Home/CarruselSecun'
 
 function Home() {
   return (

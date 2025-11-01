@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import CardJuego from './CardJuego'
+import CardJuego from '../componente_General/CardJuego'
+import { useState } from 'react'
 
-export default function SliderCategoria({ titulo, juegos }) {
+function SliderCategoria({ titulo, juegos }) {
   const [indice, setIndice] = useState(0)
 
   const siguiente = () => {
@@ -20,6 +20,7 @@ export default function SliderCategoria({ titulo, juegos }) {
     setIndice((prev) => prev - 1)
   }
 
+  // Duplica los juegos para lograr efecto de bucle visual
   const juegosExtendidos = [...juegos, ...juegos]
 
   return (
@@ -27,7 +28,9 @@ export default function SliderCategoria({ titulo, juegos }) {
       <h2 className="titulo-categoria">{titulo}</h2>
 
       <div className="contenedor-slider">
-        <button className="nav-btn izquierda" onClick={anterior}>❮</button>
+        <button className="nav-btn izquierda" onClick={anterior}>
+          ❮
+        </button>
 
         <div
           className="slider-track"
@@ -40,8 +43,12 @@ export default function SliderCategoria({ titulo, juegos }) {
           ))}
         </div>
 
-        <button className="nav-btn derecha" onClick={siguiente}>❯</button>
+        <button className="nav-btn derecha" onClick={siguiente}>
+          ❯
+        </button>
       </div>
     </div>
   )
 }
+
+export default SliderCategoria

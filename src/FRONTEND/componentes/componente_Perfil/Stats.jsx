@@ -1,4 +1,4 @@
-function EstadisticasPersonales() {
+function Stats() {
   return (
     <>
       <header>
@@ -8,4 +8,4 @@ function EstadisticasPersonales() {
   )
 }
 
-export default EstadisticasPersonales
+export default Stats

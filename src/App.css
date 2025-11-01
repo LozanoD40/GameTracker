@@ -26,6 +26,7 @@
   --color-bg-accent: #000; /* Fondo de navbar y footer */
   --color-text-primary: #d4af37; /* Dorado medieval */
   --color-text-secondary: #fff; /* Blanco para hover o contraste */
+  --color-text-tertiary:  #aaaaaa; /* contrasete */
   --color-border: #d4af37; /* Borde principal dorado */
   --color-outline: #fff2; /* Outline sutil */
   --color-bg: #0b0b0b;
@@ -40,6 +41,7 @@
   /*Tamaños de texto*/
   --font-size-navbar: 20px;
   --font-size-body: 18px;
+  --font-size-body-lg:2rem;
   --font-size-footer: 16px;
   --font-size-card: 18px;
   --icon-size: 22px;
@@ -70,7 +72,6 @@
   --text-shadow-hover: 0 0 10px #d4af37;
   --shadow-card: 0 0 20px rgba(212, 175, 55, 0.2);
   --shadow-glow: 0 0 10px #d4af37, 0 0 20px #d4af37;
-
 
   /*Transiciones y animaciones*/
   --transition-fast: 0.3s;

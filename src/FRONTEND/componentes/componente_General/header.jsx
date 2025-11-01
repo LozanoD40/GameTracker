@@ -1,12 +1,26 @@
 import './../../styles/header.css'
 import { Link } from 'react-router-dom'
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import iconIngresar from './../../../assets/iconIngresar.png'
+import iconRegistro from './../../../assets/iconRegistro.png'
+import Login from './Login'
+
 
 function Headers() {
   const [open, setOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [user, setUser] = useState(null)
   const navRef = useRef(null)
 
-  // cerrar con ESC y clic fuera
+  //redireccion a perfil
+  useEffect(() => {
+    const userData = localStorage.getItem('user')
+    if (userData) {
+      setUser(JSON.parse(userData))
+    }
+  }, [])
+
+  // cerrar menu hamburguesa
   useEffect(() => {
     function onKey(e) {
       if (e.key === 'Escape') setOpen(false)
@@ -45,34 +59,78 @@ function Headers() {
           <span />
         </button>
 
-        <ul id="primary-navigation" className={`nav-links ${open ? 'open' : ''}`}>
+        <ul
+          id="primary-navigation"
+          className={`nav-links ${open ? 'open' : ''}`}
+        >
           <li>
-            <Link to="/" className="boton-gremio" onClick={() => setOpen(false)}>
+            <Link
+              to="/"
+              className="boton-gremio"
+              onClick={() => setOpen(false)}
+            >
               Inicio
             </Link>
           </li>
           <li>
-            <Link to="/biblioteca" className="boton-gremio" onClick={() => setOpen(false)}>
+            <Link
+              to="/biblioteca"
+              className="boton-gremio"
+              onClick={() => setOpen(false)}
+            >
               Biblioteca
             </Link>
           </li>
           <li>
-            <Link to="/foro" className="boton-gremio" onClick={() => setOpen(false)}>
+            <Link
+              to="/foro"
+              className="boton-gremio"
+              onClick={() => setOpen(false)}
+            >
               Foro
             </Link>
           </li>
           <li>
-            <Link to="/inventario" className="boton-gremio" onClick={() => setOpen(false)}>
+            <Link
+              to="/inventario"
+              className="boton-gremio"
+              onClick={() => setOpen(false)}
+            >
               Inventario
             </Link>
           </li>
           <li>
-            <Link to="/perfil" className="boton-gremio" onClick={() => setOpen(false)}>
-              Perfil
-            </Link>
+            {!user ? (
+              <button
+                className="boton-gremio"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Perfil
+                <img
+                  src={iconRegistro}
+                  alt="registrarte"
+                  className="img-Icon"
+                />
+              </button>
+            ) : (
+              <Link to="/perfil" className="boton-gremio">
+                Perfil
+                <img src={iconIngresar} alt="perfil" className="img-Icon" />
+              </Link>
+            )}
           </li>
         </ul>
       </nav>
+      <Login
+        isOpen={isLoginOpen}
+        onClose={() => {
+          setIsLoginOpen(false)
+          const userData = localStorage.getItem('user')
+          if (userData) {
+            setUser(JSON.parse(userData))
+          }
+        }}
+      />
     </div>
   )
 }

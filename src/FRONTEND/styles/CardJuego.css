@@ -1,6 +1,7 @@
+/* ---------- TARJETAS ---------- */
 .card-juego {
-  min-width: 25%;
-  margin-right: 10px;
+  flex: 0 0 calc(25% - 10px); 
+  min-width: 150px; 
   background-color: var(--color-bg-alt);
   border: var(--border-width-normal) solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -8,8 +9,14 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
+.card-juego:hover {
+  transform: scale(1.1);
+}
+
+/* Imagen de portada */
 .portada {
   width: 100%;
   height: 150px;
@@ -17,9 +24,11 @@
   background-position: center;
 }
 
-.titulo-categoria {
-  padding: 10px;
+/* Título dentro de la tarjeta */
+.card-juego .titulo-categoria {
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  padding: 8px;
   text-align: center;
-  font-family: clamp(8px, 2vw, 16px);
+  font-family: var(--font-main);
   color: var(--color-text-primary);
 }
