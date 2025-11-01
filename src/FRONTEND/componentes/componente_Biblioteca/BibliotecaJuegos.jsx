@@ -1,6 +1,6 @@
 import './../../styles/biblioteca.css'
 import { useEffect, useState } from 'react'
-import AllJuegos from './../componente_General/AllJuegos,'
+import AllJuegos from './AllJuegos'
 
 function BibliotecaJuegos() {
   const [juegos, setJuegos] = useState([])
@@ -18,7 +18,7 @@ function BibliotecaJuegos() {
         <h1>Biblioteca de Juegos</h1>
         <p className="descripcion">Explora tu colección y guarda favoritos.</p>
       </header>
-      <AllJuegos juegos={juegos} />
+      <AllJuegos juegos={juegos} setJuegos={setJuegos} />
     </div>
   )
 }

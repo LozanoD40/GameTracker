@@ -8,7 +8,6 @@ import Home from './FRONTEND/pages/Home'
 import Perfil from './FRONTEND/pages/Perfil'
 import Biblioteca from './FRONTEND/pages/Biblioteca'
 import Foro from './FRONTEND/pages/foro'
-import MisJuegos from './FRONTEND/pages/MisJuegos'
 
 function App() {
   return (
@@ -20,7 +19,6 @@ function App() {
         <Route path="/foro" element={<Foro />} />
         <Route path="/info/:id" element={<Info/>} />
         <Route path="/biblioteca" element={<Biblioteca />} />
-        <Route path="/inventario" element={<MisJuegos />} />
         <Route path="/Login" element={<Login />} />
       </Routes>
       <Footer />

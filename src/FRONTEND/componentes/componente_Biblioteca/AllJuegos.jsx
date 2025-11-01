@@ -1,29 +1,51 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function AllJuegos({ juegos }) {
+function AllJuegos({ juegos, setJuegos }) {
   const [query, setQuery] = useState('')
   const [includeGenres, setIncludeGenres] = useState([])
   const [excludeGenres, setExcludeGenres] = useState([])
-  
-  const [wishlist, setWishlist] = useState(() => {
-    try {
-      const raw = localStorage.getItem('gameWishlist:v1')
-      return raw ? JSON.parse(raw) : []
-    } catch {
-      return []
-    }
-  })
 
   const navigate = useNavigate()
 
-  // Guardar wishlist en localStorage
-  const toggleWishlist = (id) => {
-    setWishlist((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    )
+  // Toggle mis juegos (wishlist) en backend
+  const toggleWishlist = async (id) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user) {
+      alert('Debes iniciar sesión para guardar juegos')
+      return
+    }
+
+    try {
+      const juego = juegos.find((j) => j._id === id)
+      if (!juego) return
+
+      const res = await fetch(`http://localhost:3000/api/games/games/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ misjuegos: !juego.misjuegos }),
+      })
+
+      if (!res.ok) throw new Error('Error al actualizar el juego')
+
+      const updatedGame = await res.json()
+
+      // Actualizamos el estado local de juegos
+      setJuegos((prev) =>
+        prev.map((j) =>
+          j._id === id ? { ...j, misjuegos: updatedGame.misjuegos } : j
+        )
+      )
+    } catch (err) {
+      console.error(err)
+    }
   }
-  const inWishlist = (id) => wishlist.includes(id)
+
+  // Saber si un juego está en mis juegos
+  const inWishlist = (id) => {
+    const juego = juegos.find((j) => j._id === id)
+    return juego?.misjuegos || false
+  }
 
   // Todos los géneros disponibles
   const allGenres = useMemo(() => {
@@ -35,23 +57,19 @@ function AllJuegos({ juegos }) {
   // Juegos filtrados
   const filtered = useMemo(() => {
     return juegos.filter((game) => {
-      // Separar géneros por " / "
       const gameGenres = game.genero.split(' / ').map((g) => g.trim())
 
-      // Filtrar por query
       if (query && !game.titulo.toLowerCase().includes(query.toLowerCase()))
         return false
 
-      // Filtrar por inclusión de géneros
       if (
         includeGenres.length > 0 &&
         !includeGenres.some((g) =>
-          g === 'WISHLIST' ? inWishlist(game._id) : gameGenres.includes(g)
+          g === 'WISHLIST' ? game.misjuegos : gameGenres.includes(g)
         )
       )
         return false
 
-      // Filtrar por exclusión de géneros
       if (
         excludeGenres.length > 0 &&
         excludeGenres.some((g) => gameGenres.includes(g))
@@ -60,8 +78,7 @@ function AllJuegos({ juegos }) {
 
       return true
     })
-  }, [juegos, query, includeGenres, excludeGenres, wishlist])
-
+  }, [juegos, query, includeGenres, excludeGenres])
 
   const resetFilters = () => {
     setQuery('')
@@ -78,7 +95,6 @@ function AllJuegos({ juegos }) {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Busca por título..."
         />
-        <button onClick={() => {}}>Buscar</button>
       </div>
 
       <details className="filtros">
@@ -128,19 +144,11 @@ function AllJuegos({ juegos }) {
             </div>
           </div>
 
-          {/* Mostrar solo wishlist + Reset */}
-          <div
-            className="acciones-filtros"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '10px',
-              marginTop: '10px',
-            }}
-          >
+          {/* Mostrar solo mis juegos + Reset */}
+          <div className="acciones-filtros">
             <button onClick={resetFilters}>Reset</button>
             <button onClick={() => setIncludeGenres(['WISHLIST'])}>
-              Mostrar Wishlist
+              Mis juegos
             </button>
           </div>
         </div>

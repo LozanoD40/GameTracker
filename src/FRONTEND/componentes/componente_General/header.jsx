@@ -78,7 +78,7 @@ function Headers() {
               className="boton-gremio"
               onClick={() => setOpen(false)}
             >
-              Biblioteca
+              Inventario
             </Link>
           </li>
           <li>
@@ -88,15 +88,6 @@ function Headers() {
               onClick={() => setOpen(false)}
             >
               Foro
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/inventario"
-              className="boton-gremio"
-              onClick={() => setOpen(false)}
-            >
-              Inventario
             </Link>
           </li>
           <li>

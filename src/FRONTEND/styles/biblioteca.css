@@ -11,44 +11,33 @@
   font-family: var(--font-main);
 }
 
+.descripcion {
+  text-align: center;
+  width: 100%;
+  color: var(--color-text-secondary);
+}
+
+/* AllJuegos */
 .all-juegos {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.all-juegos .coleccion{
-margin: 30px 0px;
-}
-
-/* Encabezado */
-.biblioteca header {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-.biblioteca header h1 {
-  font-family: var(--font-title);
-  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
-  margin-bottom: 0.25rem;
-}
-
-/* Texto descriptivo */
-.biblioteca .descripcion {
-  text-align: center;
-  width: 100%;
-  color: var(--color-text-secondary);
+.all-juegos .coleccion {
+  margin: 30px 0;
 }
 
 /* Barra de búsqueda */
-.biblioteca .busqueda {
+.busqueda {
   display: flex;
   gap: 0.5rem;
   width: 100%;
   max-width: 720px;
   align-items: center;
 }
-.biblioteca .busqueda input {
+
+.busqueda input {
   flex: 1;
   padding: 0.6rem 0.8rem;
   border-radius: var(--border-radius-small);
@@ -57,28 +46,15 @@ margin: 30px 0px;
   color: var(--color-text-primary);
   transition: box-shadow var(--transition-fast);
 }
-.biblioteca .busqueda input:focus {
+
+.busqueda input:focus {
   outline: none;
   box-shadow: var(--shadow-card);
   border-color: var(--color-border);
 }
-.biblioteca .busqueda button {
-  padding: 0.55rem 0.9rem;
-  border-radius: var(--border-radius-small);
-  background: transparent;
-  color: var(--color-text-primary);
-  border: var(--border-width-normal) solid var(--color-border);
-  cursor: pointer;
-  transition: transform var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.biblioteca .busqueda button:hover {
-  transform: translateY(-2px);
-}
 
 /* Filtros (details) */
-.biblioteca details {
+.filtros {
   width: 100%;
   max-width: 720px;
   border: var(--border-width-normal) solid rgba(212, 175, 55, 0.06);
@@ -86,24 +62,30 @@ margin: 30px 0px;
   padding: 0.6rem 1rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
 }
-.biblioteca summary {
+
+.filtros summary {
   cursor: pointer;
   font-weight: 600;
   color: var(--color-text-primary);
 }
-.biblioteca .contenido-filtros {
+
+.contenido-filtros {
   margin-top: 0.6rem;
   display: grid;
   gap: 0.6rem;
 }
 
-/* Botones de géneros */
-.biblioteca .grupo-botones {
+.bloque-filtro label {
+  font-weight: 500;
+}
+
+.grupo-botones {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.biblioteca .grupo-botones button {
+
+.grupo-botones button {
   padding: 0.38rem 0.6rem;
   border-radius: 999px;
   background: transparent;
@@ -113,37 +95,31 @@ margin: 30px 0px;
   transition: background var(--transition-fast),
     transform var(--transition-fast);
 }
-.biblioteca .grupo-botones button.activo,
-.biblioteca .grupo-botones button:hover {
+
+.grupo-botones button.activo,
+.grupo-botones button:hover {
   background: rgba(212, 175, 55, 0.08);
   transform: translateY(-2px);
 }
 
-.biblioteca .grupo-botones button.excluir {
-  background: rgba(220, 80, 80, 0.12); /* tono rojo suave para excluir */
+.grupo-botones button.excluir {
+  background: rgba(220, 80, 80, 0.12);
   border-color: rgba(220, 80, 80, 0.2);
   color: rgba(255, 200, 200, 0.95);
   transform: translateY(-2px);
 }
 
-/* Mantener contraste al hacer hover sobre un botón marcado como excluir */
-.biblioteca .grupo-botones button.excluir:hover {
+.grupo-botones button.excluir:hover {
   background: rgba(220, 80, 80, 0.16);
 }
 
-/* accesibilidad / foco */
-.biblioteca .grupo-botones button:focus {
-  outline: 2px solid rgba(212, 175, 55, 0.14);
-  outline-offset: 2px;
-}
-
-/* Acciones de filtros */
-.biblioteca .acciones-filtros {
+.acciones-filtros {
   display: flex;
   gap: 0.6rem;
   margin-top: 0.5rem;
 }
-.biblioteca .acciones-filtros button {
+
+.acciones-filtros button {
   padding: 0.5rem 0.8rem;
   border-radius: var(--border-radius-small);
   background: transparent;
@@ -153,7 +129,7 @@ margin: 30px 0px;
 }
 
 /* Cuadrícula de juegos */
-.biblioteca .grid-juegos {
+.grid-juegos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: clamp(10px, 2vw, 20px);
@@ -163,7 +139,7 @@ margin: 30px 0px;
 }
 
 /* Tarjeta de juego */
-.biblioteca .juego {
+.juego {
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.01),
@@ -177,27 +153,28 @@ margin: 30px 0px;
   transition: transform var(--transition-medium),
     box-shadow var(--transition-medium);
 }
-.biblioteca .juego:hover {
+
+.juego:hover {
   transform: translateY(-6px);
   box-shadow: var(--box-shadow-card);
 }
 
-/* Imagen de portada */
-.biblioteca .juego-imagen {
+.juego-imagen {
   position: relative;
   width: 100%;
   aspect-ratio: 3/2;
   overflow: hidden;
 }
-.biblioteca .juego-imagen img {
+
+.juego-imagen img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-/* Botón wishlist (sobre la imagen) */
-.biblioteca .wishlist-btn {
+/* Botón wishlist */
+.wishlist-btn {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -209,7 +186,8 @@ margin: 30px 0px;
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
-.biblioteca .wishlist-btn.activo {
+
+.wishlist-btn.activo {
   background: linear-gradient(
     90deg,
     rgba(212, 175, 55, 0.18),
@@ -219,14 +197,15 @@ margin: 30px 0px;
   border-color: var(--color-border);
 }
 
-/* Información y acciones */
-.biblioteca .juego-info {
+/* Información del juego */
+.juego-info {
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-.biblioteca .juego-info h3 {
+
+.juego-info h3 {
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -235,58 +214,56 @@ margin: 30px 0px;
   color: var(--color-text-primary);
 }
 
-.biblioteca .acciones-juego {
+.acciones-juego {
   margin-top: auto;
 }
-.biblioteca .acciones-juego button {
+
+.acciones-juego button {
   padding: 0.5rem;
   border-radius: 8px;
   border: 1px solid rgba(212, 175, 55, 0.06);
-  background: transparent;
+  background: rgba(212, 175, 55, 0.06);
   color: var(--color-text-primary);
   cursor: pointer;
-  background: rgba(212, 175, 55, 0.06);
 }
 
-.biblioteca .acciones-juego button:hover {
-  transform: scale(1.2);
-  transform: translateY(-3px);
+.acciones-juego button:hover {
+  transform: translateY(-3px) scale(1.2);
 }
 
-/* Mensajes */
-.biblioteca .sin-resultados {
+.sin-resultados {
   padding: 1rem;
   color: var(--color-text-secondary);
   text-align: center;
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 900px) {
   .biblioteca {
     padding: clamp(10px, 3vw, 18px);
   }
-  .biblioteca .grid-juegos {
+  .grid-juegos {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
-  .biblioteca .busqueda {
+  .busqueda {
     flex-direction: column;
     align-items: stretch;
   }
-  .biblioteca details,
-  .biblioteca .busqueda {
+  .filtros,
+  .busqueda {
     max-width: 100%;
   }
-  .biblioteca .grid-juegos {
+  .grid-juegos {
     gap: 10px;
     grid-template-columns: 1fr;
   }
-  .biblioteca .juego-imagen {
+  .juego-imagen {
     aspect-ratio: 16/9;
   }
-  .biblioteca .wishlist-btn {
+  .wishlist-btn {
     top: 6px;
     right: 6px;
     padding: 5px 6px;
