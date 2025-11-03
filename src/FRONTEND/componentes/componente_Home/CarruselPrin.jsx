@@ -1,6 +1,6 @@
+import './../../styles/CarruselPrin.css'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './../../styles/SliderCarruselPrincipal.css'
 
 function SliderCarruselPrincipal() {
   const [juegosRecomendados, setRecomendados] = useState([])
@@ -31,7 +31,7 @@ function SliderCarruselPrincipal() {
         <div
           key={juego._id}
           className={`slide ${i === indice ? 'activo' : ''}`}
-          onClick={() => navigate(`/info/${juego._id}`)} 
+          onClick={() => navigate(`/info/${juego._id}`)}
           style={{ cursor: 'pointer' }}
         >
           <img

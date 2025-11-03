@@ -7,10 +7,15 @@ import perfilDragonMan from './../../../assets/perfilDragonMan.png'
 import perfilCatGirl from './../../../assets/perfilCatGirl.png'
 import perfilBearMan from './../../../assets/perfilBearMan.png'
 import perfilElf from './../../../assets/perfilElf.png'
-import perfilDarkelf from './../../../assets/iconConfiguracion.png'
-import perfilFairy from './../../../assets/iconConfiguracion.png'
-import perfilBarbarian from './../../../assets/iconConfiguracion.png'
-import perfilWizard from './../../../assets/iconConfiguracion.png'
+import perfilDarkelf from './../../../assets/perfilDarkElf.png'
+import perfilFairy from './../../../assets/perfilFairy.png'
+import perfilBarbarian from './../../../assets/perfilBarbarian.png'
+import perfilWizard from './../../../assets/perfilWizard.png'
+import perfilBard from './../../../assets/perfilBard.png'
+import perfilSaint from './../../../assets/perfilSaint.png'
+import perfilAssesing from './../../../assets/perfilAssesing.png'
+import perfilNecromance from './../../../assets/perfilNecromance.png'
+import perfilLancer from './../../../assets/perfilLancer.png'
 import Login from './../componente_General/Login'
 
 function Status() {
@@ -67,6 +72,16 @@ function Status() {
         return perfilBarbarian
       case 'Wizard':
         return perfilWizard
+      case 'Bard':
+        return perfilBard
+      case 'Saint':
+        return perfilSaint
+      case 'Assesing':
+        return perfilAssesing
+      case 'Necromance':
+        return perfilNecromance
+      case 'Lancer':
+        return perfilLancer
       default:
         return perfilKnight
     }
@@ -143,6 +158,11 @@ function Status() {
             <button onClick={() => setOpcion('Fairy')}>Fairy</button>
             <button onClick={() => setOpcion('Barbarian')}>Barbarian</button>
             <button onClick={() => setOpcion('Wizard')}>Wizard</button>
+            <button onClick={() => setOpcion('Bard')}>Bard</button>
+            <button onClick={() => setOpcion('Saint')}>Saint</button>
+            <button onClick={() => setOpcion('Assesing')}>Assesing</button>
+            <button onClick={() => setOpcion('Necromance')}>Necromance</button>
+            <button onClick={() => setOpcion('Lancer')}>Lancer</button>
           </details>
           <h2 className="atribute">
             Titulo:<p>{titulo}</p>

@@ -1,34 +1,34 @@
-/* ---------- TARJETAS ---------- */
+/*Tarjeta, estilos generales */
 .card-juego {
-  flex: 0 0 calc(25% - 10px); 
-  min-width: 150px; 
-  background-color: var(--color-bg-alt);
-  border: var(--border-width-normal) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+flex: 0 0 calc(25% - 10px); 
+min-width: 150px; 
+background-color: var(--color-bg-alt);
+border: var(--border-width-normal) solid var(--color-border);
+border-radius: var(--radius-lg);
+overflow: hidden;
+display: flex;
+flex-direction: column;
+cursor: pointer;
+transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card-juego:hover {
-  transform: scale(1.1);
+transform: scale(1.05);
 }
 
 /* Imagen de portada */
 .portada {
-  width: 100%;
-  height: 150px;
-  background-size: cover;
-  background-position: center;
+width: 100%;
+height: 175px;
+background-position: center;
+background-size: cover;
 }
 
-/* Título dentro de la tarjeta */
-.card-juego .titulo-categoria {
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  padding: 8px;
-  text-align: center;
-  font-family: var(--font-main);
-  color: var(--color-text-primary);
+/* Titulos */
+.card-juego .titulo { 
+font-size: clamp(0.8rem, 2vw, 1rem);
+padding: 8px;
+text-align: center;
+font-family: var(--font-main);
+color: var(--color-text-primary);
 }

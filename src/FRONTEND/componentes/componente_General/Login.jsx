@@ -23,26 +23,24 @@ const Login = ({ isOpen, onClose }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      let data = null
-      try {
-        data = await res.json()
-      } catch {
-        setError('Respuesta inválida del servidor')
-        return
-      }
+
+      const data = await res.json()
 
       if (!res.ok) {
         setError(data?.error || 'Error en el proceso')
         return
       }
 
-      localStorage.setItem('user', JSON.stringify(data))
+      const userData = data.user || data
+      localStorage.setItem('user', JSON.stringify(userData))
+
       onClose()
       navigate('/perfil')
-    } catch (err) {
-      setError({error: err.mensage})
+    } catch {
+      setError('Error de conexión con el servidor')
     }
   }
+
 
   const handleInputChange = (e) => {
     setFormData({
