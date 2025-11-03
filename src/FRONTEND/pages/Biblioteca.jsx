@@ -2,6 +2,7 @@ import './../styles/biblioteca.css'
 import BibliotecaJuegos from '../componentes/componente_Biblioteca/BibliotecaJuegos'
 
 function Biblioteca() {
+  
   return (
     <>
       <div className="biblioteca">

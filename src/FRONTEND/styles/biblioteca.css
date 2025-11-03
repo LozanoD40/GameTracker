@@ -1,18 +1,19 @@
 /* Contenedor general */
 .biblioteca {
+  color: var(--color-text-primary);
+  font-family: var(--font-main);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   padding: clamp(12px, 2.5vw, 32px);
-  max-width: 1200px;
   margin: 0 auto;
-  color: var(--color-text-primary);
-  font-family: var(--font-main);
+  max-width: 1200px;
 }
 
 .descripcion {
   text-align: center;
+  margin: 10px 0;
   width: 100%;
   color: var(--color-text-secondary);
 }
@@ -25,7 +26,7 @@
 }
 
 .all-juegos .coleccion {
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 /* Barra de búsqueda */
@@ -41,7 +42,7 @@
   flex: 1;
   padding: 0.6rem 0.8rem;
   border-radius: var(--border-radius-small);
-  border: var(--border-width-normal) solid rgba(212, 175, 55, 0.08);
+  border: var(--border-width-normal) solid var(--color-outline);
   background: var(--color-bg-alt);
   color: var(--color-text-primary);
   transition: box-shadow var(--transition-fast);
@@ -53,14 +54,14 @@
   border-color: var(--color-border);
 }
 
-/* Filtros (details) */
+/* Filtros  */
 .filtros {
   width: 100%;
   max-width: 720px;
   border: var(--border-width-normal) solid rgba(212, 175, 55, 0.06);
   border-radius: 8px;
   padding: 0.6rem 1rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+  background: rgba(255, 255, 255, 0.01);
 }
 
 .filtros summary {
@@ -85,21 +86,26 @@
   gap: 0.5rem;
 }
 
+.icon_filtro {
+  width: 30px;
+  height: 30px;
+}
+
 .grupo-botones button {
   padding: 0.38rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 50px;
   background: transparent;
-  color: var(--color-text-primary);
   border: 1px solid rgba(212, 175, 55, 0.08);
-  cursor: pointer;
+  color: var(--color-text-primary);
   transition: background var(--transition-fast),
     transform var(--transition-fast);
+  cursor: pointer;
 }
 
 .grupo-botones button.activo,
 .grupo-botones button:hover {
-  background: rgba(212, 175, 55, 0.08);
-  transform: translateY(-2px);
+  background: rgb(212, 175, 55, 0.1);
+  transform: translateY(-3px);
 }
 
 .grupo-botones button.excluir {
@@ -116,7 +122,7 @@
 .acciones-filtros {
   display: flex;
   gap: 0.6rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .acciones-filtros button {
@@ -176,6 +182,8 @@
 /* Botón wishlist */
 .wishlist-btn {
   position: absolute;
+  width: 40px;
+  height: 40px;
   top: 8px;
   right: 8px;
   background: rgba(0, 0, 0, 0.45);

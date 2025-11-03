@@ -13,8 +13,6 @@ function InfoJuego() {
       .catch((err) => console.error(err))
   }, [id])
 
-  if (!juego) return <p>Cargando...</p>
-
   return (
     <div className="info-juego">
       <div

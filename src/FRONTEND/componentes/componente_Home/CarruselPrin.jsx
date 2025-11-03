@@ -1,20 +1,34 @@
 import './../../styles/CarruselPrin.css'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../componente_General/loading'
+import tiempoCarga2 from './../../../assets/tiempoCarga2.gif'
 
 function SliderCarruselPrincipal() {
   const [juegosRecomendados, setRecomendados] = useState([])
+  const [loading, setLoading] = useState(true)
   const [indice, setIndice] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
+    setLoading(true)
+
+    const timeout = setTimeout(() => {
+      setLoading(true)
+    }, 7000)
+
     fetch('http://localhost:3000/api/games')
       .then((res) => res.json())
       .then((data) => {
         const aleatorios = [...data].sort(() => Math.random() - 0.5).slice(0, 5)
         setRecomendados(aleatorios)
+        setLoading(false)
       })
-      .catch((err) => console.error('Error al cargar juegos:', err))
+      .catch((err) => {
+        console
+        .error('Error al cargar juegos:', err)
+        .finally(() => clearTimeout(timeout))
+      })
   }, [])
 
   useEffect(() => {
@@ -25,6 +39,8 @@ function SliderCarruselPrincipal() {
     return () => clearInterval(intervalo)
   }, [juegosRecomendados])
 
+  if (loading) return <Loader imagen={tiempoCarga2} />
+  
   return (
     <section className="slider-carrusel">
       {juegosRecomendados.map((juego, i) => (

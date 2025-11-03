@@ -1,5 +1,12 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import iconPorCompletar from '../../../assets/iconPorCompletar.png'
+import iconCompletados from '../../../assets/iconCompletados.png'
+import iconWishlist from '../../../assets/iconWishlist.png'
+import iconMisJuegos from '../../../assets/iconMisJuegos.png'
+import iconEliminar from '../../../assets/iconEliminar.png'
+import iconNoWishlist from '../../../assets/iconNoWishlist.png'
+import iconIngresar from '../../../assets/iconIngresar.png'
 
 function AllJuegos({ juegos, setJuegos }) {
   const [query, setQuery] = useState('')
@@ -13,7 +20,6 @@ function AllJuegos({ juegos, setJuegos }) {
 
   const navigate = useNavigate()
 
-  // ✅ Lógica corregida
   const toggleWishlist = async (id) => {
     const user = JSON.parse(localStorage.getItem('user'))
     if (!user) return navigate('/perfil')
@@ -168,12 +174,12 @@ function AllJuegos({ juegos, setJuegos }) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Busca por título o desarrollador..."
+          placeholder="Realiza tu busqueda..."
         />
       </div>
 
       <details className="filtros">
-        <summary>Filtros Avanzados y Ordenamiento</summary>
+        <summary>Filtros</summary>
         <div className="contenido-filtros">
           <div className="bloque-filtro">
             <label>Estado de Juego:</label>
@@ -182,13 +188,23 @@ function AllJuegos({ juegos, setJuegos }) {
                 onClick={() => setMisJuegosFilter((prev) => !prev)}
                 className={misJuegosFilter ? 'activo' : ''}
               >
-                🎮 Mis Juegos
+                <img
+                  src={iconMisJuegos}
+                  alt="iconMisJuegos"
+                  className="icon_filtro"
+                />
+                Mis Juegos
               </button>
               <button
                 onClick={() => setWishlistFilter((prev) => !prev)}
                 className={wishlistFilter ? 'activo' : ''}
               >
-                ❤️ Wishlist
+                <img
+                  src={iconWishlist}
+                  alt="iconWishlist"
+                  className="icon_filtro"
+                />
+                Wishlist
               </button>
               <button
                 onClick={() =>
@@ -198,7 +214,12 @@ function AllJuegos({ juegos, setJuegos }) {
                 }
                 className={estadoJuego === 'completado' ? 'activo' : ''}
               >
-                ✅ Completados
+                <img
+                  src={iconCompletados}
+                  alt="iconCompletados"
+                  className="icon_filtro"
+                />
+                Completados
               </button>
               <button
                 onClick={() =>
@@ -208,7 +229,12 @@ function AllJuegos({ juegos, setJuegos }) {
                 }
                 className={estadoJuego === 'por_completar' ? 'activo' : ''}
               >
-                ⏳ Por Completar
+                <img
+                  src={iconPorCompletar}
+                  alt="iconPorCompletar"
+                  className="icon_filtro"
+                />
+                Por Completar
               </button>
             </div>
           </div>
@@ -293,7 +319,10 @@ function AllJuegos({ juegos, setJuegos }) {
           </div>
 
           <div className="acciones-filtros">
-            <button onClick={resetFilters}>❌ Limpiar Filtros</button>
+            <button onClick={resetFilters}>
+              <img src={iconEliminar} alt="iconEliminar" className='icon_filtro'/>
+              Limpiar Filtros
+            </button>
           </div>
         </div>
       </details>
@@ -315,7 +344,15 @@ function AllJuegos({ juegos, setJuegos }) {
                   }`}
                   onClick={() => toggleWishlist(game._id)}
                 >
-                  {inWishlist(game._id) ? '❤️' : '🖤'}
+                  <img
+                    src={inWishlist(game._id) ? iconIngresar : iconNoWishlist}
+                    alt={
+                      inWishlist(game._id)
+                        ? 'En lista de deseos'
+                        : 'Añadir a lista de deseos'
+                    }
+                    className="wishlist-icon"
+                  />
                 </button>
               </div>
 

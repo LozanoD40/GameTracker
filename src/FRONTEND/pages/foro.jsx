@@ -1,8 +1,6 @@
 function Foro() {
-  return (
-    <>
-    </>
-  )
+  return <>
+  </>
 }
 
 export default Foro
