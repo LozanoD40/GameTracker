@@ -13,7 +13,7 @@ function CardJuego({ juego, tipo = 'fondo' }) {
       {tipo === 'imagen' ? (
         <div className="portada">
           <img
-            className="slide-img"
+            id="slide-img"
             src={juego.imagenPortada}
             alt={juego.titulo}
           />

@@ -45,7 +45,7 @@ function SliderCarruselPrincipal() {
               className="button"
               onClick={(e) => {
                 e.stopPropagation() // Evita que se dispare el onClick del slide
-                navigate(`/info/${juego._id}`)
+                navigate(`/biblioteca`)
               }}
             >
               Ver más

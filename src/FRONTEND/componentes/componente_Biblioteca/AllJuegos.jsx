@@ -5,85 +5,160 @@ function AllJuegos({ juegos, setJuegos }) {
   const [query, setQuery] = useState('')
   const [includeGenres, setIncludeGenres] = useState([])
   const [excludeGenres, setExcludeGenres] = useState([])
+  const [plataforma, setPlataforma] = useState('')
+  const [estadoJuego, setEstadoJuego] = useState('')
+  const [misJuegosFilter, setMisJuegosFilter] = useState(false)
+  const [wishlistFilter, setWishlistFilter] = useState(false)
+  const [ordenamiento, setOrdenamiento] = useState('titulo_asc')
 
   const navigate = useNavigate()
 
-  // Toggle mis juegos (wishlist) en backend
+  // ✅ Lógica corregida
   const toggleWishlist = async (id) => {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user) {
-      alert('Debes iniciar sesión para guardar juegos')
-      return
-    }
+    if (!user) return navigate('/perfil')
+
+    const juego = juegos.find((j) => j._id === id)
+    if (!juego) return
 
     try {
-      const juego = juegos.find((j) => j._id === id)
-      if (!juego) return
-
-      const res = await fetch(`http://localhost:3000/api/games/games/${id}`, {
-        method: 'PUT',
+      // 1️⃣ Aseguramos que existe la relación usuario-juego
+      await fetch(`http://localhost:3000/api/datauser`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ misjuegos: !juego.misjuegos }),
+        body: JSON.stringify({
+          usuarioId: user.id,
+          juegoId: id,
+        }),
       })
 
-      if (!res.ok) throw new Error('Error al actualizar el juego')
+      // 2️⃣ Alternamos el estado del wishlist
+      const res = await fetch(
+        `http://localhost:3000/api/datauser/usuario/${user.id}/juego/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wishlist: !juego.wishlist }),
+        }
+      )
 
-      const updatedGame = await res.json()
+      if (!res.ok) throw new Error('Error al actualizar wishlist')
 
-      // Actualizamos el estado local de juegos
+      const updated = await res.json()
+
+      // 3️⃣ Actualizamos el estado local
       setJuegos((prev) =>
         prev.map((j) =>
-          j._id === id ? { ...j, misjuegos: updatedGame.misjuegos } : j
+          j._id === id ? { ...j, wishlist: updated.wishlist } : j
         )
       )
     } catch (err) {
-      console.error(err)
+      console.error('Error al actualizar wishlist:', err)
     }
   }
 
-  // Saber si un juego está en mis juegos
   const inWishlist = (id) => {
     const juego = juegos.find((j) => j._id === id)
-    return juego?.misjuegos || false
+    return juego?.wishlist || false
   }
 
-  // Todos los géneros disponibles
   const allGenres = useMemo(() => {
     const s = new Set()
-    juegos.forEach((g) => s.add(g.genero))
-    return Array.from(s).sort()
+    juegos.forEach((g) => {
+      if (g.genero) g.genero.split(' / ').forEach((gen) => s.add(gen.trim()))
+    })
+    return Array.from(s).filter(Boolean).sort()
   }, [juegos])
 
-  // Juegos filtrados
-  const filtered = useMemo(() => {
-    return juegos.filter((game) => {
-      const gameGenres = game.genero.split(' / ').map((g) => g.trim())
+  const allPlatforms = useMemo(() => {
+    const s = new Set()
+    juegos.forEach((g) => {
+      if (g.plataforma && typeof g.plataforma === 'string') {
+        g.plataforma.split(' / ').forEach((p) => s.add(p.trim()))
+      }
+    })
+    return Array.from(s).filter(Boolean).sort()
+  }, [juegos])
 
-      if (query && !game.titulo.toLowerCase().includes(query.toLowerCase()))
-        return false
+  const filteredAndSorted = useMemo(() => {
+    let filteredList = juegos.filter((game) => {
+      if (query) {
+        const lowerQuery = query.toLowerCase()
+        const titleMatch = game.titulo.toLowerCase().includes(lowerQuery)
+        const devMatch = game.desarrollador
+          ? game.desarrollador.toLowerCase().includes(lowerQuery)
+          : false
+        if (!titleMatch && !devMatch) return false
+      }
 
+      const gameGenres = game.genero
+        ? game.genero.split(' / ').map((g) => g.trim())
+        : []
       if (
         includeGenres.length > 0 &&
-        !includeGenres.some((g) =>
-          g === 'WISHLIST' ? game.misjuegos : gameGenres.includes(g)
-        )
+        !includeGenres.some((g) => gameGenres.includes(g))
       )
         return false
-
       if (
         excludeGenres.length > 0 &&
         excludeGenres.some((g) => gameGenres.includes(g))
       )
         return false
 
+      if (plataforma) {
+        const gamePlatforms = game.plataforma
+          ? game.plataforma.split(' / ').map((p) => p.trim())
+          : []
+        if (!gamePlatforms.includes(plataforma)) return false
+      }
+
+      if (estadoJuego === 'completado' && !game.completado) return false
+      if (estadoJuego === 'por_completar' && game.completado) return false
+      if (misJuegosFilter && !game.misjuegos) return false
+      if (wishlistFilter && !game.wishlist) return false
+
       return true
     })
-  }, [juegos, query, includeGenres, excludeGenres])
+
+    filteredList.sort((a, b) => {
+      switch (ordenamiento) {
+        case 'titulo_asc':
+          return a.titulo.localeCompare(b.titulo)
+        case 'titulo_desc':
+          return b.titulo.localeCompare(a.titulo)
+        case 'fecha_reciente':
+          return new Date(b.lanzamiento) - new Date(a.lanzamiento)
+        case 'fecha_antigua':
+          return new Date(a.lanzamiento) - new Date(b.lanzamiento)
+        case 'puntuacion_desc':
+          return (b.puntuacion || 0) - (a.puntuacion || 0)
+        default:
+          return 0
+      }
+    })
+
+    return filteredList
+  }, [
+    juegos,
+    query,
+    includeGenres,
+    excludeGenres,
+    plataforma,
+    estadoJuego,
+    misJuegosFilter,
+    wishlistFilter,
+    ordenamiento,
+  ])
 
   const resetFilters = () => {
     setQuery('')
     setIncludeGenres([])
     setExcludeGenres([])
+    setPlataforma('')
+    setEstadoJuego('')
+    setMisJuegosFilter(false)
+    setWishlistFilter(false)
+    setOrdenamiento('titulo_asc')
   }
 
   return (
@@ -93,16 +168,53 @@ function AllJuegos({ juegos, setJuegos }) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Busca por título..."
+          placeholder="Busca por título o desarrollador..."
         />
       </div>
 
       <details className="filtros">
-        <summary>Filtros</summary>
+        <summary>Filtros Avanzados y Ordenamiento</summary>
         <div className="contenido-filtros">
-          {/* Filtrar por género */}
           <div className="bloque-filtro">
-            <label>Filtrar por género:</label>
+            <label>Estado de Juego:</label>
+            <div className="grupo-botones">
+              <button
+                onClick={() => setMisJuegosFilter((prev) => !prev)}
+                className={misJuegosFilter ? 'activo' : ''}
+              >
+                🎮 Mis Juegos
+              </button>
+              <button
+                onClick={() => setWishlistFilter((prev) => !prev)}
+                className={wishlistFilter ? 'activo' : ''}
+              >
+                ❤️ Wishlist
+              </button>
+              <button
+                onClick={() =>
+                  setEstadoJuego(
+                    estadoJuego === 'completado' ? '' : 'completado'
+                  )
+                }
+                className={estadoJuego === 'completado' ? 'activo' : ''}
+              >
+                ✅ Completados
+              </button>
+              <button
+                onClick={() =>
+                  setEstadoJuego(
+                    estadoJuego === 'por_completar' ? '' : 'por_completar'
+                  )
+                }
+                className={estadoJuego === 'por_completar' ? 'activo' : ''}
+              >
+                ⏳ Por Completar
+              </button>
+            </div>
+          </div>
+
+          <div className="bloque-filtro">
+            <label>Incluir género:</label>
             <div className="grupo-botones">
               {allGenres.map((g) => (
                 <button
@@ -122,9 +234,8 @@ function AllJuegos({ juegos, setJuegos }) {
             </div>
           </div>
 
-          {/* Excluir géneros */}
           <div className="bloque-filtro">
-            <label>Excluir géneros:</label>
+            <label>Excluir género:</label>
             <div className="grupo-botones">
               {allGenres.map((g) => (
                 <button
@@ -144,12 +255,45 @@ function AllJuegos({ juegos, setJuegos }) {
             </div>
           </div>
 
-          {/* Mostrar solo mis juegos + Reset */}
+          <div className="bloque-filtro">
+            <label htmlFor="platform-select">Filtrar por plataforma:</label>
+            <select
+              id="platform-select"
+              value={plataforma}
+              onChange={(e) => setPlataforma(e.target.value)}
+            >
+              <option value="">Todas las plataformas</option>
+              {allPlatforms.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="bloque-filtro">
+            <label htmlFor="sort-select">Ordenar por:</label>
+            <select
+              id="sort-select"
+              value={ordenamiento}
+              onChange={(e) => setOrdenamiento(e.target.value)}
+            >
+              <option value="titulo_asc">Título (A-Z)</option>
+              <option value="titulo_desc">Título (Z-A)</option>
+              <option value="fecha_reciente">
+                Fecha de lanzamiento (Más reciente)
+              </option>
+              <option value="fecha_antigua">
+                Fecha de lanzamiento (Más antigua)
+              </option>
+              <option value="puntuacion_desc">
+                Puntuación (Mayor a menor)
+              </option>
+            </select>
+          </div>
+
           <div className="acciones-filtros">
-            <button onClick={resetFilters}>Reset</button>
-            <button onClick={() => setIncludeGenres(['WISHLIST'])}>
-              Mis juegos
-            </button>
+            <button onClick={resetFilters}>❌ Limpiar Filtros</button>
           </div>
         </div>
       </details>
@@ -157,11 +301,11 @@ function AllJuegos({ juegos, setJuegos }) {
       <section className="coleccion">
         <h2>Colección</h2>
         <p>
-          Mostrando {filtered.length} de {juegos.length} juegos
+          Mostrando {filteredAndSorted.length} de {juegos.length} juegos
         </p>
 
         <div className="grid-juegos">
-          {filtered.map((game) => (
+          {filteredAndSorted.map((game) => (
             <article key={game._id} className="juego">
               <div className="juego-imagen">
                 <img src={game.imagenPortada} alt={game.titulo} />
@@ -179,14 +323,14 @@ function AllJuegos({ juegos, setJuegos }) {
                 <h3>{game.titulo}</h3>
                 <div className="acciones-juego">
                   <button onClick={() => navigate(`/info/${game._id}`)}>
-                    Ver
+                    Ver Info
                   </button>
                 </div>
               </div>
             </article>
           ))}
 
-          {filtered.length === 0 && (
+          {filteredAndSorted.length === 0 && (
             <div className="sin-resultados">
               No se encontraron juegos con esos filtros.
             </div>
