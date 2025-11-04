@@ -21,7 +21,7 @@
 
 :root {
   /* Colores */
-  --color-bg-main: #0b0b0b; /* Fondo general del body */
+  --color-bg-main: rgb(11, 11, 11); /* Fondo general del body */
   --color-bg-secondary: #1a1a1a; /* Fondos degradados o secundarios */
   --color-bg-accent: #000; /* Fondo de navbar y footer */
   --color-text-primary: #d4af37; /* Dorado medieval */

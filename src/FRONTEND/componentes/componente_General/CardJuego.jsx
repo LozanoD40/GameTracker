@@ -1,7 +1,7 @@
 import './../../styles/CardJuego.css'
 import { useNavigate } from 'react-router-dom'
 
-function CardJuego({ juego, tipo = 'fondo' }) {
+function CardJuego({ juego }) {
 
     const navigate = useNavigate()
 
@@ -10,17 +10,13 @@ function CardJuego({ juego, tipo = 'fondo' }) {
     }
   return (
     <div className="card-juego" onClick={irInfo}>
-      {tipo === 'imagen' ? (
-        <div className="portada">
-          <img id="slide-img" src={juego.imagenPortada} alt={juego.titulo} />
-        </div>
-      ) : (
-        <div
-          className="portada"
-          id="slide-img"
-          style={{ backgroundImage: `url(${juego.imagenPortada})` }}
-        ></div>
-      )}
+      <div className="portada">
+        <img
+          className="slide-img"
+          src={juego.imagenPortada}
+          alt={juego.titulo}
+        />
+      </div>
       <div className="titulo">{juego.titulo}</div>
     </div>
   )

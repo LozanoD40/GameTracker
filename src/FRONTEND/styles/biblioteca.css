@@ -1,48 +1,41 @@
-/* Contenedor general */
-.biblioteca {
+/* ===== Biblioteca general ===== */
+.alljuegos {
   color: var(--color-text-primary);
   font-family: var(--font-main);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   padding: clamp(12px, 2.5vw, 32px);
   margin: 0 auto;
   max-width: 1200px;
+  text-align: center;
 }
 
 .descripcion {
-  text-align: center;
-  margin: 10px 0;
-  width: 100%;
+  margin-top: 10px;
+  font-size: 0.8rem;
   color: var(--color-text-secondary);
 }
 
-/* AllJuegos */
-.all-juegos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ===== Filtros y búsqueda ===== */
+.filtros,
+.busqueda {
+  width: 100%;
+  max-width: 720px;
 }
 
-.all-juegos .coleccion {
-  margin: 20px 0;
-}
-
-/* Barra de búsqueda */
 .busqueda {
   display: flex;
   gap: 0.5rem;
-  width: 100%;
-  max-width: 720px;
-  align-items: center;
 }
 
 .busqueda input {
   flex: 1;
   padding: 0.6rem 0.8rem;
   border-radius: var(--border-radius-small);
-  border: var(--border-width-normal) solid var(--color-outline);
+  border: 1px solid var(--color-outline);
   background: var(--color-bg-alt);
   color: var(--color-text-primary);
   transition: box-shadow var(--transition-fast);
@@ -50,208 +43,165 @@
 
 .busqueda input:focus {
   outline: none;
-  box-shadow: var(--shadow-card);
   border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
-/* Filtros  */
 .filtros {
-  width: 100%;
-  max-width: 720px;
-  border: var(--border-width-normal) solid rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.1);
   border-radius: 8px;
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.01);
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.filtros summary {
+.filtro-grupo {
+  margin-bottom: 0.8rem;
+}
+
+.filtro-grupo h3 {
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+}
+
+.filtro-grupo select,
+.filtro-grupo input[type='checkbox'] {
+  margin-top: 4px;
+  background-color: rgb(11, 11, 11, 0.1);
+  border: solid 1px var(--color-text-primary);
+  width: 100%;
+}
+
+.filtro-grupo label {
+  display: flex;
+  align-items: center; /* centra verticalmente */
+  gap: 8px; /* espacio entre checkbox e texto */
   cursor: pointer;
-  font-weight: 600;
-  color: var(--color-text-primary);
 }
 
-.contenido-filtros {
-  margin-top: 0.6rem;
-  display: grid;
-  gap: 0.6rem;
+/* Asegura que el checkbox esté correctamente centrado */
+#filtro-checkbox[type='checkbox'] {
+  flex-shrink: 0; /* evita que se reduzca */
+  margin: 0; /* eliminamos márgenes que desalinean */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 25px;
+  height: 25px;
+  background-image: url(./../../assets/filter-checkbox.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
 }
 
-.bloque-filtro label {
-  font-weight: 500;
+/* Imagen al estar seleccionado */
+#filtro-checkbox[type='checkbox']:checked {
+  background-image: url(./../../assets/filter-checkbox-checked.png);
 }
 
-.grupo-botones {
+/* ===== Botones de género ===== */
+.filtro-grupo .opciones {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.icon_filtro {
-  width: 30px;
-  height: 30px;
-}
-
-.grupo-botones button {
-  padding: 0.38rem 0.6rem;
+.filtro-boton {
+  padding: 0.4rem 0.7rem;
   border-radius: 50px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
   background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.08);
   color: var(--color-text-primary);
-  transition: background var(--transition-fast),
-    transform var(--transition-fast);
   cursor: pointer;
+  transition: all 0.3s;
 }
 
-.grupo-botones button.activo,
-.grupo-botones button:hover {
-  background: rgb(212, 175, 55, 0.1);
-  transform: translateY(-3px);
-}
-
-.grupo-botones button.excluir {
-  background: rgba(220, 80, 80, 0.12);
-  border-color: rgba(220, 80, 80, 0.2);
-  color: rgba(255, 200, 200, 0.95);
+.filtro-boton:hover,
+.filtro-boton.incluido {
+  background: rgba(212, 175, 55, 0.1);
   transform: translateY(-2px);
 }
 
-.grupo-botones button.excluir:hover {
-  background: rgba(220, 80, 80, 0.16);
+.filtro-boton.excluido {
+  background: rgba(220, 80, 80, 0.12);
+  border-color: rgba(220, 80, 80, 0.2);
+  color: rgba(255, 200, 200, 0.95);
 }
 
-.acciones-filtros {
-  display: flex;
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-
-.acciones-filtros button {
-  padding: 0.5rem 0.8rem;
-  border-radius: var(--border-radius-small);
-  background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid rgba(212, 175, 55, 0.08);
-  cursor: pointer;
-}
-
-/* Cuadrícula de juegos */
-.grid-juegos {
+/* ===== Cuadrícula de juegos ===== */
+.contenedor-juegos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: clamp(10px, 2vw, 20px);
   width: 100%;
   max-width: 1000px;
-  margin-top: 0.6rem;
-}
-
-/* Tarjeta de juego */
-.juego {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.01),
-    rgba(255, 255, 255, 0.005)
-  );
-  border: var(--border-width-normal) solid rgba(212, 175, 55, 0.06);
-  border-radius: var(--border-radius-card);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium);
-}
-
-.juego:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--box-shadow-card);
 }
 
 .juego-imagen {
   position: relative;
-  width: 100%;
-  aspect-ratio: 3/2;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
+  border-radius: var(--border-radius-card);
+  border: 1px solid rgba(212, 175, 55, 0.06);
+  transition: transform var(--transition-medium),
+    box-shadow var(--transition-medium);
+}
+
+.juego-imagen:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--box-shadow-card);
 }
 
 .juego-imagen img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
   display: block;
 }
 
-/* Botón wishlist */
+.juego-nombre {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* ===== Wishlist ===== */
 .wishlist-btn {
   position: absolute;
-  width: 40px;
-  height: 40px;
   top: 8px;
   right: 8px;
+  width: 40px;
+  height: 40px;
   background: rgba(0, 0, 0, 0.45);
   color: var(--color-text-primary);
   border: 1px solid rgba(212, 175, 55, 0.12);
-  padding: 6px 8px;
   border-radius: 8px;
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
 
 .wishlist-btn.activo {
-  background: linear-gradient(
-    90deg,
-    rgba(212, 175, 55, 0.18),
-    rgba(212, 175, 55, 0.06)
-  );
   color: var(--color-bg);
   border-color: var(--color-border);
 }
 
-/* Información del juego */
-.juego-info {
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.juego-info h3 {
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-main);
-  color: var(--color-text-primary);
-}
-
-.acciones-juego {
-  margin-top: auto;
-}
-
-.acciones-juego button {
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.06);
-  background: rgba(212, 175, 55, 0.06);
-  color: var(--color-text-primary);
-  cursor: pointer;
-}
-
-.acciones-juego button:hover {
-  transform: translateY(-3px) scale(1.2);
-}
-
+/* ===== Sin resultados ===== */
 .sin-resultados {
   padding: 1rem;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   text-align: center;
 }
 
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .biblioteca {
     padding: clamp(10px, 3vw, 18px);
   }
-  .grid-juegos {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+  .contenedor-juegos {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
 
@@ -260,20 +210,25 @@
     flex-direction: column;
     align-items: stretch;
   }
+
   .filtros,
   .busqueda {
     max-width: 100%;
   }
-  .grid-juegos {
-    gap: 10px;
+
+  .contenedor-juegos {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
+
   .juego-imagen {
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
   }
+
   .wishlist-btn {
     top: 6px;
     right: 6px;
-    padding: 5px 6px;
+    width: 32px;
+    height: 32px;
   }
 }
