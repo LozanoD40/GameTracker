@@ -21,8 +21,8 @@ function BibliotecaJuegos() {
       .then((data) => setJuegos(data), setLoading(false))
       .catch((err) => {
         console.error('Error al cargar juegos:', err)
-        .finally(() => clearTimeout(timeout))
       })
+      .finally(() => clearTimeout(timeout))
   }, [])
 
   if (loading) return <Loader imagen={tiempoCarga1} />

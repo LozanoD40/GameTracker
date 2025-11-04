@@ -11,10 +11,6 @@ function Stats() {
 
   return (
     <>
-      <header>
-        <h1>Game Tracker</h1>
-      </header>
-
       <Estadisticas stats={mockStats} />
     </>
   )

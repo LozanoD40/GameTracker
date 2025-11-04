@@ -28,7 +28,7 @@ function AllJuegos({ juegos, setJuegos }) {
     if (!juego) return
 
     try {
-      // 1️⃣ Aseguramos que existe la relación usuario-juego
+      // Aseguramos que existe la relación usuario-juego
       await fetch(`http://localhost:3000/api/datauser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,7 +38,7 @@ function AllJuegos({ juegos, setJuegos }) {
         }),
       })
 
-      // 2️⃣ Alternamos el estado del wishlist
+      // Alternamos el estado del wishlist
       const res = await fetch(
         `http://localhost:3000/api/datauser/usuario/${user.id}/juego/${id}`,
         {
@@ -52,7 +52,7 @@ function AllJuegos({ juegos, setJuegos }) {
 
       const updated = await res.json()
 
-      // 3️⃣ Actualizamos el estado local
+      // Actualizamos el estado local
       setJuegos((prev) =>
         prev.map((j) =>
           j._id === id ? { ...j, wishlist: updated.wishlist } : j

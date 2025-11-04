@@ -25,10 +25,9 @@ function SliderCarruselPrincipal() {
         setLoading(false)
       })
       .catch((err) => {
-        console
-        .error('Error al cargar juegos:', err)
-        .finally(() => clearTimeout(timeout))
+        console.error('Error al cargar juegos:', err)
       })
+      .finally(() => clearTimeout(timeout))
   }, [])
 
   useEffect(() => {

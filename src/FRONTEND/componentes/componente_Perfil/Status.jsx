@@ -16,6 +16,9 @@ import perfilSaint from './../../../assets/perfilSaint.png'
 import perfilAssesing from './../../../assets/perfilAssesing.png'
 import perfilNecromance from './../../../assets/perfilNecromance.png'
 import perfilLancer from './../../../assets/perfilLancer.png'
+import perfilCultist from './../../../assets/perfilCultist.png'
+import perfilMerchant from './../../../assets/perfilMerchant.png'
+import perfilHomunculus from './../../../assets/perfilHomunculus.png'
 import Login from './../componente_General/Login'
 
 function Status() {
@@ -52,8 +55,6 @@ function Status() {
 
   const mostrarImagen = () => {
     switch (opcion) {
-      case 'Knight':
-        return perfilKnight
       case 'Dwarf':
         return perfilDwarf
       case 'DragonMan':
@@ -82,6 +83,12 @@ function Status() {
         return perfilNecromance
       case 'Lancer':
         return perfilLancer
+      case 'Cultist':
+        return perfilCultist
+      case 'Merchant':
+        return perfilMerchant
+      case 'Homunculus':
+        return perfilHomunculus
       default:
         return perfilKnight
     }
@@ -163,6 +170,9 @@ function Status() {
             <button onClick={() => setOpcion('Assesing')}>Assesing</button>
             <button onClick={() => setOpcion('Necromance')}>Necromance</button>
             <button onClick={() => setOpcion('Lancer')}>Lancer</button>
+            <button onClick={() => setOpcion('Cultist')}>Cultist</button>
+            <button onClick={() => setOpcion('Merchant')}>Merchant</button>
+            <button onClick={() => setOpcion('Homunculus')}>Homunculus</button>
           </details>
           <h2 className="atribute">
             Titulo:<p>{titulo}</p>

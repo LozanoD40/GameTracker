@@ -12,15 +12,12 @@ function CardJuego({ juego, tipo = 'fondo' }) {
     <div className="card-juego" onClick={irInfo}>
       {tipo === 'imagen' ? (
         <div className="portada">
-          <img
-            id="slide-img"
-            src={juego.imagenPortada}
-            alt={juego.titulo}
-          />
+          <img id="slide-img" src={juego.imagenPortada} alt={juego.titulo} />
         </div>
       ) : (
         <div
           className="portada"
+          id="slide-img"
           style={{ backgroundImage: `url(${juego.imagenPortada})` }}
         ></div>
       )}
