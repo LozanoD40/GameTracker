@@ -58,11 +58,31 @@
   align-items: center;
   gap: 10px;
   font-weight: bold;
+  font-family: var(--font-ornament);
 }
 
 .level-progress {
-  width: 120px;
-  height: 24px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  height: 20px;
+  overflow: hidden;
+}
+
+/* Fondo del progreso */
+.level-progress::-webkit-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Parte rellena del progreso */
+.level-progress::-webkit-progress-value {
+  background: var(--color-border);
+  border-radius: 12px;
+}
+
+.level-progress::-moz-progress-bar {
+  background: var(--color-border);
+  border-radius: 12px;
 }
 
 /* ---------- BLOQUE DE ATRIBUTOS ---------- */
@@ -88,7 +108,7 @@
   height: min(30%, 65px);
 }
 
-.atribute p{
+.atribute p {
   color: var(--color-text-tertiary);
   font-size: var(--font-size-body);
 }
@@ -144,11 +164,11 @@
 /* ---------- Stats ---------- */
 
 /* ---------- SEPARADOR DE SECCIONES ---------- */
-.hr{
-    margin: 10px 0;
-    height: 3px;
-    width: 100%;
-    background-color: var(--color-border);
+.hr {
+  margin: 10px 0;
+  height: 3px;
+  width: 100%;
+  background-color: var(--color-border);
 }
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {

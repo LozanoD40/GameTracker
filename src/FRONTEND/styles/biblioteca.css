@@ -145,7 +145,7 @@
   border-radius: var(--border-radius-card);
   border: 1px solid rgba(212, 175, 55, 0.06);
   transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium);
+  box-shadow var(--transition-medium);
 }
 
 .juego-imagen:hover {

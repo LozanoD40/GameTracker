@@ -138,12 +138,7 @@ function Status() {
           />
           <div className="level">
             Level: {lvl}
-            <span></span>
-            <progress
-              className="level-progress"
-              max="80"
-              value={lvl}
-            ></progress>
+            <progress className="level-progress" max="80" value={lvl}></progress>
           </div>
         </div>
         <div className="atributes-der">
