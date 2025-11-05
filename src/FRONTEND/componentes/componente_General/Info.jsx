@@ -3,18 +3,17 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Loader from '../componente_General/loading'
 import tiempoCarga4 from './../../../assets/tiempoCarga4.gif'
+import FormularioReseñas from '../componente_MisJuegos/FormularioReseña'
 
 function InfoJuego() {
   const { id } = useParams()
   const [loading, setLoading] = useState(true)
   const [juego, setJuego] = useState(null)
 
+  // 🔹 Cargar datos del juego desde el backend
   useEffect(() => {
     setLoading(true)
-
-    const timeout = setTimeout(() => {
-      setLoading(true)
-    }, 5000)
+    const timeout = setTimeout(() => setLoading(true), 5000)
 
     fetch(`http://localhost:3000/api/games/games/${id}`)
       .then((res) => {
@@ -25,7 +24,7 @@ function InfoJuego() {
         setJuego(data)
         setLoading(false)
       })
-      .catch((err) => ('Error al cargar juegos:', err))
+      .catch((err) => console.error('Error al cargar juegos:', err))
       .finally(() => clearTimeout(timeout))
   }, [id])
 
@@ -33,7 +32,8 @@ function InfoJuego() {
 
   return (
     <div className="info-juego">
-      <img src={juego.imagenPortada} alt={juego.titulo} className='portada-info' />
+      {/* Imagen y detalles del juego */}
+      <img src={juego.imagenPortada} alt={juego.titulo} className="portada-info" />
       <h1>{juego.titulo}</h1>
       <p>{juego.descripcion}</p>
       <p>
@@ -42,7 +42,11 @@ function InfoJuego() {
       <p>
         <strong>Plataforma:</strong> {juego.plataforma}
       </p>
+
       <button className="btn-jugar">Jugar</button>
+
+      {/* 🔽 Sección de reseñas: ahora todo se maneja desde FormularioReseñas */}
+      <FormularioReseñas gameTitle={juego.titulo} />
     </div>
   )
 }
