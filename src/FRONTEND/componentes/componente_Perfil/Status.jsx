@@ -138,7 +138,11 @@ function Status() {
           />
           <div className="level">
             Level: {lvl}
-            <progress className="level-progress" max="80" value={lvl}></progress>
+            <progress
+              className="level-progress"
+              max="80"
+              value={lvl}
+            ></progress>
           </div>
         </div>
         <div className="atributes-der">
@@ -148,26 +152,64 @@ function Status() {
           <details className="atribute" id="genero-Selection">
             <summary id="summary">
               <h2>Genero:</h2>
-              <p>Un valeroso {opcion || ' caballero'}</p>
+              <p>{opcion || ' Un Caballero novato'}</p>
             </summary>
-            <button onClick={() => setOpcion('Knight')}>Knight</button>
-            <button onClick={() => setOpcion('Dwarf')}>Dwarf</button>
-            <button onClick={() => setOpcion('DragonMan')}>Dragon Man</button>
-            <button onClick={() => setOpcion('Nekomimi')}>Nekomimi</button>
-            <button onClick={() => setOpcion('BearMan')}>Bear Man</button>
-            <button onClick={() => setOpcion('Elf')}>Elf</button>
-            <button onClick={() => setOpcion('Darkelf')}>Dark elf</button>
-            <button onClick={() => setOpcion('Fairy')}>Fairy</button>
-            <button onClick={() => setOpcion('Barbarian')}>Barbarian</button>
-            <button onClick={() => setOpcion('Wizard')}>Wizard</button>
-            <button onClick={() => setOpcion('Bard')}>Bard</button>
-            <button onClick={() => setOpcion('Saint')}>Saint</button>
-            <button onClick={() => setOpcion('Assesing')}>Assesing</button>
-            <button onClick={() => setOpcion('Necromance')}>Necromance</button>
-            <button onClick={() => setOpcion('Lancer')}>Lancer</button>
-            <button onClick={() => setOpcion('Cultist')}>Cultist</button>
-            <button onClick={() => setOpcion('Merchant')}>Merchant</button>
-            <button onClick={() => setOpcion('Homunculus')}>Homunculus</button>
+            <button onClick={() => setOpcion('Caballero del Alba')}>
+              Knight
+            </button>
+            <button onClick={() => setOpcion('Dwarf de Hierro')}>
+              Dwarf
+            </button>
+            <button onClick={() => setOpcion('DragonMan del Fuego Eterno')}>
+              Dragon Man
+            </button>
+            <button onClick={() => setOpcion('Nekomimi de Sombras Suaves')}>
+              Nekomimi
+            </button>
+            <button onClick={() => setOpcion('BearMan del Norte Salvaje')}>
+              Bear Man
+            </button>
+            <button onClick={() => setOpcion('Elfo del Bosque Eterno')}>
+              Elf
+            </button>
+            <button onClick={() => setOpcion('Dark Elf de la Noche')}>
+              Dark Elf
+            </button>
+            <button onClick={() => setOpcion('Fairy de Luz Pura')}>
+              Fairy
+            </button>
+            <button onClick={() => setOpcion('Barbarian del Rugido Antiguo')}>
+              Barbarian
+            </button>
+            <button onClick={() => setOpcion('Wizard del Ojo Arcano')}>
+              Wizard
+            </button>
+            <button onClick={() => setOpcion('Bardo de las Mil Canciones')}>
+              Bard
+            </button>
+            <button onClick={() => setOpcion('Santa del Sol Blanco')}>
+              Saint
+            </button>
+            <button onClick={() => setOpcion('Asesino del Silencio')}>
+              Assassing
+            </button>
+            <button onClick={() => setOpcion('Necromante de la Tumba')}>
+              Necromancer
+            </button>
+            <button onClick={() => setOpcion('Lancer de la Tormenta')}>
+              Lancer
+            </button>
+            <button onClick={() => setOpcion('Cultista del Dios olvidado')}>
+              Cultist
+            </button>
+            <button onClick={() => setOpcion('Mercader del Oro Viejo')}>
+              Merchant
+            </button>
+            <button
+              onClick={() => setOpcion('Homúnculo del Laboratorio Perdido')}
+            >
+              Homunculus
+            </button>
           </details>
           <h2 className="atribute">
             Titulo:<p>{titulo}</p>

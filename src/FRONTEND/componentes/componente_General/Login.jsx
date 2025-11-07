@@ -2,7 +2,7 @@ import './../../styles/login.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Login = ({ isOpen, onClose }) => {
+function Login ({ isOpen, onClose }){
   const [isLogin, setIsLogin] = useState(true)
   const [formData, setFormData] = useState({
     nombre: '',

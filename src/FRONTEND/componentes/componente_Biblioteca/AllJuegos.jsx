@@ -1,6 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CardJuego from '../componente_General/CardJuego'
+import Login from '../componente_General/Login'
+import iconNoWishlist from '../../../assets/iconNoWishlist.png'
+import iconWishlist from '../../../assets/iconWishlist.png'
+import iconMisJuegos from '../../../assets/iconMisJuegos.png'
+import iconEliminar from '../../../assets/iconEliminar.png'
 
 function AllJuegos({ juegos = [], setJuegos }) {
   const [query, setQuery] = useState('')
@@ -11,10 +16,10 @@ function AllJuegos({ juegos = [], setJuegos }) {
   const [misJuegosFilter, setMisJuegosFilter] = useState(false)
   const [wishlistFilter, setWishlistFilter] = useState(false)
   const [ordenamiento, setOrdenamiento] = useState('titulo_asc')
-  //const [excluidos, setExcluidos] = useState([])
+  const [usuarioId, setUsuarioId] = useState(null)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
   const navigate = useNavigate()
 
-  // Listas fijas
   const generosDisponibles = [
     'Aventura',
     'Acción',
@@ -38,46 +43,89 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'Nintendo',
   ]
 
-  // Lógica de filtrado + ordenamiento
+  // 🔹 Cargar el usuario logueado (si existe)
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem('user')
+      if (!userData) return
+
+      const parsedUser = JSON.parse(userData)
+      if (parsedUser && parsedUser._id) {
+        setUsuarioId(parsedUser._id)
+        setIsLoginOpen(false)
+      } else {
+        console.warn('Usuario inválido en localStorage')
+        setUsuarioId(null)
+      }
+    } catch (error) {
+      console.error('Error al leer usuario del localStorage:', error)
+      setUsuarioId(null)
+    }
+  }, [])
+
+  // ✅ Actualizar estado del juego (wishlist o misjuegos)
+  const actualizarEstado = async (juegoId, campo, valor) => {
+    // Si no hay usuario logueado, abrir login
+    if (!usuarioId) {
+      setIsLoginOpen(true)
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/dataUser/usuario/${usuarioId}/juego/${juegoId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [campo]: valor }),
+        }
+      )
+
+      if (!response.ok) throw new Error('Error al actualizar el estado')
+
+      const updated = await response.json()
+      const juegoIdReal = updated.juegoId?._id || updated.juegoId || juegoId
+
+      setJuegos((prev) =>
+        prev.map((j) =>
+          j._id === juegoIdReal ? { ...j, [campo]: updated[campo] } : j
+        )
+      )
+    } catch (err) {
+      console.error('Error actualizando juego:', err)
+    }
+  }
+
+  // 🔹 Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
     let filteredList = juegos.filter((game) => {
-      //if (excluidos.includes(game._id)) return false
-
       const lowerQuery = query.toLowerCase()
-      if (query && !game.titulo.toLowerCase().includes(lowerQuery)) return false
+      const genero = game.genero?.toLowerCase() || ''
+      const plat = game.plataforma?.toLowerCase() || ''
 
-      // Géneros incluidos
-      if (includeGenres.length > 0) {
-        const genero = game.genero?.toLowerCase() || ''
-        if (!includeGenres.some((g) => genero.includes(g.toLowerCase())))
-          return false
-      }
+      if (query && !game.titulo?.toLowerCase().includes(lowerQuery))
+        return false
 
-      // Géneros excluidos
-      if (excludeGenres.length > 0) {
-        const genero = game.genero?.toLowerCase() || ''
-        if (excludeGenres.some((g) => genero.includes(g.toLowerCase())))
-          return false
-      }
+      if (
+        includeGenres.length > 0 &&
+        !includeGenres.some((g) => genero.includes(g.toLowerCase()))
+      )
+        return false
 
-      // Plataforma
-      if (plataforma) {
-        const plat = game.plataforma?.toLowerCase() || ''
-        if (!plat.includes(plataforma.toLowerCase())) return false
-      }
+      if (excludeGenres.some((g) => genero.includes(g.toLowerCase())))
+        return false
 
-      // Estado
+      if (plataforma && !plat.includes(plataforma.toLowerCase())) return false
+
       if (estadoJuego === 'completado' && !game.completado) return false
       if (estadoJuego === 'por_completar' && game.completado) return false
 
-      // Mis juegos / Wishlist
       if (misJuegosFilter && !game.misjuegos) return false
       if (wishlistFilter && !game.wishlist) return false
 
       return true
     })
 
-    // Ordenamiento
     filteredList.sort((a, b) => {
       switch (ordenamiento) {
         case 'titulo_asc':
@@ -106,24 +154,22 @@ function AllJuegos({ juegos = [], setJuegos }) {
     misJuegosFilter,
     wishlistFilter,
     ordenamiento,
-//    excluidos,
   ])
 
-  const toggleIncludeGenre = (genre) => {
-    setIncludeGenres((prev) =>
-      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
-    )
-  }
-
-  const toggleExcludeGenre = (genre) => {
-    setExcludeGenres((prev) =>
-      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
-    )
+  // 🔹 Alternar género incluido/excluido
+  const toggleGenre = (genre) => {
+    if (includeGenres.includes(genre)) {
+      setIncludeGenres((prev) => prev.filter((g) => g !== genre))
+      setExcludeGenres((prev) => [...prev, genre])
+    } else if (excludeGenres.includes(genre)) {
+      setExcludeGenres((prev) => prev.filter((g) => g !== genre))
+    } else {
+      setIncludeGenres((prev) => [...prev, genre])
+    }
   }
 
   return (
     <section className="alljuegos">
-      {/* Barra de búsqueda */}
       <div className="busqueda">
         <input
           type="text"
@@ -133,7 +179,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
         />
       </div>
 
-      {/* Filtros */}
       <details className="filtros">
         <summary>Filtros</summary>
 
@@ -150,17 +195,7 @@ function AllJuegos({ juegos = [], setJuegos }) {
                     ? 'excluido'
                     : ''
                 }`}
-                onClick={() =>
-                  includeGenres.includes(g)
-                    ? toggleIncludeGenre(g)
-                    : excludeGenres.includes(g)
-                    ? toggleExcludeGenre(g)
-                    : toggleIncludeGenre(g)
-                }
-                onContextMenu={(e) => {
-                  e.preventDefault()
-                  toggleExcludeGenre(g)
-                }}
+                onClick={() => toggleGenre(g)}
               >
                 {g}
               </button>
@@ -205,7 +240,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
             />
             Mis juegos
           </label>
-
           <label>
             <input
               type="checkbox"
@@ -232,13 +266,11 @@ function AllJuegos({ juegos = [], setJuegos }) {
         </div>
       </details>
 
-      {/* Contador */}
       <p className="contador-juegos">
         Mostrando <strong>{filteredAndSorted.length}</strong> de{' '}
         <strong>{juegos.length}</strong> juegos
       </p>
 
-      {/* Contenedor de tarjetas */}
       <div className="contenedor-juegos">
         {filteredAndSorted.length > 0 ? (
           filteredAndSorted.map((juego) => (
@@ -249,12 +281,45 @@ function AllJuegos({ juegos = [], setJuegos }) {
                 onClick={() => navigate(`/info/${juego._id}`)}
                 tipo="imagen"
               />
+              <div className="btn-juego">
+                <button
+                  className={`mygame-boton ${juego.misjuegos ? 'activo' : ''}`}
+                  onClick={() =>
+                    actualizarEstado(juego._id, 'misjuegos', !juego.misjuegos)
+                  }
+                >
+                  <img
+                    src={juego.misjuegos ? iconMisJuegos : iconEliminar}
+                    alt={
+                      juego.misjuegos ? 'En mis juegos' : 'Agregar a mis juegos'
+                    }
+                    className="iconGames"
+                  />
+                </button>
+                <button
+                  className={`mywishlist-boton ${
+                    juego.wishlist ? 'activo' : ''
+                  }`}
+                  onClick={() =>
+                    actualizarEstado(juego._id, 'wishlist', !juego.wishlist)
+                  }
+                >
+                  <img
+                    src={juego.wishlist ? iconWishlist : iconNoWishlist}
+                    alt={juego.wishlist ? 'En wishlist' : 'Agregar a wishlist'}
+                    className="iconGames"
+                  />
+                </button>
+              </div>
             </div>
           ))
         ) : (
           <p className="sin-resultados">No se encontraron juegos</p>
         )}
       </div>
+
+      {/* Mostrar modal login si no hay sesión */}
+      {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
     </section>
   )
 }
