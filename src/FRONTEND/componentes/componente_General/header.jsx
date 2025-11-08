@@ -1,8 +1,8 @@
-import './../../styles/header.css'
+import './../../styles/Header.css'
 import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
-import iconIngresar from './../../../assets/iconIngresar.png'
-import iconRegistro from './../../../assets/iconRegistro.png'
+import iconIngresar from './../../../assets/Icons/iconIngresar.png'
+import iconRegistro from './../../../assets/Icons/iconRegistro.png'
 import Login from './Login'
 
 

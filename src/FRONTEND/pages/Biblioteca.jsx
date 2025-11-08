@@ -1,4 +1,4 @@
-import './../styles/biblioteca.css'
+import './../styles/Biblioteca.css'
 import BibliotecaJuegos from '../componentes/componente_Biblioteca/BibliotecaJuegos'
 
 function Biblioteca() {

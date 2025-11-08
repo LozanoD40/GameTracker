@@ -1,8 +1,8 @@
-import './../../styles/info.css'
+import './../../styles/Info.css'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import Loader from '../componente_General/loading'
-import tiempoCarga4 from './../../../assets/tiempoCarga4.gif'
+import Loader from '../componente_General/Loading'
+import tiempoCarga4 from './../../../assets/loadingGif/tiempoCarga4.gif'
 import FormularioReseñas from '../componente_MisJuegos/FormularioReseña'
 
 function InfoJuego() {

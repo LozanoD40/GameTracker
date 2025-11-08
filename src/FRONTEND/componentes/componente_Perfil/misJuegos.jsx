@@ -1,25 +1,20 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import iconMisJuegos from '../../../assets/iconMisJuegos.png'
-import iconEliminar from '../../../assets/iconEliminar.png'
-import iconCompletados from '../../../assets/iconCompletados.png'
-import iconPorCompletar from '../../../assets/iconPorCompletar.png'
+import iconMisJuegos from '../../../assets/Icons/iconMisJuegos.png'
+import iconCompletados from '../../../assets/Icons/iconCompletados.png'
+import iconPorCompletar from '../../../assets/Icons/iconPorCompletar.png'
+import SliderCategoria from '../componente_Home/Categoria'
 
 function MisJuegos() {
   const [juegos, setJuegos] = useState([])
   const [query, setQuery] = useState('')
   const [estadoJuego, setEstadoJuego] = useState('')
-  const [ordenamiento, setOrdenamiento] = useState('titulo_asc')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
-
   // 🔹 Obtener juegos del usuario logueado
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user) {
-      navigate('/perfil')
-      return
-    }
+    if (!user) return // No redirige, solo evita errores
 
     fetch(`http://localhost:3000/api/datauser/usuario/${user.id}`)
       .then((res) => {
@@ -27,14 +22,12 @@ function MisJuegos() {
         return res.json()
       })
       .then((data) => {
-        // Filtramos solo los juegos que el usuario tiene marcados como "misjuegos"
         const misJuegos = data.filter((item) => item.misjuegos === true)
-        // Extraemos la info de los juegos relacionados
         const juegosUsuario = misJuegos.map((item) => item.juegoId)
         setJuegos(juegosUsuario)
       })
       .catch((err) => setError(err.message))
-  }, [navigate])
+  }, [])
 
   // 🔹 Filtros y ordenamiento
   const filteredAndSorted = useMemo(() => {
@@ -50,31 +43,10 @@ function MisJuegos() {
       return true
     })
 
-    filteredList.sort((a, b) => {
-      switch (ordenamiento) {
-        case 'titulo_asc':
-          return a.titulo.localeCompare(b.titulo)
-        case 'titulo_desc':
-          return b.titulo.localeCompare(a.titulo)
-        case 'fecha_reciente':
-          return new Date(b.lanzamiento) - new Date(a.lanzamiento)
-        case 'fecha_antigua':
-          return new Date(a.lanzamiento) - new Date(b.lanzamiento)
-        case 'puntuacion_desc':
-          return (b.puntuacion || 0) - (a.puntuacion || 0)
-        default:
-          return 0
-      }
-    })
 
     return filteredList
-  }, [juegos, query, estadoJuego, ordenamiento])
+  }, [juegos, query, estadoJuego,])
 
-  const resetFilters = () => {
-    setQuery('')
-    setEstadoJuego('')
-    setOrdenamiento('titulo_asc')
-  }
 
   if (error) return <div className="mis-juegos">Error{error}</div>
   if (juegos.length === 0)
@@ -83,8 +55,10 @@ function MisJuegos() {
   return (
     <div className="mis-juegos">
       <header className="mis-juegos-header">
-        <img src={iconMisJuegos} alt="Mis Juegos" className="icon-titulo" />
-        <h2>Mis Juegos</h2>
+        <h2 className="sub-title">
+          <img src={iconMisJuegos} alt="Mis Juegos" className="icon-titulo" />
+          Mis Juegos
+        </h2>
       </header>
 
       <div className="busqueda">
@@ -100,7 +74,6 @@ function MisJuegos() {
         <summary>Filtros</summary>
         <div className="contenido-filtros">
           <div className="bloque-filtro">
-            <label>Estado:</label>
             <div className="grupo-botones">
               <button
                 onClick={() =>
@@ -117,7 +90,6 @@ function MisJuegos() {
                 />
                 Completados
               </button>
-
               <button
                 onClick={() =>
                   setEstadoJuego(
@@ -135,28 +107,6 @@ function MisJuegos() {
               </button>
             </div>
           </div>
-
-          <div className="bloque-filtro">
-            <label htmlFor="sort-select">Ordenar por:</label>
-            <select
-              id="sort-select"
-              value={ordenamiento}
-              onChange={(e) => setOrdenamiento(e.target.value)}
-            >
-              <option value="titulo_asc">Título (A-Z)</option>
-              <option value="titulo_desc">Título (Z-A)</option>
-              <option value="fecha_reciente">Más reciente</option>
-              <option value="fecha_antigua">Más antiguo</option>
-              <option value="puntuacion_desc">Puntuación (Alta a baja)</option>
-            </select>
-          </div>
-
-          <div className="acciones-filtros">
-            <button onClick={resetFilters}>
-              <img src={iconEliminar} alt="Limpiar" className="icon_filtro" />
-              Limpiar filtros
-            </button>
-          </div>
         </div>
       </details>
 
@@ -164,22 +114,16 @@ function MisJuegos() {
         <p>
           Mostrando {filteredAndSorted.length} de {juegos.length} juegos
         </p>
-
-        <div className="grid-juegos">
-          {filteredAndSorted.map((game) => (
-            <article key={game._id} className="juego">
-              <div className="juego-imagen">
-                <img src={game.imagenPortada} alt={game.titulo} />
-              </div>
-              <div className="juego-info">
-                <h3>{game.titulo}</h3>
-                <button onClick={() => navigate(`/info/${game._id}`)}>
-                  Ver Info
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+        <SliderCategoria juegos={filteredAndSorted} />
+        <button
+          className="button-navegate"
+          onClick={(e) => {
+            e.stopPropagation() // Evita que se dispare el onClick del slide
+            navigate(`/biblioteca`)
+          }}
+        >
+          Explorar mas Juegos
+        </button>
       </section>
     </div>
   )

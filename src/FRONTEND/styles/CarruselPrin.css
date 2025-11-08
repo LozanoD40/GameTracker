@@ -46,14 +46,6 @@
   z-index: 3;
 }
 
-.overlay h2 {
-  font-family: var(--font-main);
-  color: var(--color-text-secondary);
-  text-shadow: 0 0 8px var(--color-border);
-  font-size: clamp(2.5rem, 3vw, 6rem);
-  margin-bottom: 15px;
-}
-
 .overlay .button {
   background-color: var(--color-bg-accent);
   border: none;
@@ -66,6 +58,7 @@
   font-size: clamp(18px, 1.5vw, 3rem);
   pointer-events: auto;
   cursor: pointer;
+  margin-top:100px;
   transition: background 0.3s;
 }
 

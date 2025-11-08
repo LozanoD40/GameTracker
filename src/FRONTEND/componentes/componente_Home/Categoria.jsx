@@ -1,5 +1,5 @@
-import CardJuego from '../componente_General/CardJuego'
 import { useState } from 'react'
+import CardJuego from '../componente_General/CardJuego'
 
 function SliderCategoria({ titulo, juegos }) {
   const [indice, setIndice] = useState(0)

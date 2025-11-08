@@ -1,13 +1,13 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
-import Headers from './FRONTEND/componentes/componente_General/header'
-import Footer from './FRONTEND/componentes/componente_General/footer'
+import Headers from './FRONTEND/componentes/componente_General/Header'
+import Footer from './FRONTEND/componentes/componente_General/Footer'
 import Login from './FRONTEND/componentes/componente_General/Login'
 import Info from './FRONTEND/componentes/componente_General/Info'
 import Home from './FRONTEND/pages/Home'
 import Perfil from './FRONTEND/pages/Perfil'
 import Biblioteca from './FRONTEND/pages/Biblioteca'
-import Foro from './FRONTEND/pages/foro'
+import Foro from './FRONTEND/pages/Foro'
 
 function App() {
   return (

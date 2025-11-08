@@ -1,8 +1,8 @@
 import './../../styles/CarruselPrin.css'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Loader from '../componente_General/loading'
-import tiempoCarga2 from './../../../assets/tiempoCarga2.gif'
+import Loader from '../componente_General/Loading'
+import tiempoCarga2 from './../../../assets/loadingGif/tiempoCarga2.gif'
 
 function SliderCarruselPrincipal() {
   const [juegosRecomendados, setRecomendados] = useState([])

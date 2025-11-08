@@ -1,18 +1,29 @@
-import './../styles/perfil.css'
+import './../styles/Perfil.css'
 import Status from './../componentes/componente_Perfil/Status'
-import Stats from './../componentes/componente_Perfil/Stats'
+import Estadisticas from './../componentes/componente_Perfil/Estadisticas'
 import MisJuegos from '../componentes/componente_Perfil/misJuegos'
+import MisLogros from '../componentes/componente_Perfil/MisLogros'
 
 function Perfil() {
+const stats = {
+  tiempoactivo: 12,
+  cantidaddeamigos: 100,
+  misionesCompletadas: 30,
+  tesorosDescubiertos: 4,
+  logrosObtenidos: 25,
+  reseñasDadas: 18,
+}
   return (
     <div>
       <Status />
       <div className="hr"></div>
-      <Stats />
-      <div className="hr"></div>
-      <h2>Logros</h2>
+      <div className="estadisticas-right">
+        <Estadisticas stats={stats} />
+      </div>
       <div className="hr"></div>
       <MisJuegos />
+      <div className="hr"></div>
+      <MisLogros />
     </div>
   )
 }

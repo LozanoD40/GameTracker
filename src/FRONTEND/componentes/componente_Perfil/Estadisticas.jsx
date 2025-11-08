@@ -1,70 +1,103 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Login from './../componente_General/Login'
+import { useEffect, useRef } from 'react'
+import '../../styles/Perfil.css'
 
-const Estadisticas = () => {
-  const [user, setUser] = useState(null)
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const navigate = useNavigate()
+function Estadisticas({ stats }) {
+  const canvasRef = useRef(null)
 
   useEffect(() => {
-    const userData = localStorage.getItem('user')
-    if (!userData) {
-      setIsLoginOpen(true)
-      return
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    const size = 300
+    const center = size / 2
+    const radius = 100
+
+    canvas.width = size
+    canvas.height = size
+
+    ctx.clearRect(0, 0, size, size)
+
+    const labels = ['Horas jugadas', 'Misiones', 'Amigos', 'Logros', 'Reseñas']
+    const values = [
+      stats.tiempoactivo / 100, // se normalizan para el radar
+      stats.misionesCompletadas / 100,
+      stats.cantidaddeamigos / 100,
+      stats.logrosObtenidos / 30,
+      stats.reseñasDadas / 50,
+    ]
+
+    // Dibujar fondo del radar
+    ctx.strokeStyle = 'rgba(212,175,55,0.4)'
+    ctx.lineWidth = 1
+    for (let i = 1; i <= 5; i++) {
+      ctx.beginPath()
+      for (let j = 0; j < labels.length; j++) {
+        const angle = (Math.PI * 2 * j) / labels.length
+        const x = center + Math.cos(angle) * ((radius * i) / 5)
+        const y = center + Math.sin(angle) * ((radius * i) / 5)
+        if (j === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.closePath()
+      ctx.stroke()
     }
-    setUser(JSON.parse(userData))
-  }, [navigate])
 
-  if (!user)
-    return (
-      <Login
-        isOpen={isLoginOpen}
-        onClose={() => {
-          setIsLoginOpen(false)
-          const userData = localStorage.getItem('user')
-          if (userData) {
-            setUser(JSON.parse(userData))
-          } else {
-            navigate('/')
-          }
-        }}
-      />
-    )
+    // Dibujar los valores del jugador
+    ctx.beginPath()
+    for (let i = 0; i < values.length; i++) {
+      const angle = (Math.PI * 2 * i) / values.length
+      const valueRadius = radius * Math.min(values[i], 1.2) // permite superar el límite visual
+      const x = center + Math.cos(angle) * valueRadius
+      const y = center + Math.sin(angle) * valueRadius
+      if (i === 0) ctx.moveTo(x, y)
+      else ctx.lineTo(x, y)
+    }
+    ctx.closePath()
+    ctx.fillStyle = 'rgba(212,175,55,0.3)'
+    ctx.strokeStyle = 'rgba(212,175,55,0.8)'
+    ctx.lineWidth = 2
+    ctx.fill()
+    ctx.stroke()
 
-  const stats = {
-    tiempoactivo: 120,
-    cantidaddeamigos: 10,
-    misionesCompletadas: 78,
-    tesorosDescubiertos: 14,
-    logrosObtenidos: 25,
-  }
-
+    // Etiquetas
+    ctx.fillStyle = '#fff'
+    ctx.font = '14px Cinzel Decorative'
+    labels.forEach((label, i) => {
+      const angle = (Math.PI * 2 * i) / labels.length
+      const x = center + Math.cos(angle) * (radius + 25)
+      const y = center + Math.sin(angle) * (radius + 25)
+      ctx.textAlign = 'center'
+      ctx.fillText(label, x, y)
+    })
+  }, [stats])
 
   return (
-    <div className='container'>
-      <h3 className='title'>Estadísticas personales de {user.nombre}</h3>
+    <div className="estadisticas-container">
+      <h2 className="estadisticas-title">Estadísticas</h2>
 
-      <div className='content'>
-        <div className='leftColumn'>
-          <div className='box'>Horas jugadas: {stats.tiempoactivo}</div>
-          <div className='box'>Amigos: {stats.cantidaddeamigos}</div>
-          <div className='box'>
-            Misiones completadas: {stats.misionesCompletadas}
+      <div className="estadisticas-content">
+        <div className="estadisticas-left">
+          <div className="stat-box glow">
+            🕒 Horas jugadas: {stats.tiempoactivo}
           </div>
-          <div className='box'>
-            Tesoros descubiertos: {stats.tesorosDescubiertos}
+          <div className="stat-box glow">
+            🤝 Amigos: {stats.cantidaddeamigos}
           </div>
-          <div className='box'>
-            Logros obtenidos: {stats.logrosObtenidos}
+          <div className="stat-box glow">
+            ⚔️ Misiones completadas: {stats.misionesCompletadas}
+          </div>
+          <div className="stat-box glow">
+            💎 Tesoros descubiertos: {stats.tesorosDescubiertos}
+          </div>
+          <div className="stat-box glow">
+            🏆 Logros obtenidos: {stats.logrosObtenidos}
           </div>
         </div>
-
-        <div className='rightPanel'>
-          <div></div>
+        <div className="chart-container">
+          <canvas ref={canvasRef}></canvas>
         </div>
       </div>
     </div>
   )
 }
+
 export default Estadisticas

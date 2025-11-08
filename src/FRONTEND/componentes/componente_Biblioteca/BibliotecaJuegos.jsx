@@ -1,8 +1,8 @@
-import './../../styles/biblioteca.css'
+import './../../styles/Biblioteca.css'
 import { useEffect, useState } from 'react'
 import AllJuegos from './AllJuegos'
-import Loader from '../componente_General/loading'
-import tiempoCarga1 from './../../../assets/tiempoCarga1.gif'
+import Loader from '../componente_General/Loading'
+import tiempoCarga1 from './../../../assets/loadingGif/tiempoCarga1.gif'
 
 function BibliotecaJuegos() {
   const [juegos, setJuegos] = useState([])

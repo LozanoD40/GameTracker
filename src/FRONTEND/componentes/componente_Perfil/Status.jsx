@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import iconConfiguracion from './../../../assets/iconConfiguracion.png'
-import perfilKnight from './../../../assets/perfilKnight.jpg'
-import perfilDwarf from './../../../assets/perfilDwarf.png'
-import perfilDragonMan from './../../../assets/perfilDragonMan.png'
-import perfilCatGirl from './../../../assets/perfilCatGirl.png'
-import perfilBearMan from './../../../assets/perfilBearMan.png'
-import perfilElf from './../../../assets/perfilElf.png'
-import perfilDarkelf from './../../../assets/perfilDarkElf.png'
-import perfilFairy from './../../../assets/perfilFairy.png'
-import perfilBarbarian from './../../../assets/perfilBarbarian.png'
-import perfilWizard from './../../../assets/perfilWizard.png'
-import perfilBard from './../../../assets/perfilBard.png'
-import perfilSaint from './../../../assets/perfilSaint.png'
-import perfilAssesing from './../../../assets/perfilAssesing.png'
-import perfilNecromance from './../../../assets/perfilNecromance.png'
-import perfilLancer from './../../../assets/perfilLancer.png'
-import perfilCultist from './../../../assets/perfilCultist.png'
-import perfilMerchant from './../../../assets/perfilMerchant.png'
-import perfilHomunculus from './../../../assets/perfilHomunculus.png'
+import iconConfiguracion from './../../../assets/Icons/iconConfiguracion.png'
+import perfilKnight from './../../../assets/perfilPlayer/perfilKnight.jpg'
+import perfilDwarf from './../../../assets/perfilPlayer/perfilDwarf.png'
+import perfilDragonMan from './../../../assets/perfilPlayer/perfilDragonMan.png'
+import perfilCatGirl from './../../../assets/perfilPlayer/perfilCatGirl.png'
+import perfilBearMan from './../../../assets/perfilPlayer/perfilBearMan.png'
+import perfilElf from './../../../assets/perfilPlayer/perfilElf.png'
+import perfilDarkelf from './../../../assets/perfilPlayer/perfilDarkElf.png'
+import perfilFairy from './../../../assets/perfilPlayer/perfilFairy.png'
+import perfilBarbarian from './../../../assets/perfilPlayer/perfilBarbarian.png'
+import perfilWizard from './../../../assets/perfilPlayer/perfilWizard.png'
+import perfilBard from './../../../assets/perfilPlayer/perfilBard.png'
+import perfilSaint from './../../../assets/perfilPlayer/perfilSaint.png'
+import perfilAssesing from './../../../assets/perfilPlayer/perfilAssesing.png'
+import perfilNecromance from './../../../assets/perfilPlayer/perfilNecromance.png'
+import perfilLancer from './../../../assets/perfilPlayer/perfilLancer.png'
+import perfilCultist from './../../../assets/perfilPlayer/perfilCultist.png'
+import perfilMerchant from './../../../assets/perfilPlayer/perfilMerchant.png'
+import perfilHomunculus from './../../../assets/perfilPlayer/perfilHomunculus.png'
 import Login from './../componente_General/Login'
+import MisLogros from './MisLogros'
+import Estadisticas from './Estadisticas'
 
 function Status() {
   const [opcion, setOpcion] = useState(null)
@@ -94,7 +96,7 @@ function Status() {
     }
   }
 
-  const titulo = 'Caza dragones'
+  const titulo = MisLogros.logros
   const lvl = 70
 
   const rango = () => {
@@ -212,7 +214,7 @@ function Status() {
             </button>
           </details>
           <h2 className="atribute">
-            Titulo:<p>{titulo}</p>
+            Titulo:<p>{titulo || 'Aventurero novato'}</p>
           </h2>
           <h2 className="atribute">
             Rango: <p>{rango()}</p>

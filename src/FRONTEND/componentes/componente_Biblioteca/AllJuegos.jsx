@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import iconNoWishlist from '../../../assets/Icons/iconNoWishlist.png'
+import iconWishlist from '../../../assets/Icons/iconWishlist.png'
+import iconMisJuegos from '../../../assets/Icons/iconMisJuegos.png'
+import iconEliminar from '../../../assets/Icons/iconEliminar.png'
 import CardJuego from '../componente_General/CardJuego'
 import Login from '../componente_General/Login'
-import iconNoWishlist from '../../../assets/iconNoWishlist.png'
-import iconWishlist from '../../../assets/iconWishlist.png'
-import iconMisJuegos from '../../../assets/iconMisJuegos.png'
-import iconEliminar from '../../../assets/iconEliminar.png'
 
 function AllJuegos({ juegos = [], setJuegos }) {
   const [query, setQuery] = useState('')
@@ -44,6 +44,44 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'Nintendo',
   ]
 
+  // 🔹 Verifica si el usuario está logueado y sincroniza Datauser
+  useEffect(() => {
+    const userData = localStorage.getItem('user')
+    if (!userData) {
+      setIsLoginOpen(true)
+      return
+    }
+    const parsedUser = JSON.parse(userData)
+    setUser(parsedUser)
+
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/dataUser/usuario/${parsedUser._id}`
+        )
+        const dataUser = await res.json()
+
+        // Mezclamos la info de Datauser con los juegos
+        const juegosActualizados = juegos.map((j) => {
+          const relacion = dataUser.find((d) => d.juegoId._id === j._id)
+          return relacion
+            ? {
+                ...j,
+                misjuegos: relacion.misjuegos,
+                wishlist: relacion.wishlist,
+                completado: relacion.completado,
+              }
+            : j
+        })
+        setJuegos(juegosActualizados)
+      } catch (err) {
+        console.error('Error al sincronizar Datauser:', err)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   // 🔹 Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
     const q = (query || '').trim().toLowerCase()
@@ -57,30 +95,22 @@ function AllJuegos({ juegos = [], setJuegos }) {
       const plat = (game.plataforma || '').toLowerCase()
 
       if (q && !titulo.includes(q)) return false
-
-      // Si hay géneros incluidos, el juego debe coincidir con al menos uno
       if (
         includeNorm.length > 0 &&
         !includeNorm.some((g) => genero.includes(g))
       )
         return false
-
-      // Si hay géneros excluidos, el juego no debe contener ninguno
       if (excludeNorm.length > 0 && excludeNorm.some((g) => genero.includes(g)))
         return false
-
       if (plataformaNorm && !plat.includes(plataformaNorm)) return false
-
       if (estadoJuego === 'completado' && !game.completado) return false
       if (estadoJuego === 'por_completar' && game.completado) return false
-
       if (misJuegosFilter && !game.misjuegos) return false
       if (wishlistFilter && !game.wishlist) return false
 
       return true
     })
 
-    // Ordenamiento
     filteredList.sort((a, b) => {
       switch (ordenamiento) {
         case 'titulo_asc':
@@ -88,11 +118,13 @@ function AllJuegos({ juegos = [], setJuegos }) {
         case 'titulo_desc':
           return (b.titulo || '').localeCompare(a.titulo || '')
         case 'fecha_reciente':
-          return new Date(b.lanzamiento || 0) - new Date(a.lanzamiento || 0)
+          return (
+            new Date(b.anioLanzamiento || 0) - new Date(a.anioLanzamiento || 0)
+          )
         case 'fecha_antigua':
-          return new Date(a.lanzamiento || 0) - new Date(b.lanzamiento || 0)
-        case 'puntuacion_desc':
-          return (b.puntuacion || 0) - (a.puntuacion || 0)
+          return (
+            new Date(a.anioLanzamiento || 0) - new Date(b.anioLanzamiento || 0)
+          )
         default:
           return 0
       }
@@ -123,29 +155,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
     }
   }
 
-  // 🔹 Verifica si el usuario está logueado
-  useEffect(() => {
-    const userData = localStorage.getItem('user')
-    if (!userData) {
-      setIsLoginOpen(true)
-      return
-    }
-    setUser(JSON.parse(userData))
-  }, [navigate])
-
-  // 🔹 Muestra login si no hay usuario
-  if (!user)
-    return (
-      <Login
-        isOpen={isLoginOpen}
-        onClose={() => {
-          setIsLoginOpen(false)
-          const userData = localStorage.getItem('user')
-          if (userData) setUser(JSON.parse(userData))
-        }}
-      />
-    )
-
   // 🔹 FUNCIÓN PRINCIPAL: Actualizar estado (misjuegos o wishlist)
   const actualizarEstado = async (juegoId, campo, valor) => {
     try {
@@ -170,18 +179,26 @@ function AllJuegos({ juegos = [], setJuegos }) {
         return
       }
 
-      const updated = await res.json()
-
-      // 🔹 Actualiza visualmente el estado del juego modificado
+      // 🔹 Actualizar visualmente
       setJuegos((prev) =>
-        prev.map((j) =>
-          j._id === juegoId ? { ...j, [campo]: updated[campo] } : j
-        )
+        prev.map((j) => (j._id === juegoId ? { ...j, [campo]: valor } : j))
       )
     } catch (error) {
       console.error('Error al conectar con el backend:', error)
     }
   }
+
+  if (!user)
+    return (
+      <Login
+        isOpen={isLoginOpen}
+        onClose={() => {
+          setIsLoginOpen(false)
+          const userData = localStorage.getItem('user')
+          if (userData) setUser(JSON.parse(userData))
+        }}
+      />
+    )
 
   return (
     <section className="alljuegos">
@@ -274,7 +291,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
             <option value="titulo_desc">Título (Z-A)</option>
             <option value="fecha_reciente">Más recientes</option>
             <option value="fecha_antigua">Más antiguos</option>
-            <option value="puntuacion_desc">Mayor puntuación</option>
           </select>
         </div>
       </details>
