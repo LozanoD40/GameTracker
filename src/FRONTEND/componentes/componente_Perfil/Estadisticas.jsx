@@ -18,7 +18,7 @@ function Estadisticas({ stats }) {
 
     const labels = ['Jugado', 'Misiones', 'Amigos', 'Logros', 'Reseñas']
     const values = [
-      stats.tiempoactivo / 100, // se normalizan para el radar
+      stats.tiempoActivo / 100, // se normalizan para el radar
       stats.misionesCompletadas / 100,
       stats.cantidaddeamigos / 100,
       stats.logrosObtenidos / 30,
@@ -77,7 +77,7 @@ function Estadisticas({ stats }) {
       <div className="estadisticas-content">
         <div className="estadisticas-left">
           <div className="stat-box glow">
-            Horas jugadas: {stats.tiempoactivo}
+            Horas jugadas: {stats.tiempoActivo}
           </div>
           <div className="stat-box glow">
             Amigos: {stats.cantidaddeamigos}

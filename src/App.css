@@ -1,6 +1,6 @@
 @import url('./FRONTEND/styles/body.css');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -41,6 +41,20 @@
   }
 }
 
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
 :root {
   /* Colores */
   --color-bg-main: rgb(11, 11, 11); /* Fondo general del body */
@@ -48,11 +62,11 @@
   --color-bg-accent: #000; /* Fondo de navbar y footer */
   --color-text-primary: #d4af37; /* Dorado medieval */
   --color-text-secondary: #fff; /* Blanco para hover o contraste */
-  --color-text-tertiary:  #aaaaaa; /* contrasete */
+  --color-text-tertiary: #aaaaaa; /* contrasete */
   --color-border: #d4af37; /* Borde principal dorado */
   --color-outline: #fff2; /* Outline sutil */
   --color-bg: #0b0b0b;
-  --color-bg-alt: #1a1a1a;
+  --color-bg-alt: rgb(26, 26, 26);
   --color-text-hover: #fff;
 
   /*Tipografía*/
@@ -63,8 +77,8 @@
   /*Tamaños de texto*/
   --font-size-navbar: 20px;
   --font-size-body: 18px;
-  --font-size-body-lg:2rem;
-  --font-size-body-sh:0.9rem;
+  --font-size-body-lg: 2rem;
+  --font-size-body-sh: 0.9rem;
   --font-size-footer: 16px;
   --font-size-card: 18px;
   --icon-size: 22px;
@@ -104,4 +118,3 @@
   --container-padding: 50px;
   --bg-pattern: url('./assets/dark-mosaic.png');
 }
-

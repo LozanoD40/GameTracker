@@ -97,7 +97,7 @@ function Status() {
   }
 
   const titulo = MisLogros.logros
-  const lvl = 70
+  const lvl = 20
 
   const rango = () => {
     if (lvl < 10) return 'Aspirante'

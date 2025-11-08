@@ -238,6 +238,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 /* Header */
@@ -270,7 +271,7 @@
   width: 100%;
 }
 
-/* Busqueda*/
+/* Busqueda */
 .mis-juegos .busqueda {
   width: 100%;
   display: flex;
@@ -299,7 +300,6 @@
   width: 100%;
   border-radius: 8px;
   border: 1px solid rgba(212, 175, 55, 0.1);
-  border-radius: 8px;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.02);
   margin-bottom: 1.5rem;
@@ -361,6 +361,52 @@
   height: 20px;
 }
 
+/* --- FIX para carrusel dentro de MisJuegos --- */
+.mis-juegos .slider-categoria {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+}
+
+.mis-juegos .contenedor-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+.mis-juegos .slider-track {
+  display: flex;
+  gap: 15px;
+  transition: transform 0.5s ease-in-out;
+  padding: 0 10px;
+}
+
+.mis-juegos .nav-btn {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.mis-juegos .nav-btn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-outline);
+}
+
+.mis-juegos .nav-btn.izquierda {
+  left: 10px;
+}
+
+.mis-juegos .nav-btn.derecha {
+  right: 10px;
+}
+
 /* Contenido */
 .button-navegate {
   display: flex;
@@ -378,7 +424,7 @@
   }
 
   .grupo-botones button {
-    flex: 1 1 calc(50% - 0.5rem); /* ✅ botones se acomodan 2 por fila */
+    flex: 1 1 calc(50% - 0.5rem);
   }
 }
 
@@ -392,8 +438,13 @@
     height: 25px;
   }
 
+  .coleccion {
+    width: 100%;
+    margin: 0 auto;
+  }
+
   .grupo-botones button {
-    flex: 1 1 100%; /* ✅ un botón por fila */
+    flex: 1 1 90%;
   }
 
   .mis-juegos .filtros {
@@ -401,11 +452,10 @@
   }
 
   .button-navegate {
-    width: 100%;
+    width: 90%;
     justify-content: center;
   }
 }
-
 
 /* ---------- LOGROS ---------- */
 .mis-logros-container {
@@ -417,16 +467,19 @@
   font-family: var(--font-title);
   font-size: var(--font-size-body-lg);
   color: var(--color-text-primary);
+  text-transform: uppercase;
   margin-bottom: 1.5rem;
 }
 
+/* Grid principal */
 .grid-logros {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  row-gap: 4rem;
   justify-items: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 .logro-card {
@@ -438,13 +491,12 @@
   border: 2px solid var(--color-border);
   border-radius: 10px;
   padding: 1rem;
-  width: 90%;
-  max-width: 250px;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
   animation: fadeIn 0.6s ease both;
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
+  position: relative;
 }
 
 .rombo {
@@ -460,8 +512,6 @@
   border-radius: 8px;
   transition: all 0.4s ease;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-  width: 200px;
-  height: 200px;
 }
 
 .logro-card:hover {
@@ -470,16 +520,12 @@
 }
 
 .logro-card:hover .rombo {
-  background: (135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.1));
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
   scale: 1.05;
 }
 
 .logro-card h3 {
-  display: flex;
   text-align: center;
-  justify-content: center;
-  align-items: center;
   position: relative;
   z-index: 1;
   font-family: var(--font-main);
@@ -489,29 +535,24 @@
   padding: 0.5rem;
 }
 
-.logro-card:hover {
-  box-shadow: var(--text-shadow-gold);
-  transform: translateY(-5px);
-  scale: 1.08;
-}
-
-.icon-logro{
+.icon-logro {
   width: 80%;
   height: 80%;
 }
 
-/* Dialog*/
+/* Dialog */
 .dialog-logro {
   position: fixed;
   inset: 0;
-  margin: auto;
   display: flex;
+  margin: auto;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  border: 2px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-bg-secondary);
+  border: none;
+  background-color: rgb(26, 26, 26, 10);
+  border: 4px solid var(--color-border);
+  border-radius: 10px;
   color: var(--color-text-primary);
   padding: 2rem;
   max-width: 420px;
@@ -540,9 +581,10 @@
 }
 
 .dialog-content .icon-logro {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   margin-bottom: 1rem;
+  animation: float 4s ease-in-out infinite;
 }
 
 .dialog-content button {
@@ -560,6 +602,7 @@
   scale: 1.05;
 }
 
+/* Botón Ver más */
 .btn-vermas {
   margin: 1rem auto;
   gap: 0.4rem;
@@ -576,46 +619,62 @@
   scale: 1.05;
 }
 
+/* Responsivo */
 @media (max-width: 1024px) {
   .grid-logros {
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.2rem;
+    row-gap: 4rem;
   }
 }
 
 @media (max-width: 768px) {
   .grid-logros {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.8rem;
+    row-gap: 4rem;
   }
 
-  .logro-card {
-    width: 100px;
-    height: 100px;
-  }
-
-  .dialog-logro {
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem;
-    width: 420px;
-  }
-}
-
-@media (max-width: 480px) {
   .logro-card {
     width: 130px;
     height: 130px;
   }
 
-  .logro-card h3 {
-    font-size: var(--font-size-body-sh);
+  .dialog-logro {
+    padding: 1rem;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-logros {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.6rem;
+    row-gap: 2.5rem;
+  }
+
+  .logro-card {
+    width: 150px;
+    height: 150px;
   }
 
   .rombo {
     width: 150px;
     height: 150px;
   }
+
+  .dialog-logro {
+    margin: auto;
+    width: 80vw;
+    height: 50vh;
+  }
+
+  .dialog-content .icon-logro {
+    width: 180px;
+    height: 180px;
+  }
 }
+
 /* ---------- SEPARADOR DE SECCIONES ---------- */
 .hr {
   position: relative;

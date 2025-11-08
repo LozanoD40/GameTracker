@@ -1,3 +1,4 @@
+import '../../styles/Perfil.css'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import iconMisJuegos from '../../../assets/Icons/iconMisJuegos.png'
@@ -11,10 +12,10 @@ function MisJuegos() {
   const [estadoJuego, setEstadoJuego] = useState('')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
-  // 🔹 Obtener juegos del usuario logueado
+  // Obtener juegos del usuario logueado
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user) return // No redirige, solo evita errores
+    if (!user) return 
 
     fetch(`http://localhost:3000/api/datauser/usuario/${user.id}`)
       .then((res) => {
