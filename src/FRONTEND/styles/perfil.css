@@ -248,6 +248,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
@@ -320,6 +321,7 @@
 .bloque-filtro {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.3rem;
 }
 
@@ -365,85 +367,255 @@
   margin: 0 auto;
   margin-bottom: 10px;
 }
+
+@media (max-width: 768px) {
+  .mis-juegos-header .sub-title {
+    font-size: 1.1rem;
+  }
+
+  .mis-juegos .busqueda input {
+    max-width: 100%;
+  }
+
+  .grupo-botones button {
+    flex: 1 1 calc(50% - 0.5rem); /* ✅ botones se acomodan 2 por fila */
+  }
+}
+
+@media (max-width: 480px) {
+  .mis-juegos-header {
+    flex-direction: column;
+  }
+
+  .mis-juegos-header .icon-titulo {
+    width: 30px;
+    height: 25px;
+  }
+
+  .grupo-botones button {
+    flex: 1 1 100%; /* ✅ un botón por fila */
+  }
+
+  .mis-juegos .filtros {
+    padding: 0.8rem;
+  }
+
+  .button-navegate {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
 /* ---------- LOGROS ---------- */
 .mis-logros-container {
   margin-top: 2rem;
   text-align: center;
-  color: var(--color-text);
 }
 
 .titulo-seccion {
   font-family: var(--font-title);
-  font-size: 2rem;
-  color: gold;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text-primary);
   margin-bottom: 1.5rem;
 }
 
 .grid-logros {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
   justify-items: center;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .logro-card {
-  background: rgba(30, 30, 40, 0.8);
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: 2px solid var(--color-border);
   border-radius: 10px;
   padding: 1rem;
   width: 90%;
   max-width: 250px;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.6s ease both;
+  width: 200px;
+  height: 200px;
 }
 
-.logro-card h3 {
-  color: gold;
-  margin-bottom: 0.5rem;
-}
-
-.logro-card p {
-  font-size: 0.9rem;
-  color: #ccc;
+.rombo {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  transform: rotate(45deg);
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 0;
+  border-radius: 8px;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+  width: 200px;
+  height: 200px;
 }
 
 .logro-card:hover {
-  border-color: gold;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-  transform: translateY(-5px);
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.logro-card:hover .rombo {
+  background: (135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.1));
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+  scale: 1.05;
+}
+
+.logro-card h3 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-main);
+  font-size: var(--font-size-body-sh);
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.logro-card:hover {
+  box-shadow: var(--text-shadow-gold);
+  transform: translateY(-5px);
+  scale: 1.08;
+}
+
+.icon-logro{
+  width: 80%;
+  height: 80%;
+}
+
+/* Dialog*/
+.dialog-logro {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  padding: 2rem;
+  max-width: 420px;
+  width: 90%;
+  animation: fadeInScale 0.4s ease forwards;
+}
+
+.dialog-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.dialog-content h3 {
+  font-family: var(--font-title);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-lg);
+  margin-bottom: 1rem;
+}
+
+.dialog-content p {
+  font-size: var(--font-size-body-sh);
+  color: var(--color-text-tertiary);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.dialog-content .icon-logro {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 1rem;
+}
+
+.dialog-content button {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.dialog-content button:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  scale: 1.05;
 }
 
 .btn-vermas {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.5rem;
-  background: linear-gradient(135deg, #3a2a1a, #5b4429);
-  color: gold;
-  border: 2px solid gold;
-  border-radius: 8px;
-  font-family: var(--font-main);
+  margin: 1rem auto;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-vermas:hover {
-  background: gold;
-  color: #1a1a1a;
-  box-shadow: 0 0 15px gold;
+  scale: 1.05;
 }
 
+@media (max-width: 1024px) {
+  .grid-logros {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-logros {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .logro-card {
+    width: 100px;
+    height: 100px;
+  }
+
+  .dialog-logro {
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    width: 420px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logro-card {
+    width: 130px;
+    height: 130px;
+  }
+
+  .logro-card h3 {
+    font-size: var(--font-size-body-sh);
+  }
+
+  .rombo {
+    width: 150px;
+    height: 150px;
+  }
+}
 /* ---------- SEPARADOR DE SECCIONES ---------- */
 .hr {
   position: relative;

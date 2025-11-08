@@ -16,7 +16,7 @@ function Estadisticas({ stats }) {
 
     ctx.clearRect(0, 0, size, size)
 
-    const labels = ['Horas jugadas', 'Misiones', 'Amigos', 'Logros', 'Reseñas']
+    const labels = ['Jugado', 'Misiones', 'Amigos', 'Logros', 'Reseñas']
     const values = [
       stats.tiempoactivo / 100, // se normalizan para el radar
       stats.misionesCompletadas / 100,
@@ -77,19 +77,19 @@ function Estadisticas({ stats }) {
       <div className="estadisticas-content">
         <div className="estadisticas-left">
           <div className="stat-box glow">
-            🕒 Horas jugadas: {stats.tiempoactivo}
+            Horas jugadas: {stats.tiempoactivo}
           </div>
           <div className="stat-box glow">
-            🤝 Amigos: {stats.cantidaddeamigos}
+            Amigos: {stats.cantidaddeamigos}
           </div>
           <div className="stat-box glow">
-            ⚔️ Misiones completadas: {stats.misionesCompletadas}
+            Misiones completadas: {stats.misionesCompletadas}
           </div>
           <div className="stat-box glow">
-            💎 Tesoros descubiertos: {stats.tesorosDescubiertos}
+            Tesoros descubiertos: {stats.tesorosDescubiertos}
           </div>
           <div className="stat-box glow">
-            🏆 Logros obtenidos: {stats.logrosObtenidos}
+            Logros obtenidos: {stats.logrosObtenidos}
           </div>
         </div>
         <div className="chart-container">

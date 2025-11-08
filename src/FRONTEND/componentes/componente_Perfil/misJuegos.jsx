@@ -114,7 +114,7 @@ function MisJuegos() {
         <p>
           Mostrando {filteredAndSorted.length} de {juegos.length} juegos
         </p>
-        <SliderCategoria juegos={filteredAndSorted} />
+        <SliderCategoria juegos={filteredAndSorted} id='carrusel'/>
         <button
           className="button-navegate"
           onClick={(e) => {
