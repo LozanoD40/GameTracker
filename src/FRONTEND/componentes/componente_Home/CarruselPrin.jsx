@@ -55,7 +55,7 @@ function SliderCarruselPrincipal() {
             alt={juego.titulo}
           />
           <div className="overlay">
-            <h2>{juego.titulo}</h2>
+            <span></span>
             <button
               className="button"
               onClick={(e) => {

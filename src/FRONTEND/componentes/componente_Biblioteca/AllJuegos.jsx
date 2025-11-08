@@ -16,10 +16,11 @@ function AllJuegos({ juegos = [], setJuegos }) {
   const [misJuegosFilter, setMisJuegosFilter] = useState(false)
   const [wishlistFilter, setWishlistFilter] = useState(false)
   const [ordenamiento, setOrdenamiento] = useState('titulo_asc')
-  const [usuarioId, setUsuarioId] = useState(null)
+  const [user, setUser] = useState(null)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const navigate = useNavigate()
 
+  // 🔹 Listas de géneros y plataformas
   const generosDisponibles = [
     'Aventura',
     'Acción',
@@ -43,79 +44,32 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'Nintendo',
   ]
 
-  // 🔹 Cargar el usuario logueado (si existe)
-  useEffect(() => {
-    try {
-      const userData = localStorage.getItem('user')
-      if (!userData) return
-
-      const parsedUser = JSON.parse(userData)
-      if (parsedUser && parsedUser._id) {
-        setUsuarioId(parsedUser._id)
-        setIsLoginOpen(false)
-      } else {
-        console.warn('Usuario inválido en localStorage')
-        setUsuarioId(null)
-      }
-    } catch (error) {
-      console.error('Error al leer usuario del localStorage:', error)
-      setUsuarioId(null)
-    }
-  }, [])
-
-  // ✅ Actualizar estado del juego (wishlist o misjuegos)
-  const actualizarEstado = async (juegoId, campo, valor) => {
-    // Si no hay usuario logueado, abrir login
-    if (!usuarioId) {
-      setIsLoginOpen(true)
-      return
-    }
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/dataUser/usuario/${usuarioId}/juego/${juegoId}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ [campo]: valor }),
-        }
-      )
-
-      if (!response.ok) throw new Error('Error al actualizar el estado')
-
-      const updated = await response.json()
-      const juegoIdReal = updated.juegoId?._id || updated.juegoId || juegoId
-
-      setJuegos((prev) =>
-        prev.map((j) =>
-          j._id === juegoIdReal ? { ...j, [campo]: updated[campo] } : j
-        )
-      )
-    } catch (err) {
-      console.error('Error actualizando juego:', err)
-    }
-  }
-
   // 🔹 Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
+    const q = (query || '').trim().toLowerCase()
+    const includeNorm = includeGenres.map((g) => g.toLowerCase())
+    const excludeNorm = excludeGenres.map((g) => g.toLowerCase())
+    const plataformaNorm = (plataforma || '').toLowerCase()
+
     let filteredList = juegos.filter((game) => {
-      const lowerQuery = query.toLowerCase()
-      const genero = game.genero?.toLowerCase() || ''
-      const plat = game.plataforma?.toLowerCase() || ''
+      const titulo = (game.titulo || '').toLowerCase()
+      const genero = (game.genero || '').toLowerCase()
+      const plat = (game.plataforma || '').toLowerCase()
 
-      if (query && !game.titulo?.toLowerCase().includes(lowerQuery))
-        return false
+      if (q && !titulo.includes(q)) return false
 
+      // Si hay géneros incluidos, el juego debe coincidir con al menos uno
       if (
-        includeGenres.length > 0 &&
-        !includeGenres.some((g) => genero.includes(g.toLowerCase()))
+        includeNorm.length > 0 &&
+        !includeNorm.some((g) => genero.includes(g))
       )
         return false
 
-      if (excludeGenres.some((g) => genero.includes(g.toLowerCase())))
+      // Si hay géneros excluidos, el juego no debe contener ninguno
+      if (excludeNorm.length > 0 && excludeNorm.some((g) => genero.includes(g)))
         return false
 
-      if (plataforma && !plat.includes(plataforma.toLowerCase())) return false
+      if (plataformaNorm && !plat.includes(plataformaNorm)) return false
 
       if (estadoJuego === 'completado' && !game.completado) return false
       if (estadoJuego === 'por_completar' && game.completado) return false
@@ -126,16 +80,17 @@ function AllJuegos({ juegos = [], setJuegos }) {
       return true
     })
 
+    // Ordenamiento
     filteredList.sort((a, b) => {
       switch (ordenamiento) {
         case 'titulo_asc':
-          return a.titulo.localeCompare(b.titulo)
+          return (a.titulo || '').localeCompare(b.titulo || '')
         case 'titulo_desc':
-          return b.titulo.localeCompare(a.titulo)
+          return (b.titulo || '').localeCompare(a.titulo || '')
         case 'fecha_reciente':
-          return new Date(b.lanzamiento) - new Date(a.lanzamiento)
+          return new Date(b.lanzamiento || 0) - new Date(a.lanzamiento || 0)
         case 'fecha_antigua':
-          return new Date(a.lanzamiento) - new Date(b.lanzamiento)
+          return new Date(a.lanzamiento || 0) - new Date(b.lanzamiento || 0)
         case 'puntuacion_desc':
           return (b.puntuacion || 0) - (a.puntuacion || 0)
         default:
@@ -165,6 +120,66 @@ function AllJuegos({ juegos = [], setJuegos }) {
       setExcludeGenres((prev) => prev.filter((g) => g !== genre))
     } else {
       setIncludeGenres((prev) => [...prev, genre])
+    }
+  }
+
+  // 🔹 Verifica si el usuario está logueado
+  useEffect(() => {
+    const userData = localStorage.getItem('user')
+    if (!userData) {
+      setIsLoginOpen(true)
+      return
+    }
+    setUser(JSON.parse(userData))
+  }, [navigate])
+
+  // 🔹 Muestra login si no hay usuario
+  if (!user)
+    return (
+      <Login
+        isOpen={isLoginOpen}
+        onClose={() => {
+          setIsLoginOpen(false)
+          const userData = localStorage.getItem('user')
+          if (userData) setUser(JSON.parse(userData))
+        }}
+      />
+    )
+
+  // 🔹 FUNCIÓN PRINCIPAL: Actualizar estado (misjuegos o wishlist)
+  const actualizarEstado = async (juegoId, campo, valor) => {
+    try {
+      if (!user?._id) {
+        console.error('Usuario no logueado')
+        setIsLoginOpen(true)
+        return
+      }
+
+      const res = await fetch(
+        `http://localhost:3000/api/dataUser/usuario/${user._id}/juego/${juegoId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [campo]: valor }),
+        }
+      )
+
+      if (!res.ok) {
+        const err = await res.json()
+        console.error('Error al actualizar:', err)
+        return
+      }
+
+      const updated = await res.json()
+
+      // 🔹 Actualiza visualmente el estado del juego modificado
+      setJuegos((prev) =>
+        prev.map((j) =>
+          j._id === juegoId ? { ...j, [campo]: updated[campo] } : j
+        )
+      )
+    } catch (error) {
+      console.error('Error al conectar con el backend:', error)
     }
   }
 
@@ -236,7 +251,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
               type="checkbox"
               checked={misJuegosFilter}
               onChange={(e) => setMisJuegosFilter(e.target.checked)}
-              id="filtro-checkbox"
             />
             Mis juegos
           </label>
@@ -245,7 +259,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
               type="checkbox"
               checked={wishlistFilter}
               onChange={(e) => setWishlistFilter(e.target.checked)}
-              id="filtro-checkbox"
             />
             Wishlist
           </label>
@@ -282,6 +295,7 @@ function AllJuegos({ juegos = [], setJuegos }) {
                 tipo="imagen"
               />
               <div className="btn-juego">
+                {/* 🔹 Botón Mis Juegos */}
                 <button
                   className={`mygame-boton ${juego.misjuegos ? 'activo' : ''}`}
                   onClick={() =>
@@ -296,6 +310,8 @@ function AllJuegos({ juegos = [], setJuegos }) {
                     className="iconGames"
                   />
                 </button>
+
+                {/* 🔹 Botón Wishlist */}
                 <button
                   className={`mywishlist-boton ${
                     juego.wishlist ? 'activo' : ''
@@ -317,9 +333,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
           <p className="sin-resultados">No se encontraron juegos</p>
         )}
       </div>
-
-      {/* Mostrar modal login si no hay sesión */}
-      {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
     </section>
   )
 }

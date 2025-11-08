@@ -162,6 +162,44 @@
   transform: translateX(10px);
 }
 /* ---------- Stats ---------- */
+.container {
+  padding: 20px;
+  color: white;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftColumn {
+  width: 45%;
+}
+
+.box {
+  background-color: #2e2e2e;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+.rightPanel {
+  width: 45%;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  min-height: 250px;
+}
+
+.hexagon-hability {
+  clip-path: polygon(90.3% 80%, 50% 100%, 10% 80%, 10% 25%, 50% 0%, 90.3% 25%);
+}
 
 /* ---------- SEPARADOR DE SECCIONES ---------- */
 .hr {

@@ -21,7 +21,7 @@ function SliderCategoria({ titulo, juegos }) {
   }
 
   // Duplica los juegos para lograr efecto de bucle visual
-  const juegosExtendidos = [...juegos, ...juegos]
+  const juegosExtendidos = [...juegos, ...juegos, ...juegos]
 
   return (
     <div className="slider-categoria">

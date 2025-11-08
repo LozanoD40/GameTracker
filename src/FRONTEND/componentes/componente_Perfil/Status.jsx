@@ -55,39 +55,39 @@ function Status() {
 
   const mostrarImagen = () => {
     switch (opcion) {
-      case 'Dwarf':
+      case 'Dwarf de Hierro':
         return perfilDwarf
-      case 'DragonMan':
+      case 'DragonMan del Fuego Eterno':
         return perfilDragonMan
-      case 'Nekomimi':
+      case 'Nekomimi de Sombras Suaves':
         return perfilCatGirl
-      case 'BearMan':
+      case 'BearMan del Norte':
         return perfilBearMan
-      case 'Elf':
+      case 'Elfo del gran Bosque':
         return perfilElf
-      case 'Darkelf':
+      case 'Dark Elf los repudiados por el bosque':
         return perfilDarkelf
-      case 'Fairy':
+      case 'Fairy de Luz Pura':
         return perfilFairy
-      case 'Barbarian':
+      case 'Barbarian del Rugido Antiguo':
         return perfilBarbarian
-      case 'Wizard':
+      case 'Wizard del Ojo Arcano':
         return perfilWizard
-      case 'Bard':
+      case 'Bardo de las Mil Canciones':
         return perfilBard
-      case 'Saint':
+      case 'Santa del Sol Blanco':
         return perfilSaint
-      case 'Assesing':
+      case 'Asesino del Silencio':
         return perfilAssesing
-      case 'Necromance':
+      case 'Necromante de la Tumba':
         return perfilNecromance
-      case 'Lancer':
+      case 'Lancero imperial':
         return perfilLancer
-      case 'Cultist':
+      case 'Cultista, seguidor heretico':
         return perfilCultist
-      case 'Merchant':
+      case 'Mercader del Oro Viejo':
         return perfilMerchant
-      case 'Homunculus':
+      case 'Homúnculo, la aberracion del mundo':
         return perfilHomunculus
       default:
         return perfilKnight
@@ -157,22 +157,22 @@ function Status() {
             <button onClick={() => setOpcion('Caballero del Alba')}>
               Knight
             </button>
-            <button onClick={() => setOpcion('Dwarf de Hierro')}>
-              Dwarf
-            </button>
+            <button onClick={() => setOpcion('Dwarf de Hierro')}>Dwarf</button>
             <button onClick={() => setOpcion('DragonMan del Fuego Eterno')}>
               Dragon Man
             </button>
             <button onClick={() => setOpcion('Nekomimi de Sombras Suaves')}>
               Nekomimi
             </button>
-            <button onClick={() => setOpcion('BearMan del Norte Salvaje')}>
+            <button onClick={() => setOpcion('BearMan del Norte ')}>
               Bear Man
             </button>
-            <button onClick={() => setOpcion('Elfo del Bosque Eterno')}>
+            <button onClick={() => setOpcion('Elfo del gran Bosque')}>
               Elf
             </button>
-            <button onClick={() => setOpcion('Dark Elf de la Noche')}>
+            <button
+              onClick={() => setOpcion('Dark Elf los repudiados por el bosque')}
+            >
               Dark Elf
             </button>
             <button onClick={() => setOpcion('Fairy de Luz Pura')}>
@@ -196,17 +196,17 @@ function Status() {
             <button onClick={() => setOpcion('Necromante de la Tumba')}>
               Necromancer
             </button>
-            <button onClick={() => setOpcion('Lancer de la Tormenta')}>
+            <button onClick={() => setOpcion('Lancero imperial')}>
               Lancer
             </button>
-            <button onClick={() => setOpcion('Cultista del Dios olvidado')}>
+            <button onClick={() => setOpcion('Cultista, seguidor heretico')}>
               Cultist
             </button>
             <button onClick={() => setOpcion('Mercader del Oro Viejo')}>
               Merchant
             </button>
             <button
-              onClick={() => setOpcion('Homúnculo del Laboratorio Perdido')}
+              onClick={() => setOpcion('Homúnculo, la aberracion del mundo')}
             >
               Homunculus
             </button>

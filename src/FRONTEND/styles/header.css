@@ -49,9 +49,9 @@
   background: none;
   border: none;
 
-  display: inline-flex; /* ✅ Alinea texto + icono */
+  display: inline-flex; /* Alinea texto + icono */
   align-items: center;
-  gap: 6px; /* ✅ Espacio entre texto e ícono */
+  gap: 6px; /*Espacio entre texto e ícono */
   font-size: 1rem;
 }
 
