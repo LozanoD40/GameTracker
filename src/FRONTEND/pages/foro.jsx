@@ -1,6 +1,9 @@
 function Foro() {
-  return <>
-  </>
+  return (
+    <div>
+      <div>feefwfw</div>
+    </div>
+  )
 }
 
 export default Foro

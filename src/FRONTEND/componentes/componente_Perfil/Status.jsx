@@ -119,8 +119,7 @@ function Status() {
         <button
           className="btn-logout"
           onClick={() => {
-            localStorage.removeItem('user')
-            navigate('/')
+            navigate('/Confi')
           }}
         >
           <img
