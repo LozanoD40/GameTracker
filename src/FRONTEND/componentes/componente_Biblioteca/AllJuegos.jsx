@@ -44,26 +44,56 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'Nintendo',
   ]
 
-  // 🔹 Verifica si el usuario está logueado y sincroniza Datauser
-  useEffect(() => {
-    const userData = localStorage.getItem('user')
-    if (!userData) {
-      setIsLoginOpen(true)
-      return
-    }
-    const parsedUser = JSON.parse(userData)
-    setUser(parsedUser)
+// 🔹 Cargar usuario desde localStorage al montar el componente
+useEffect(() => {
+  const userData = localStorage.getItem("user");
+  if (!userData) {
+    console.warn("⚠️ No hay usuario en localStorage");
+    setIsLoginOpen(true);
+    return;
+  }
 
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${parsedUser._id}`
-        )
-        const dataUser = await res.json()
+  let parsedUser;
+  try {
+    parsedUser = JSON.parse(userData);
+  } catch (err) {
+    console.error("Error parseando el usuario:", err);
+    return;
+  }
 
-        // Mezclamos la info de Datauser con los juegos
-        const juegosActualizados = juegos.map((j) => {
-          const relacion = dataUser.find((d) => d.juegoId._id === j._id)
+  if (!parsedUser || (!parsedUser.id && !parsedUser._id)) {
+    console.error("⚠️ Usuario guardado sin id:", parsedUser);
+    return;
+  }
+
+  const userId = parsedUser.id || parsedUser._id;
+  setUser(parsedUser);
+
+  // ✅ Lógica protegida con bandera de control
+  let cancelled = false;
+
+  const fetchData = async () => {
+    try {
+      console.log("📡 Sincronizando DataUser para:", userId);
+      const res = await fetch(`http://localhost:3000/api/dataUser/usuario/${userId}`);
+      if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+
+      const dataUser = await res.json();
+      if (!Array.isArray(dataUser)) {
+        console.warn("Respuesta inesperada de DataUser:", dataUser);
+        return;
+      }
+
+      if (cancelled) return; // 🚫 evita actualizar si el componente se desmonta
+
+      setJuegos((prev) => {
+        if (!Array.isArray(prev)) return prev;
+        const actualizados = prev.map((j) => {
+          const relacion = dataUser.find((d) => {
+            const idJuego = typeof d.juegoId === "object" ? d.juegoId._id : d.juegoId;
+            return idJuego === j._id;
+          });
+
           return relacion
             ? {
                 ...j,
@@ -71,16 +101,23 @@ function AllJuegos({ juegos = [], setJuegos }) {
                 wishlist: relacion.wishlist,
                 completado: relacion.completado,
               }
-            : j
-        })
-        setJuegos(juegosActualizados)
-      } catch (err) {
-        console.error('Error al sincronizar Datauser:', err)
-      }
-    }
+            : j;
+        });
 
-    fetchData()
-  }, [])
+        return actualizados;
+      });
+    } catch (err) {
+      console.error("❌ Error al sincronizar DataUser:", err);
+    }
+  };
+
+  // Ejecuta solo una vez, sin bucles
+  fetchData();
+
+  return () => {
+    cancelled = true; // evita llamadas pendientes después del desmontaje
+  };
+}, []); // 👈 SIN dependencias
 
   // 🔹 Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
@@ -154,39 +191,50 @@ function AllJuegos({ juegos = [], setJuegos }) {
       setIncludeGenres((prev) => [...prev, genre])
     }
   }
-
-  // 🔹 FUNCIÓN PRINCIPAL: Actualizar estado (misjuegos o wishlist)
+  // Función de wishlist y agregar a mis juegos
   const actualizarEstado = async (juegoId, campo, valor) => {
-    try {
-      if (!user?._id) {
-        console.error('Usuario no logueado')
-        setIsLoginOpen(true)
-        return
+  try {
+    // 🔹 Obtener userId desde estado o localStorage
+    let userId = user?._id || user?.id;
+
+    if (!userId) {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        userId = parsed._id || parsed.id;
       }
-
-      const res = await fetch(
-        `http://localhost:3000/api/dataUser/usuario/${user._id}/juego/${juegoId}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ [campo]: valor }),
-        }
-      )
-
-      if (!res.ok) {
-        const err = await res.json()
-        console.error('Error al actualizar:', err)
-        return
-      }
-
-      // 🔹 Actualizar visualmente
-      setJuegos((prev) =>
-        prev.map((j) => (j._id === juegoId ? { ...j, [campo]: valor } : j))
-      )
-    } catch (error) {
-      console.error('Error al conectar con el backend:', error)
     }
+
+    if (!userId) {
+      console.error("Usuario no logueado");
+      setIsLoginOpen(true);
+      return;
+    }
+
+    // 🔹 Ejecutar la petición al backend
+    const res = await fetch(
+      `http://localhost:3000/api/dataUser/usuario/${userId}/juego/${juegoId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [campo]: valor }),
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      console.error("Error al actualizar:", err);
+      return;
+    }
+
+    // 🔹 Actualizar visualmente
+    setJuegos((prev) =>
+      prev.map((j) => (j._id === juegoId ? { ...j, [campo]: valor } : j))
+    );
+  } catch (error) {
+    console.error("Error al conectar con el backend:", error);
   }
+};
 
   return (
     <section className="alljuegos">
@@ -323,6 +371,7 @@ function AllJuegos({ juegos = [], setJuegos }) {
                   onClick={() =>
                     actualizarEstado(juego._id, 'wishlist', !juego.wishlist)
                   }
+                  disabled={!user}
                 >
                   <img
                     src={juego.wishlist ? iconWishlist : iconNoWishlist}
