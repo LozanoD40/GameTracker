@@ -57,8 +57,8 @@
 
 :root {
   /* Colores */
-  --color-bg-main: rgb(11, 11, 11); /* Fondo general del body */
-  --color-bg-secondary: rgb(26, 26, 26); /* Fondos degradados o secundarios */
+  --color-bg-main: #0b0b0b; /* Fondo general del body */
+  --color-bg-secondary: #1a1a1a; /* Fondos degradados o secundarios */
   --color-bg-accent: #000; /* Fondo de navbar y footer */
   --color-text-primary: #d4af37; /* Dorado medieval */
   --color-text-secondary: #fff; /* Blanco para hover o contraste */
@@ -66,7 +66,7 @@
   --color-border: #d4af37; /* Borde principal dorado */
   --color-outline: #fff2; /* Outline sutil */
   --color-bg: #0b0b0b;
-  --color-bg-alt: rgb(26, 26, 26);
+  --color-bg-alt: #111111;
   --color-text-hover: #fff;
 
   /*Tipografía*/

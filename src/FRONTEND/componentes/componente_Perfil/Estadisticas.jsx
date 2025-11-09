@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
 import '../../styles/Perfil.css'
+import { useEffect, useRef } from 'react'
 
 function Estadisticas({ stats }) {
   const canvasRef = useRef(null)
@@ -18,11 +18,11 @@ function Estadisticas({ stats }) {
 
     const labels = ['Jugado', 'Misiones', 'Amigos', 'Logros', 'Reseñas']
     const values = [
-      stats.tiempoActivo / 100, // se normalizan para el radar
+      stats.tiempoActivo / 100,
       stats.misionesCompletadas / 100,
       stats.cantidaddeamigos / 100,
-      stats.logrosObtenidos / 30,
-      stats.reseñasDadas / 50,
+      stats.logrosObtenidos / 50,
+      stats.reseñasDadas / 100,
     ]
 
     // Dibujar fondo del radar
@@ -76,11 +76,9 @@ function Estadisticas({ stats }) {
 
       <div className="estadisticas-content">
         <div className="estadisticas-left">
+          <div className="stat-box glow">Amigos: {stats.cantidaddeamigos}</div>
           <div className="stat-box glow">
             Horas jugadas: {stats.tiempoActivo}
-          </div>
-          <div className="stat-box glow">
-            Amigos: {stats.cantidaddeamigos}
           </div>
           <div className="stat-box glow">
             Misiones completadas: {stats.misionesCompletadas}

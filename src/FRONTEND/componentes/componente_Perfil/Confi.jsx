@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import '../../styles/confi.css'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Login from '../componente_General/Login'
 
 function Confi() {
   const [juegos, setJuegos] = useState([])
   const [editandoId, setEditandoId] = useState(null)
-
   // campos juego
   const [titulo, setTitulo] = useState('')
   const [genero, setGenero] = useState('')
@@ -15,51 +14,62 @@ function Confi() {
   const [desarrollador, setDesarrollador] = useState('')
   const [imagenPortada, setImagenPortada] = useState('')
   const [descripcion, setDescripcion] = useState('')
-
   // cuenta
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [IsLoginOpen, setIsLoginOpen] = useState(false)
   const [user, setUser] = useState(null)
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [contrasenia, setContrasenia] = useState('')
+  // logros
+  const [logros, setLogros] = useState([])
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const cargarUsuario = () => {
-      try {
-        const raw = localStorage.getItem('user')
-        if (!raw) {
-          setUser(null)
-          setIsLoginOpen(true)
-          return
-        }
-        const parsed = JSON.parse(raw)
-        setUser(parsed)
-        setNombre(parsed.nombre || '')
-        setEmail(parsed.email || '')
-      } catch (err) {
-        console.error('Error leyendo user desde localStorage', err)
+  const cargarUsuario = () => {
+    try {
+      const raw = localStorage.getItem('user')
+      if (!raw) {
         setUser(null)
         setIsLoginOpen(true)
+        return
       }
+      const parsed = JSON.parse(raw)
+      setUser(parsed)
+      setNombre(parsed.nombre || '')
+      setEmail(parsed.email || '')
+    } catch (err) {
+      console.error('Error leyendo user desde localStorage', err)
+      setUser(null)
+      setIsLoginOpen(true)
     }
+  }
 
+  const fetchJuegos = useCallback(async () => {
+    const uid = user?.id || user?._id
+    if (!uid) return
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/games?facilitador=${uid}`
+      )
+      if (!res.ok) throw new Error(await res.text())
+      const data = await res.json()
+      setJuegos(data)
+    } catch (err) {
+      console.error('Error cargando juegos:', err)
+    }
+  }, [user])
+
+  useEffect(() => {
     cargarUsuario()
   }, [])
 
-  const cerrarSesion = () => {
-    localStorage.removeItem('user')
-    setUser(null)
-    setNombre('')
-    setEmail('')
-    setContrasenia('')
-    setJuegos([])
-    navigate('/')
-  }
+  useEffect(() => {
+    if (user) fetchJuegos()
+  }, [user, fetchJuegos])
 
   // --- Juegos CRUD ---
   const crearJuego = async () => {
+    const uid = user.id || user._id
     const nuevoJuego = {
       titulo,
       genero,
@@ -69,6 +79,7 @@ function Confi() {
       desarrollador,
       imagenPortada,
       descripcion,
+      facilitador: uid,
     }
     try {
       const res = await fetch('http://localhost:3000/api/games', {
@@ -78,24 +89,12 @@ function Confi() {
       })
       if (!res.ok) throw new Error(await res.text())
       const data = await res.json()
-      setJuegos((prev) => [...prev, data])
-      alert('si se subio')
+      await fetchJuegos()
+      setJuegos(() => [data])
       limpiarFormularioJuego()
     } catch (err) {
       console.error('Error creando juego:', err)
     }
-  }
-
-  const prepararEdicion = (juego) => {
-    setEditandoId(juego._id)
-    setTitulo(juego.titulo || '')
-    setGenero(juego.genero || '')
-    setPlataforma(juego.plataforma || '')
-    setAnioLanzamiento(juego.anioLanzamiento || '')
-    setClasificacionEdad(juego.clasificacionEdad || '')
-    setDesarrollador(juego.desarrollador || '')
-    setImagenPortada(juego.imagenPortada || '')
-    setDescripcion(juego.descripcion || '')
   }
 
   const actualizarJuego = async () => {
@@ -129,6 +128,18 @@ function Confi() {
     }
   }
 
+  const prepararEdicion = (juego) => {
+    setEditandoId(juego._id)
+    setTitulo(juego.titulo || '')
+    setGenero(juego.genero || '')
+    setPlataforma(juego.plataforma || '')
+    setAnioLanzamiento(juego.anioLanzamiento || '')
+    setClasificacionEdad(juego.clasificacionEdad || '')
+    setDesarrollador(juego.desarrollador || '')
+    setImagenPortada(juego.imagenPortada || '')
+    setDescripcion(juego.descripcion || '')
+  }
+
   const limpiarFormularioJuego = () => {
     setTitulo('')
     setGenero('')
@@ -142,10 +153,6 @@ function Confi() {
 
   // --- Cuenta (editar / eliminar) ---
   const actualizarCuenta = async () => {
-    if (!user?.id && !user?._id) {
-      alert('No hay usuario logueado')
-      return
-    }
     const id = user.id || user._id
     try {
       const res = await fetch(`http://localhost:3000/api/users/users/${id}`, {
@@ -172,10 +179,6 @@ function Confi() {
   }
 
   const eliminarCuenta = async () => {
-    if (!user?.id && !user?._id) {
-      alert('No hay usuario logueado')
-      return
-    }
     if (!confirm('¿Eliminar tu cuenta permanentemente?')) return
     const id = user.id || user._id
     try {
@@ -193,46 +196,71 @@ function Confi() {
     }
   }
 
+  const cerrarSesion = () => {
+    localStorage.removeItem('user')
+    setUser(null)
+    setNombre('')
+    setEmail('')
+    setContrasenia('')
+    setJuegos([])
+    navigate('/')
+  }
+
+  // --- Logros -------
+  useEffect(() => {
+    fetch('http://localhost:3000/api/achievements')
+      .then((response) => response.json())
+      .then((data) => setLogros(data))
+  }, [])
+
   return (
     <div className="confi-container">
       <section className="confi-juegos">
-        <h2>{editandoId ? 'Editar Juego' : 'Crear Juego'}</h2>
+        <h2>{editandoId ? 'Editar Juego' : 'Subir Juego'}</h2>
 
-        <div className="form-row">
+        <div className="form">
           <input
             placeholder="Título"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
+            required
           />
           <input
             placeholder="Género"
             value={genero}
             onChange={(e) => setGenero(e.target.value)}
+            required
           />
           <input
             placeholder="Plataforma"
             value={plataforma}
             onChange={(e) => setPlataforma(e.target.value)}
+            required
           />
           <input
             placeholder="Año lanzamiento"
             value={anioLanzamiento}
             onChange={(e) => setAnioLanzamiento(e.target.value)}
+            required
           />
           <input
             placeholder="Clasificación"
             value={clasificacionEdad}
             onChange={(e) => setClasificacionEdad(e.target.value)}
+            required
           />
           <input
             placeholder="Desarrollador"
             value={desarrollador}
             onChange={(e) => setDesarrollador(e.target.value)}
+            required
           />
           <input
             placeholder="URL imagen portada"
             value={imagenPortada}
             onChange={(e) => setImagenPortada(e.target.value)}
+            className="url-confi"
+            required
           />
           <textarea
             placeholder="Descripción"
@@ -244,18 +272,23 @@ function Confi() {
         <div className="form-actions">
           {editandoId ? (
             <>
-              <button onClick={actualizarJuego}>Guardar cambios</button>
+              <button onClick={actualizarJuego} className="btn-gold">
+                Guardar cambios
+              </button>
               <button
                 onClick={() => {
                   setEditandoId(null)
                   limpiarFormularioJuego()
                 }}
+                className="btn-gold"
               >
                 Cancelar
               </button>
             </>
           ) : (
-            <button onClick={crearJuego}>Crear juego</button>
+            <button onClick={crearJuego} className="btn-gold">
+              Subir juego
+            </button>
           )}
         </div>
 
@@ -271,11 +304,13 @@ function Confi() {
               <div className="meta">
                 <strong>{g.titulo}</strong>
                 <small>
-                  {g.genero} • {g.plataforma}
+                  {g.genero} • {g.desarrollador}
                 </small>
               </div>
               <div className="actions">
-                <button onClick={() => prepararEdicion(g)}>Editar</button>
+                <button onClick={() => prepararEdicion(g)} className="btn-gold">
+                  Editar
+                </button>
               </div>
             </div>
           ))}
@@ -284,7 +319,7 @@ function Confi() {
 
       <section className="confi-cuenta">
         <h2>Mi Cuenta</h2>
-        <div className="form-row">
+        <div className="form">
           <input
             placeholder="Nombre"
             value={nombre}
@@ -303,7 +338,9 @@ function Confi() {
           />
         </div>
         <div className="form-actions">
-          <button onClick={actualizarCuenta}>Actualizar cuenta</button>
+          <button onClick={actualizarCuenta} className="btn-gold">
+            Actualizar cuenta
+          </button>
           <button onClick={eliminarCuenta} className="danger">
             Eliminar cuenta
           </button>
@@ -311,6 +348,22 @@ function Confi() {
             Cerrar cuenta
           </button>
         </div>
+      </section>
+
+      <section className="all-logros">
+        <h3 className='title-logro'>Logros</h3>
+        {logros.length > 0 ? (
+          logros.map((logro) => (
+            <div key={logro._id} className="item-logro">
+              <strong>{logro.titulo}</strong>
+              <p>{logro.descripcion}</p>
+              <img src={logro.icono} alt={logro.titulo} className='sin-logros'/>
+              <p>{logro.condicion}</p>
+            </div>
+          ))
+        ) : (
+          <p>No hay logros disponibles.</p>
+        )}
       </section>
     </div>
   )

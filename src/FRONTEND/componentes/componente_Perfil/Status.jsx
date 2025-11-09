@@ -1,3 +1,4 @@
+import '../../styles/Perfil.css'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import iconConfiguracion from './../../../assets/Icons/iconConfiguracion.png'
@@ -21,7 +22,6 @@ import perfilMerchant from './../../../assets/perfilPlayer/perfilMerchant.png'
 import perfilHomunculus from './../../../assets/perfilPlayer/perfilHomunculus.png'
 import Login from './../componente_General/Login'
 import MisLogros from './MisLogros'
-import Estadisticas from './Estadisticas'
 
 function Status() {
   const [opcion, setOpcion] = useState(null)

@@ -188,18 +188,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
     }
   }
 
-  if (!user)
-    return (
-      <Login
-        isOpen={isLoginOpen}
-        onClose={() => {
-          setIsLoginOpen(false)
-          const userData = localStorage.getItem('user')
-          if (userData) setUser(JSON.parse(userData))
-        }}
-      />
-    )
-
   return (
     <section className="alljuegos">
       <div className="busqueda">
