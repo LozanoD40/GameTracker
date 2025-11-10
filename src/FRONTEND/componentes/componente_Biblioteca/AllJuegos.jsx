@@ -4,29 +4,35 @@ import iconNoWishlist from '../../../assets/Icons/iconNoWishlist.png'
 import iconWishlist from '../../../assets/Icons/iconWishlist.png'
 import iconMisJuegos from '../../../assets/Icons/iconMisJuegos.png'
 import iconEliminar from '../../../assets/Icons/iconEliminar.png'
+import iconCompletados from '../../../assets/Icons/iconCompletados.png'
+import iconPorCompletar from '../../../assets/Icons/iconPorCompletar.png'
 import CardJuego from '../componente_General/CardJuego'
-import Login from '../componente_General/Login'
 
 function AllJuegos({ juegos = [], setJuegos }) {
   const [query, setQuery] = useState('')
   const [includeGenres, setIncludeGenres] = useState([])
   const [excludeGenres, setExcludeGenres] = useState([])
-  const [plataforma, setPlataforma] = useState('')
+  const [includePlatforms, setIncludePlatforms] = useState([])
+  const [excludePlatforms, setExcludePlatforms] = useState([])
   const [estadoJuego, setEstadoJuego] = useState('')
   const [misJuegosFilter, setMisJuegosFilter] = useState(false)
   const [wishlistFilter, setWishlistFilter] = useState(false)
   const [ordenamiento, setOrdenamiento] = useState('titulo_asc')
   const [user, setUser] = useState(null)
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
+
   const navigate = useNavigate()
 
-  // 🔹 Listas de géneros y plataformas
+  // Listas de géneros y plataformas
   const generosDisponibles = [
     'Aventura',
     'Acción',
     'Deportes',
     'Estrategia',
     'Rol',
+    'Shooters',
+    'Sandbox',
+    'Multijugador',
+    'Single player',
     'Simulación',
     'Puzzle',
     'Carreras',
@@ -41,95 +47,90 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'iOS',
     'PlayStation',
     'Xbox',
+    'Switch',
     'Nintendo',
   ]
 
-// 🔹 Cargar usuario desde localStorage al montar el componente
-useEffect(() => {
-  const userData = localStorage.getItem("user");
-  if (!userData) {
-    console.warn("⚠️ No hay usuario en localStorage");
-    setIsLoginOpen(true);
-    return;
-  }
+  // Cargar usuario desde localStorage al montar el componente
+  useEffect(() => {
+    const userData = localStorage.getItem('user')
 
-  let parsedUser;
-  try {
-    parsedUser = JSON.parse(userData);
-  } catch (err) {
-    console.error("Error parseando el usuario:", err);
-    return;
-  }
-
-  if (!parsedUser || (!parsedUser.id && !parsedUser._id)) {
-    console.error("⚠️ Usuario guardado sin id:", parsedUser);
-    return;
-  }
-
-  const userId = parsedUser.id || parsedUser._id;
-  setUser(parsedUser);
-
-  // ✅ Lógica protegida con bandera de control
-  let cancelled = false;
-
-  const fetchData = async () => {
+    let parsedUser
     try {
-      console.log("📡 Sincronizando DataUser para:", userId);
-      const res = await fetch(`http://localhost:3000/api/dataUser/usuario/${userId}`);
-      if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
-
-      const dataUser = await res.json();
-      if (!Array.isArray(dataUser)) {
-        console.warn("Respuesta inesperada de DataUser:", dataUser);
-        return;
-      }
-
-      if (cancelled) return; // 🚫 evita actualizar si el componente se desmonta
-
-      setJuegos((prev) => {
-        if (!Array.isArray(prev)) return prev;
-        const actualizados = prev.map((j) => {
-          const relacion = dataUser.find((d) => {
-            const idJuego = typeof d.juegoId === "object" ? d.juegoId._id : d.juegoId;
-            return idJuego === j._id;
-          });
-
-          return relacion
-            ? {
-                ...j,
-                misjuegos: relacion.misjuegos,
-                wishlist: relacion.wishlist,
-                completado: relacion.completado,
-              }
-            : j;
-        });
-
-        return actualizados;
-      });
+      parsedUser = JSON.parse(userData)
     } catch (err) {
-      console.error("❌ Error al sincronizar DataUser:", err);
+      console.error('Error parseando el usuario:', err)
+      return
     }
-  };
 
-  // Ejecuta solo una vez, sin bucles
-  fetchData();
+    if (!parsedUser || (!parsedUser.id && !parsedUser._id)) {
+      return
+    }
 
-  return () => {
-    cancelled = true; // evita llamadas pendientes después del desmontaje
-  };
-}, []); // 👈 SIN dependencias
+    const userId = parsedUser.id || parsedUser._id
+    setUser(parsedUser)
 
-  // 🔹 Filtrado y ordenamiento
+    let cancelled = false
+
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/dataUser/usuario/${userId}`
+        )
+        if (!res.ok) throw new Error(`Error HTTP ${res.status}`)
+
+        const dataUser = await res.json()
+        if (!Array.isArray(dataUser)) {
+          return
+        }
+
+        if (cancelled) return
+
+        setJuegos((prev) => {
+          if (!Array.isArray(prev)) return prev
+          const actualizados = prev.map((j) => {
+            const relacion = dataUser.find((d) => {
+              const idJuego =
+                typeof d.juegoId === 'object' ? d.juegoId._id : d.juegoId
+              return idJuego === j._id
+            })
+
+            return relacion
+              ? {
+                  ...j,
+                  misjuegos: relacion.misjuegos,
+                  wishlist: relacion.wishlist,
+                  completado: relacion.completado,
+                }
+              : j
+          })
+
+          return actualizados
+        })
+      } catch (err) {
+        console.error('Error al sincronizar DataUser:', err)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      cancelled = true
+    }
+  }, [setJuegos])
+
+  // Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
     const q = (query || '').trim().toLowerCase()
     const includeNorm = includeGenres.map((g) => g.toLowerCase())
     const excludeNorm = excludeGenres.map((g) => g.toLowerCase())
-    const plataformaNorm = (plataforma || '').toLowerCase()
+    const includePlat = includePlatforms.map((p) => p.toLowerCase())
+    const excludePlat = excludePlatforms.map((p) => p.toLowerCase())
 
     let filteredList = juegos.filter((game) => {
       const titulo = (game.titulo || '').toLowerCase()
       const genero = (game.genero || '').toLowerCase()
-      const plat = (game.plataforma || '').toLowerCase()
+      //    const plat = (game.plataforma || '').toLowerCase()
 
       if (q && !titulo.includes(q)) return false
       if (
@@ -139,7 +140,20 @@ useEffect(() => {
         return false
       if (excludeNorm.length > 0 && excludeNorm.some((g) => genero.includes(g)))
         return false
-      if (plataformaNorm && !plat.includes(plataformaNorm)) return false
+      if (
+        includePlat.length > 0 &&
+        !includePlat.some((p) =>
+          (game.plataforma || '').toLowerCase().includes(p)
+        )
+      )
+        return false
+      if (
+        excludePlat.length > 0 &&
+        excludePlat.some((p) =>
+          (game.plataforma || '').toLowerCase().includes(p)
+        )
+      )
+        return false
       if (estadoJuego === 'completado' && !game.completado) return false
       if (estadoJuego === 'por_completar' && game.completado) return false
       if (misJuegosFilter && !game.misjuegos) return false
@@ -173,14 +187,15 @@ useEffect(() => {
     query,
     includeGenres,
     excludeGenres,
-    plataforma,
+    includePlatforms, 
+    excludePlatforms, 
     estadoJuego,
     misJuegosFilter,
     wishlistFilter,
     ordenamiento,
   ])
 
-  // 🔹 Alternar género incluido/excluido
+  // Alternar género incluido/excluido
   const toggleGenre = (genre) => {
     if (includeGenres.includes(genre)) {
       setIncludeGenres((prev) => prev.filter((g) => g !== genre))
@@ -191,50 +206,62 @@ useEffect(() => {
       setIncludeGenres((prev) => [...prev, genre])
     }
   }
+
+  const togglePlatform = (platform) => {
+    if (includePlatforms.includes(platform)) {
+      setIncludePlatforms((prev) => prev.filter((p) => p !== platform))
+      setExcludePlatforms((prev) => [...prev, platform])
+    } else if (excludePlatforms.includes(platform)) {
+      setExcludePlatforms((prev) => prev.filter((p) => p !== platform))
+    } else {
+      setIncludePlatforms((prev) => [...prev, platform])
+    }
+  }
+
   // Función de wishlist y agregar a mis juegos
   const actualizarEstado = async (juegoId, campo, valor) => {
-  try {
-    // 🔹 Obtener userId desde estado o localStorage
-    let userId = user?._id || user?.id;
+    try {
+      // 🔹 Obtener userId desde estado o localStorage
+      let userId = user?._id || user?.id
 
-    if (!userId) {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsed = JSON.parse(storedUser);
-        userId = parsed._id || parsed.id;
+      if (!userId) {
+        const storedUser = localStorage.getItem('user')
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser)
+          userId = parsed._id || parsed.id
+        }
       }
-    }
 
-    if (!userId) {
-      console.error("Usuario no logueado");
-      setIsLoginOpen(true);
-      return;
-    }
-
-    // 🔹 Ejecutar la petición al backend
-    const res = await fetch(
-      `http://localhost:3000/api/dataUser/usuario/${userId}/juego/${juegoId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [campo]: valor }),
+      if (!userId) {
+        console.error('Usuario no logueado')
+        navigate('/perfil')
+        return
       }
-    );
 
-    if (!res.ok) {
-      const err = await res.json();
-      console.error("Error al actualizar:", err);
-      return;
+      // Ejecutar la petición al backend
+      const res = await fetch(
+        `http://localhost:3000/api/dataUser/usuario/${userId}/juego/${juegoId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [campo]: valor }),
+        }
+      )
+
+      if (!res.ok) {
+        const err = await res.json()
+        console.error('Error al actualizar:', err)
+        return
+      }
+
+      // Actualizar visualmente
+      setJuegos((prev) =>
+        prev.map((j) => (j._id === juegoId ? { ...j, [campo]: valor } : j))
+      )
+    } catch (error) {
+      console.error('Error al conectar con el backend:', error)
     }
-
-    // 🔹 Actualizar visualmente
-    setJuegos((prev) =>
-      prev.map((j) => (j._id === juegoId ? { ...j, [campo]: valor } : j))
-    );
-  } catch (error) {
-    console.error("Error al conectar con el backend:", error);
   }
-};
 
   return (
     <section className="alljuegos">
@@ -252,7 +279,7 @@ useEffect(() => {
 
         <div className="filtro-grupo">
           <h3>Géneros</h3>
-          <div className="opciones">
+          <div className="grupo-botones">
             {generosDisponibles.map((g) => (
               <button
                 key={g}
@@ -273,61 +300,97 @@ useEffect(() => {
 
         <div className="filtro-grupo">
           <h3>Plataforma</h3>
-          <select
-            value={plataforma}
-            onChange={(e) => setPlataforma(e.target.value)}
-          >
-            <option value="">Todas</option>
+          <div className="grupo-botones">
             {plataformasDisponibles.map((p) => (
-              <option key={p} value={p}>
+              <button
+                key={p}
+                className={`filtro-boton ${
+                  includePlatforms.includes(p)
+                    ? 'incluido'
+                    : excludePlatforms.includes(p)
+                    ? 'excluido'
+                    : ''
+                }`}
+                onClick={() => togglePlatform(p)}
+              >
                 {p}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
-        <div className="filtro-grupo">
+        <div className="filtro-grupo estado-grupo">
           <h3>Estado</h3>
-          <select
-            value={estadoJuego}
-            onChange={(e) => setEstadoJuego(e.target.value)}
-          >
-            <option value="">Todos</option>
-            <option value="completado">Completado</option>
-            <option value="por_completar">Por completar</option>
-          </select>
+          <div className="grupo-botones">
+            <button
+              onClick={() =>
+                setEstadoJuego(estadoJuego === 'completado' ? '' : 'completado')
+              }
+              className={`filtro-boton ${
+                estadoJuego === 'completado' ? 'activo' : ''
+              }`}
+            >
+              <img
+                src={iconCompletados}
+                alt="Completados"
+                className="icon_filtro"
+              />
+              Completados
+            </button>
+
+            <button
+              onClick={() =>
+                setEstadoJuego(
+                  estadoJuego === 'por_completar' ? '' : 'por_completar'
+                )
+              }
+              className={`filtro-boton ${
+                estadoJuego === 'por_completar' ? 'activo' : ''
+              }`}
+            >
+              <img
+                src={iconPorCompletar}
+                alt="Por completar"
+                className="icon_filtro"
+              />
+              Por Completar
+            </button>
+
+            <button
+              onClick={() => setMisJuegosFilter(!misJuegosFilter)}
+              className={`filtro-boton ${misJuegosFilter ? 'activo' : ''}`}
+            >
+              <img
+                src={iconMisJuegos}
+                alt="Mis Juegos"
+                className="icon_filtro"
+              />
+              Mis Juegos
+            </button>
+
+            <button
+              onClick={() => setWishlistFilter(!wishlistFilter)}
+              className={`filtro-boton ${wishlistFilter ? 'activo' : ''}`}
+            >
+              <img src={iconWishlist} alt="Wishlist" className="icon_filtro" />
+              Wishlist
+            </button>
+          </div>
         </div>
 
         <div className="filtro-grupo">
-          <label>
-            <input
-              type="checkbox"
-              checked={misJuegosFilter}
-              onChange={(e) => setMisJuegosFilter(e.target.checked)}
-            />
-            Mis juegos
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={wishlistFilter}
-              onChange={(e) => setWishlistFilter(e.target.checked)}
-            />
-            Wishlist
-          </label>
-        </div>
-
-        <div className="filtro-grupo">
-          <h3>Ordenar por</h3>
+          {' '}
+          <h3>Ordenar por</h3>{' '}
           <select
             value={ordenamiento}
             onChange={(e) => setOrdenamiento(e.target.value)}
           >
-            <option value="titulo_asc">Título (A-Z)</option>
-            <option value="titulo_desc">Título (Z-A)</option>
-            <option value="fecha_reciente">Más recientes</option>
-            <option value="fecha_antigua">Más antiguos</option>
-          </select>
+            {' '}
+            <option value="titulo_asc">Título (A-Z)</option>{' '}
+            <option value="titulo_desc">Título (Z-A)</option>{' '}
+            <option value="fecha_reciente">Más recientes</option>{' '}
+            <option value="fecha_antigua">Más antiguos</option>{' '}
+          </select>{' '}
         </div>
       </details>
 
@@ -347,7 +410,7 @@ useEffect(() => {
                 tipo="imagen"
               />
               <div className="btn-juego">
-                {/* 🔹 Botón Mis Juegos */}
+                {/*  Botón Mis Juegos */}
                 <button
                   className={`mygame-boton ${juego.misjuegos ? 'activo' : ''}`}
                   onClick={() =>
@@ -363,7 +426,7 @@ useEffect(() => {
                   />
                 </button>
 
-                {/* 🔹 Botón Wishlist */}
+                {/* Botón Wishlist */}
                 <button
                   className={`mywishlist-boton ${
                     juego.wishlist ? 'activo' : ''
@@ -371,7 +434,6 @@ useEffect(() => {
                   onClick={() =>
                     actualizarEstado(juego._id, 'wishlist', !juego.wishlist)
                   }
-                  disabled={!user}
                 >
                   <img
                     src={juego.wishlist ? iconWishlist : iconNoWishlist}

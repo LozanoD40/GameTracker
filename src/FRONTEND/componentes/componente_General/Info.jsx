@@ -45,7 +45,7 @@ function InfoJuego() {
 
       <button className="btn-jugar">Jugar</button>
 
-      {/* 🔽 Sección de reseñas: ahora todo se maneja desde FormularioReseñas */}
+      {/* Sección de reseñas: ahora todo se maneja desde FormularioReseñas */}
       <FormularioReseñas gameTitle={juego.titulo} />
     </div>
   )

@@ -5,11 +5,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
   padding: clamp(12px, 2.5vw, 32px);
   margin: 0 auto;
   max-width: 1200px;
+  min-height: 100vh;
   text-align: center;
 }
 
@@ -55,78 +56,72 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
-.filtro-grupo {
-  margin-bottom: 0.8rem;
-}
-
-.filtro-grupo h3 {
-  margin-bottom: 0.4rem;
-  font-size: 1rem;
-}
-
-.filtro-grupo select,
-.filtro-grupo input[type='checkbox'] {
-  margin-top: 4px;
-  background-color: rgb(11, 11, 11, 0.1);
-  border: solid 1px var(--color-text-primary);
-  width: 100%;
-}
-
-.filtro-grupo label {
-  display: flex;
-  align-items: center; /* centra verticalmente */
-  gap: 8px; /* espacio entre checkbox e texto */
-  cursor: pointer;
-}
-
-#filtro-checkbox[type='checkbox'] {
-  flex-shrink: 0; /* evita que se reduzca */
-  margin: 0; /* eliminamos márgenes que desalinean */
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 25px;
-  height: 25px;
-  background-image: url(./../../assets/filter-checkbox.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: none;
-  cursor: pointer;
-}
-
-/* Imagen al estar seleccionado */
-#filtro-checkbox[type='checkbox']:checked {
-  background-image: url(./../../assets/filter-checkbox-checked.png);
-}
-
-/* ===== Botones de género ===== */
-.filtro-grupo .opciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
+/* Filtros generales */
 .filtro-boton {
   padding: 0.4rem 0.7rem;
   border-radius: 50px;
   border: 1px solid rgba(212, 175, 55, 0.1);
   background: transparent;
-  color: var(--color-text-primary);
   cursor: pointer;
   transition: all 0.3s;
+  outline: none;
 }
 
+.filtro-grupo h3 {
+  font-size: 1.1rem;
+  margin: 1em 0;
+  color: var(--color-text-tertiary);
+}
+
+.grupo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/*Botones de filtro */
+.estado-grupo .filtro-boton:hover,
 .filtro-boton:hover,
 .filtro-boton.incluido {
   background: rgba(212, 175, 55, 0.1);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.estado-grupo .filtro-boton.activo,
+.filtro-boton.activo,
+.filtro-boton.incluido {
+  background-color: var(--color-bg-accept);
+  border-color: var(--color-border);
 }
 
 .filtro-boton.excluido {
-  background: rgba(220, 80, 80, 0.12);
-  border-color: rgba(220, 80, 80, 0.2);
-  color: rgba(255, 200, 200, 0.95);
+  background-color: var(--color-bg-refused);
+  border-color: var(--color-borde-refused);
+  color: var(--color-text-secondary);
+}
+
+/* Íconos dentro de los botones */
+.icon_filtro {
+  width: 18px;
+  height: 18px;
+}
+
+/* Seccion ordenar por */
+.filtro-grupo select {
+  appearance: none;
+  padding: 5px;
+  margin-top: 4px;
+  background-color: transparent;
+  border: solid 1px var(--color-border);
+  color: var(--color-text-secondary);
+  width: 100%;
+}
+
+.filtro-grupo select:hover,
+.filtro-grupo select:focus {
+  outline: none;
+  border: solid 1px var(--color-border);
+  background: var(--color-bg-secondary);
 }
 
 /* ===== Cuadrícula de juegos ===== */
@@ -135,25 +130,6 @@
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: clamp(10px, 2vw, 20px);
   width: 100%;
-}
-
-.juego-imagen:hover{
-  transform: translateY(-6px);
-  box-shadow: var(--box-shadow-card);
-}
-
-.juego-imagen img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  display: block;
-}
-
-.juego-nombre {
-  margin-top: 6px;
-  font-size: 0.95rem;
-  color: var(--color-text-primary);
-  text-align: center;
 }
 
 /* ===== Botones-juego ===== */
@@ -167,9 +143,11 @@
 .mygame-boton,
 .mywishlist-boton {
   cursor: pointer;
-  padding: 3px;
-  border: solid 2px var(--color-border);
+  padding: 0.3rem 0.5rem;
+  border: none;
+  border-radius: 8px;
   background-color: var(--color-bg-secondary);
+  transition: background 0.2s ease;
   color: var(--color-text-primary);
   width: 100%;
   height: 36px;
@@ -188,14 +166,20 @@
 
 .mygame-boton:hover,
 .mywishlist-boton:hover {
+  background: var(--color-outline);
   transform: scale(1.1, 1.05);
+}
+
+.btn-juego button.activo {
+  background: var(--color-bg-accept);
 }
 
 /* ===== Sin resultados ===== */
 .sin-resultados {
   padding: 1rem;
   color: var(--color-text-tertiary);
-  text-align: center;
+  margin: 0 auto;
+  text-align: start;
 }
 
 /* ===== Responsive ===== */

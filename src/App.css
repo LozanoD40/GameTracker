@@ -60,14 +60,18 @@
   --color-bg-main: #0b0b0b; /* Fondo general del body */
   --color-bg-secondary: #1a1a1a; /* Fondos degradados o secundarios */
   --color-bg-accent: #000; /* Fondo de navbar y footer */
+  --color-bg: #0b0b0b;
+  --color-bg-alt: #111111;
+  --color-bg-accept: rgb(211, 181, 82, 0.1);
+  --color-bg-refused: rgb(179, 36, 36, 0.1);
+  --color-borde-refused: #380b0b; 
+  --color-border: #d4af37; /* Borde principal dorado */
+  --color-outline: #fff2; /* Outline sutil */
+  --color-text-hover: #fff; /* Sutil hover */
   --color-text-primary: #d4af37; /* Dorado medieval */
   --color-text-secondary: #fff; /* Blanco para hover o contraste */
   --color-text-tertiary: #aaaaaa; /* contrasete */
-  --color-border: #d4af37; /* Borde principal dorado */
-  --color-outline: #fff2; /* Outline sutil */
-  --color-bg: #0b0b0b;
-  --color-bg-alt: #111111;
-  --color-text-hover: #fff;
+  
 
   /*Tipografía*/
   --font-main: 'Crimson Text', serif; /* Texto general */
