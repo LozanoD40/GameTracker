@@ -130,7 +130,6 @@ function AllJuegos({ juegos = [], setJuegos }) {
     let filteredList = juegos.filter((game) => {
       const titulo = (game.titulo || '').toLowerCase()
       const genero = (game.genero || '').toLowerCase()
-      //    const plat = (game.plataforma || '').toLowerCase()
 
       if (q && !titulo.includes(q)) return false
       if (

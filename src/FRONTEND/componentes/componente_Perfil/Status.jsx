@@ -106,7 +106,6 @@ function Status() {
         )
         if (generoRes.ok) {
           const generoData = await generoRes.json()
-          // aceptar formato: objeto único o array con objeto
           const item = Array.isArray(generoData) ? generoData[0] : generoData
           if (item && item.genero) setOpcion(item.genero)
         } else {
