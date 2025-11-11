@@ -235,7 +235,7 @@ textarea:focus {
 
 .item-logro p:nth-child(4) {
   grid-area: cond;
-  color: #888;
+  color: var(--color-text-secondar);
 }
 
 .item-logro img {
@@ -245,12 +245,15 @@ textarea:focus {
   object-fit: cover;
   border-radius: 5px;
   border: 1px solid var(--color-border);
-  filter: grayscale(1);
   transition: filter 0.3s ease;
 }
 
+.item-logro.bloqueado {
+  filter: grayscale(1);
+}
+
 @media (hover: hover) {
-  .item-logro:hover img {
+  .item-logro:hover {
     filter: grayscale(0);
   }
 }

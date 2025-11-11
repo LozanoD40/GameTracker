@@ -208,10 +208,42 @@ function Confi() {
 
   // --- Logros -------
   useEffect(() => {
-    fetch('http://localhost:3000/api/achievements')
-      .then((response) => response.json())
-      .then((data) => setLogros(data))
-  }, [])
+    const cargarLogros = async () => {
+      try {
+        // 1️⃣ Cargar todos los logros
+        const resAll = await fetch('http://localhost:3000/api/achievements')
+        if (!resAll.ok) throw new Error('Error al cargar logros generales')
+        const todosLogros = await resAll.json()
+
+        // 2️⃣ Si hay usuario logeado, cargar los desbloqueados
+        const uid = user?.id || user?._id
+        if (!uid) {
+          setLogros(todosLogros)
+          return
+        }
+
+        const resUnlocked = await fetch(
+          `http://localhost:3000/api/dataUser/usuario/${uid}/logros`
+        )
+        if (!resUnlocked.ok)
+          throw new Error('Error al cargar logros desbloqueados')
+        const logrosDesbloqueados = await resUnlocked.json()
+
+        // 3️⃣ Marcar los desbloqueados
+        const idsDesbloqueados = new Set(logrosDesbloqueados.map((l) => l._id))
+        const logrosConEstado = todosLogros.map((l) => ({
+          ...l,
+          desbloqueado: idsDesbloqueados.has(l._id),
+        }))
+
+        setLogros(logrosConEstado)
+      } catch (err) {
+        console.error('Error cargando logros:', err)
+      }
+    }
+
+    cargarLogros()
+  }, [user])
 
   return (
     <div className="confi-container">
@@ -351,13 +383,21 @@ function Confi() {
       </section>
 
       <section className="all-logros">
-        <h3 className='title-logro'>Logros</h3>
+        <h3 className="title-logro">Logros</h3>
         {logros.length > 0 ? (
           logros.map((logro) => (
-            <div key={logro._id} className="item-logro">
-              <strong>{logro.titulo}</strong>
+            <div
+              className={`item-logro ${
+                logro.desbloqueado ? 'activo' : 'bloqueado'
+              }`}
+            >
+              <strong>{logro.nombre}</strong>
               <p>{logro.descripcion}</p>
-              <img src={logro.icono} alt={logro.titulo} className='sin-logros'/>
+              <img
+                src={logro.icono}
+                alt={logro.nombre}
+                className="sin-logros"
+              />
               <p>{logro.condicion}</p>
             </div>
           ))
