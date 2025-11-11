@@ -33,24 +33,67 @@ function InfoJuego({ setJuegos }) {
 
   // Cargar datos del juego desde el backend (respetando tu ruta actual)
   useEffect(() => {
-    setLoading(true)
-    const timeout = setTimeout(() => setLoading(true), 5000)
+    if (!user) return // Esperar a que el usuario cargue
 
-    fetch(`http://localhost:3000/api/games/games/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Error al obtener los datos del juego')
-        return res.json()
-      })
-      .then((data) => {
-        setJuego(data)
+    setLoading(true)
+    let cancelled = false
+    const userId = user._id || user.id
+
+    const fetchData = async () => {
+      try {
+        // Petición 1: Obtener la información BASE del juego
+        const resJuego = await fetch(`http://localhost:3000/api/games/games/${id}`)
+        if (!resJuego.ok) throw new Error('Error al obtener los datos base del juego')
+        let dataJuego = await resJuego.json()
+
+        // Petición 2: Obtener la relación del usuario (misjuegos, wishlist, completado)
+        const resUserRelacion = await fetch(
+          `http://localhost:3000/api/dataUser/usuario/${userId}`
+        )
+        if (!resUserRelacion.ok) throw new Error('Error al obtener la relación del usuario')
+        const dataUser = await resUserRelacion.json()
+
+        if (cancelled) return
+
+        // 3. Integrar los datos de la relación al objeto 'dataJuego'
+        const relacion = Array.isArray(dataUser)
+          ? dataUser.find((d) => {
+              const idJuego = typeof d.juegoId === 'object' ? d.juegoId._id : d.juegoId
+              return idJuego === dataJuego._id
+            })
+          : null
+          
+        if (relacion) {
+          dataJuego = {
+            ...dataJuego,
+            misjuegos: relacion.misjuegos,
+            wishlist: relacion.wishlist,
+            completado: relacion.completado,
+          }
+        } else {
+          // Asegurarse de que las propiedades existen si no hay relación previa
+          dataJuego = {
+            ...dataJuego,
+            misjuegos: false,
+            wishlist: false,
+            completado: false,
+          }
+        }
+
+        setJuego(dataJuego)
         setLoading(false)
-      })
-      .catch((err) => {
-        console.error('Error al cargar juego:', err)
+      } catch (err) {
+        console.error('Error al cargar datos en InfoJuego:', err)
         setLoading(false)
-      })
-      .finally(() => clearTimeout(timeout))
-  }, [id])
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      cancelled = true
+    }
+  }, [id, user])
 
   // --- Aquí está la función EXACTA (mismo comportamiento que en AllJuegos.jsx) ---
   const actualizarEstado = async (juegoId, campo, valor) => {
