@@ -230,12 +230,18 @@ textarea:focus {
 }
 
 .item-logro p:nth-child(2) {
+  color: var(--color-text-secondary);
   grid-area: desc;
 }
 
-.item-logro p:nth-child(4) {
+.item-logro small:nth-child(4) {
   grid-area: cond;
-  color: var(--color-text-secondar);
+  font-weight: 600;
+  background-color: var(--color-outline);
+  border-radius: 6px;
+  padding: 4px 6px;
+  margin-top: 4px;
+  color: var(--color-text-tertiary);
 }
 
 .item-logro img {

@@ -398,7 +398,7 @@ function Confi() {
                 alt={logro.nombre}
                 className="sin-logros"
               />
-              <p>{logro.condicion}</p>
+              <small>{logro.condicion}</small>
             </div>
           ))
         ) : (
