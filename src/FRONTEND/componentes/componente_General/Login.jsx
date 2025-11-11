@@ -2,7 +2,7 @@ import './../../styles/Login.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function Login ({ isOpen, onClose }){
+function Login({ isOpen, onClose }) {
   const [isLogin, setIsLogin] = useState(true)
   const [formData, setFormData] = useState({
     nombre: '',
@@ -12,60 +12,59 @@ function Login ({ isOpen, onClose }){
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-const handleSubmit = async (e) => {
-  e.preventDefault()
-  setError('')
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
 
-  try {
-    const endpoint = isLogin ? '/api/users/login' : '/api/users'
-    const res = await fetch(`http://localhost:3000${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
+    try {
+      const endpoint = isLogin ? '/api/users/login' : '/api/users'
+      const res = await fetch(`http://localhost:3000${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    if (!res.ok) {
-      setError(data?.error || 'Error en el proceso')
-      return
-    }
-
-    const userData = data.user || data
-    localStorage.setItem('user', JSON.stringify(userData))
-
-    // --- NUEVO CÓDIGO ---
-    if (isLogin) {
-      const userId = userData.id || userData._id
-      const logroId = '690f9aa32b89ad388ddc677a'
-
-      try {
-        // Verificamos si ya tiene Datauser (es decir, si ya había iniciado antes)
-        const check = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${userId}`
-        )
-        if (check.status === 404 || check.status === 400) {
-          // No tiene registro → primer inicio → damos el logro
-          await fetch(
-            `http://localhost:3000/api/dataUser/usuario/${userId}/logros/${logroId}`,
-            {
-              method: 'POST',
-            }
-          )
-          console.log('Logro "El Juramento del Acero" desbloqueado')
-        }
-      } catch (err) {
-        console.error('Error otorgando logro:', err)
+      if (!res.ok) {
+        setError(data?.error || 'Error en el proceso')
+        return
       }
-    }
-  
-    onClose()
-    navigate('/perfil')
-  } catch {
-    setError('Error de conexión con el servidor')
-  }
-}
 
+      const userData = data.user || data
+      localStorage.setItem('user', JSON.stringify(userData))
+
+      // --- NUEVO CÓDIGO ---
+      if (isLogin) {
+        const userId = userData.id || userData._id
+        const logroId = '690f9aa32b89ad388ddc677a'
+        console.log('erorr eadeaf')
+        try {
+          // Verificamos si ya tiene Datauser (es decir, si ya había iniciado antes)
+          const check = await fetch(
+            `http://localhost:3000/api/dataUser/usuario/${userId}`
+          )
+          if (check.status === 404 || check.status === 400) {
+            // No tiene registro → primer inicio → damos el logro
+            await fetch(
+              `http://localhost:3000/api/dataUser/usuario/${userId}/logros/${logroId}`,
+              {
+                method: 'POST',
+              }
+            )
+            console.log('Logro "El Juramento del Acero" desbloqueado')
+          }
+        } catch (err) {
+          console.error('Error otorgando logro:', err)
+        }
+      }
+
+      onClose()
+      navigate('/perfil')
+    } catch {
+      setError('Error de conexión con el servidor')
+    }
+  }
 
   const handleInputChange = (e) => {
     setFormData({

@@ -1,7 +1,10 @@
+import '../styles/Foro.css'
+import ListaResenias from '../componentes/componente_Foro/ListaResenias'
+
 function Foro() {
   return (
     <div>
-      <div>feefwfw</div>
+      <ListaResenias />
     </div>
   )
 }

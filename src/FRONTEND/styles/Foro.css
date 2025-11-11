@@ -1,0 +1,34 @@
+.foro.dark-fantasy {
+  background: radial-gradient(circle, #1a1a1a, #0d0d0d);
+  color: #e0d8c3;
+  font-family: 'Cinzel', serif;
+  padding: 2rem;
+}
+
+.foro-header h1 {
+  text-shadow: 0 0 10px #ffcc66;
+  margin-bottom: 0.5rem;
+}
+
+.reseña-carta {
+  border: 1px solid #3a2e14;
+  background: rgba(30, 20, 10, 0.8);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #000 inset;
+}
+
+.btn-publicar,
+.btn-eliminar {
+  background: #3d2b1f;
+  border: none;
+  color: #ffcc66;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background: #6a1a1a;
+}
