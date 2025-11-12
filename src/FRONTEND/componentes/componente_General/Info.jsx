@@ -242,7 +242,7 @@ function InfoJuego({ setJuegos }) {
           <div key={r._id}>
             <p>
               <strong>{r.usuarioId?.nombre || 'Anónimo'}</strong> -{' '}
-              {r.puntuacion} <img src={iconReview} alt={iconReview} />
+              {r.puntuacion} <img src={iconReview} alt={iconReview} className='iconReview'/>
             </p>
             <p>{r.textoResenia}</p>
             <p>

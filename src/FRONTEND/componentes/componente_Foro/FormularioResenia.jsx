@@ -150,12 +150,12 @@ function FormularioResenias({
         </label>
 
         <label>
-          Dificultad:
+          Asunto:
           <input
             type="text"
             value={dificultad}
             onChange={(e) => setDificultad(e.target.value)}
-            placeholder="Fácil / Medio / Difícil"
+            placeholder="Explicacion"
           />
         </label>
 
@@ -164,6 +164,7 @@ function FormularioResenias({
             type="checkbox"
             checked={recomendaria}
             onChange={(e) => setRecomendaria(e.target.checked)}
+            className='checkbox-magic'
           />
           Recomendaría el juego
         </label>
