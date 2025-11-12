@@ -1,43 +1,191 @@
 .info-juego {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
+    /* Contenedor principal: usa el fondo oscuro del body y espaciado */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--container-padding);
+    color: var(--color-text-tertiary); /* Texto base en gris sutil */
+    font-family: var(--font-main);
+    animation: fadeIn 0.8s ease-out;
 }
 
-.portada-info {
-  width: 100%;
-  height: 400px;
-  object-fit: fill;
-  border-radius: 15px;
-  margin-bottom: 1rem;
-}
+/* --- Títulos y Texto Principal --- */
 
 .info-juego h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+    font-family: var(--font-title);
+    color: var(--color-text-primary); /* Dorado para el título principal */
+    font-size: 3rem;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    text-shadow: var(--text-shadow-gold); /* Efecto de brillo dorado */
+    border-bottom: var(--border-width-normal) solid var(--color-border);
+    padding-bottom: 10px;
+    animation: fadeIn 1s ease-out;
+}
+
+.info-juego h3 {
+    font-family: var(--font-title);
+    color: var(--color-text-secondary); /* Blanco/Plata para subtítulos */
+    font-size: var(--font-size-body-lg);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .info-juego p {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: var(--font-size-body);
 }
 
+.info-juego strong {
+    color: var(--color-text-primary); /* Resaltar etiquetas */
+}
+
+/* --- Portada del Juego --- */
+
+.portada-info {
+    width: 100%;
+    max-height: 400px; /* Altura máxima para la imagen de portada */
+    object-fit: cover;
+    border: var(--border-width-thick) solid var(--color-border);
+    box-shadow: var(--box-shadow-card);
+    margin-bottom: 30px;
+    border-radius: var(--border-radius-small);
+    transition: var(--transition-medium);
+}
+
+.portada-info:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+/* --- Botones de Acción (Jugar, Wishlist, Mis Juegos, etc.) --- */
+
+.acciones-juego {
+    display: flex;
+    gap: var(--gap-lg);
+    margin: 30px 0;
+    align-items: center;
+}
+
+.acciones-juego button {
+    cursor: pointer;
+    padding: var(--padding-button);
+    font-family: var(--font-title);
+    font-size: var(--font-size-navbar);
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    border: var(--border-width-normal) solid var(--color-border);
+}
+
+/* Estilo general para todos los botones de acción */
+.acciones-juego button {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    box-shadow: var(--box-shadow-card);
+}
+
+.acciones-juego button:hover {
+    background: var(--color-bg-alt);
+    color: var(--color-text-hover);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Botón principal JUGAR */
 .btn-jugar {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: var(--color-bg-accent);
-  color: var(--color-text-primary);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: background 0.3s;
+    flex-grow: 1; 
+    background: var(--color-text-primary) ;
+    color: var(--color-bg-accent);
+    border: var(--border-width-normal) solid var(--color-text-secondary);
 }
 
 .btn-jugar:hover {
-  background-color: var(--color-text-primary);
-  color: var(--color-bg-accent);
+    background: var(--color-text-secondary);
+    color: var(--color-bg-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Estilo para los iconos de estado (Mis Juegos, Wishlist, Completado) */
+.iconGames {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    filter: brightness(0.7); /* Oscurece el icono por defecto */
+    transition: var(--transition-fast);
+}
+
+/* Botones de estado (pequeños) */
+.mygame-boton,
+.mywishlist-boton,
+.completado-boton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+}
+
+/* Estado ACTIVO para Mis Juegos/Wishlist/Completado */
+.acciones-juego button.activo {
+    background: var(--color-bg-accept);
+    border-color: var(--color-text-primary);
+}
+
+.acciones-juego button.activo .iconGames {
+    filter: brightness(1) drop-shadow(0 0 5px var(--color-text-primary)); /* Icono brillante en activo */
+}
+
+.acciones-juego button.activo:hover {
+    transform: scale(1.05);
+}
+
+/* --- SECCIÓN RESEÑAS --- */
+
+/* Contenedor de una reseña */
+.info-juego > div > div {
+    background: var(--color-bg-secondary);
+    border: var(--border-width-normal) solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    padding: var(--padding-card);
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: var(--transition-fast);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.info-juego > div > div:hover {
+    border-color: var(--color-text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Puntuación y datos del usuario */
+.info-juego div div p:first-child {
+    font-size: var(--font-size-card);
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+}
+
+/* Texto de la reseña */
+.info-juego > div > div p:nth-child(2) {
+    
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-left: 2px solid var(--color-text-primary);
+    padding-left: 15px;
+}
+
+.info-juego > div > div p:last-child {
+    font-size: var(--font-size-body-sh);
+    color: var(--color-text-tertiary);
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.info-juego > div > div strong {
+    color: var(--color-text-primary);
 }

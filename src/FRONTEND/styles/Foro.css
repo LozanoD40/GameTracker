@@ -1,34 +1,509 @@
-.foro.dark-fantasy {
-  background: radial-gradient(circle, #1a1a1a, #0d0d0d);
-  color: #e0d8c3;
-  font-family: 'Cinzel', serif;
-  padding: 2rem;
+/* ================================================= */
+/* Archivo: ListaResenias.css                        */
+/* Estilo: Dark Fantasy Medieval RPG - Lista Reseñas */
+/* ================================================= */
+
+/* --- Contenedor Principal --- */
+.lista-reseñas-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--container-padding);
+    font-family: var(--font-main);
+    color: var(--color-text-tertiary);
 }
 
-.foro-header h1 {
-  text-shadow: 0 0 10px #ffcc66;
-  margin-bottom: 0.5rem;
+/* --- Encabezado del Foro --- */
+.lista-reseñas-header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-.reseña-carta {
-  border: 1px solid #3a2e14;
-  background: rgba(30, 20, 10, 0.8);
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px #000 inset;
+.lista-reseñas-titulo {
+    font-family: var(--font-title);
+    color: var(--color-text-primary);
+    font-size: 3rem;
+    text-shadow: var(--text-shadow-gold);
+    margin-bottom: 10px;
 }
 
-.btn-publicar,
-.btn-eliminar {
-  background: #3d2b1f;
-  border: none;
-  color: #ffcc66;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
+.lista-reseñas-subtitulo {
+    font-size: var(--font-size-body);
+    color: var(--color-text-secondary);
+    opacity: 0.8;
 }
 
-.btn-eliminar:hover {
-  background: #6a1a1a;
+/* --- Filtro de Búsqueda --- */
+.lista-reseñas-filtro {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-md);
+}
+
+.input-filtro {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-outline);
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+    font-size: var(--font-size-body);
+    transition: border-color var(--transition-fast);
+}
+
+.input-filtro:focus {
+    border-color: var(--color-border);
+    outline: none;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+/* --- Lista de Reseñas --- */
+.lista-reseñas-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-cards);
+}
+
+/* --- Item de Reseña (Efecto de Pergamino/Losa) --- */
+.reseña-item {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-medium);
+}
+
+.reseña-item:hover {
+    border-color: var(--color-border);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* --- Elemento Details (Para el colapsable) --- */
+.reseña-details {
+    width: 100%;
+}
+
+/* --- Summary (Encabezado visible de la reseña) --- */
+.reseña-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-card);
+    cursor: pointer;
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    list-style: none; /* Oculta el triángulo por defecto */
+    /* Crea un borde inferior al expandirse */
+    border-bottom: 1px solid transparent; 
+    transition: background-color 0.3s;
+}
+
+.reseña-details[open] .reseña-summary {
+    background-color: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-outline);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Personaliza el indicador de expansión */
+.reseña-summary::before {
+    content: '►';
+    color: var(--color-text-primary);
+    margin-right: 15px;
+    font-size: 1rem;
+    transition: transform 0.3s;
+}
+
+.reseña-details[open] .reseña-summary::before {
+    content: '▼';
+    transform: rotate(0deg);
+}
+
+
+.reseña-summary-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.reseña-imagenPortada {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+}
+
+.reseña-titulo {
+    font-family: var(--font-title);
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    display: block;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.reseña-usuario {
+    font-size: var(--font-size-body-sh);
+    color: var(--color-text-tertiary);
+    margin-top: 5px;
+}
+
+.reseña-recomendaria {
+    font-size: var(--font-size-body-sh);
+    margin-top: 5px;
+    color: var(--color-text-primary); /* Destacar recomendación */
+}
+
+/* --- Botón Responder --- */
+.btn-responder {
+    cursor: pointer;
+    padding: 8px 15px;
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    background: var(--color-text-primary);
+    color: var(--color-bg-accent);
+    border: var(--border-width-normal) solid var(--color-text-secondary);
+    transition: var(--transition-fast);
+}
+
+.btn-responder:hover {
+    background: var(--color-text-secondary);
+    color: var(--color-bg-accent);
+    box-shadow: 0 0 10px var(--color-text-primary);
+}
+
+/* --- Contenido Expandido de la Reseña --- */
+.reseña-contenido {
+    padding: 10px var(--padding-card) var(--padding-card) var(--padding-card);
+    border-top: 1px solid var(--color-outline); /* Separador visual */
+}
+
+.reseña-texto {
+    font-style: italic;
+    color: var(--color-text-tertiary);
+    border-left: 3px solid var(--color-text-primary);
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+/* --- Respuestas (Comentarios) --- */
+.reseña-respuestas {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-outline);
+}
+
+.respuesta-item {
+    font-size: var(--font-size-body-sh);
+    margin-bottom: 8px;
+    padding-left: 10px;
+    border-left: 3px solid var(--color-outline);
+}
+
+.respuesta-item strong {
+    color: var(--color-text-primary);
+    margin-right: 5px;
+}
+
+/* ================================================= */
+/* Archivo: Respuesta.css                             */
+/* Estilo: Dark Fantasy Medieval RPG - Modal Respuesta */
+/* ================================================= */
+
+/* --- Contenedor del Modal (Fondo Oscuro) --- */
+.respuesta-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Oscurece el fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegura que esté encima de todo */
+    backdrop-filter: blur(3px); /* Efecto de desenfoque */
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* --- Contenido de la Ventana (Pergamino Oscuro) --- */
+.respuesta-modal-content {
+    background-color: var(--color-bg-secondary);
+    border: var(--border-width-thick) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glow); /* Brillo sutil */
+    padding: var(--padding-card);
+    width: 90%;
+    max-width: 500px;
+    transform: scale(0.9);
+    animation: fadeInScale 0.4s forwards; /* Animación de entrada con escala */
+}
+
+/* --- Título (Encabezado) --- */
+.respuesta-modal-content h2 {
+    font-family: var(--font-title);
+    color: var(--color-text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: var(--text-shadow-gold);
+    border-bottom: 1px solid var(--color-outline);
+    padding-bottom: 10px;
+}
+
+/* --- Área de Texto --- */
+.respuesta-modal-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+    resize: vertical;
+    transition: border-color var(--transition-fast);
+}
+
+.respuesta-modal-textarea:focus {
+    border-color: var(--color-border);
+    outline: none;
+    box-shadow: 0 0 5px var(--color-border);
+}
+
+/* --- Contenedor de Botones --- */
+.respuesta-modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap-lg);
+}
+
+/* --- Estilo Base de Botones --- */
+.respuesta-modal-acciones button {
+    cursor: pointer;
+    padding: 10px 20px;
+    font-family: var(--font-title);
+    font-size: var(--font-size-navbar);
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    border: var(--border-width-normal) solid;
+}
+
+/* --- Botón CANCELAR --- */
+.btn-cancelar {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-tertiary);
+    border-color: var(--color-outline);
+}
+
+.btn-cancelar:hover {
+    color: var(--color-text-hover);
+    border-color: var(--color-text-tertiary);
+    background: var(--color-bg-alt);
+}
+
+/* --- Botón ENVIAR (Principal Dorado) --- */
+.btn-enviar {
+    background: var(--color-text-primary);
+    color: var(--color-bg-accent);
+    border-color: var(--color-text-secondary);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-enviar:hover {
+    background: var(--color-text-secondary);
+    color: var(--color-bg-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--color-text-primary);
+}
+
+
+/* ================================================= */
+/* Archivo: FormularioResenias.css (ACTUALIZADO)     */
+/* Estilo: Dark Fantasy Medieval RPG - Formulario    */
+/* ================================================= */
+
+/* --- Contenedor Principal del Formulario --- */
+.reseña-container {
+    margin-top: 40px;
+    padding: var(--padding-section);
+    background-color: var(--color-bg-secondary);
+    border: var(--border-width-thick) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.reseña-container h3 {
+    font-family: var(--font-title);
+    color: var(--color-text-primary);
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-shadow: var(--text-shadow-gold);
+    text-align: center;
+    border-bottom: 1px solid var(--color-outline);
+    padding-bottom: 15px;
+}
+
+/* --- Formulario --- */
+.reseña-container form {
+    display: grid;
+    gap: var(--gap-lg);
+    grid-template-columns: 1fr 1fr;
+    color: var(--color-text-tertiary);
+}
+
+.reseña-container label {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-main);
+    font-size: var(--font-size-body);
+    color: var(--color-text-secondary);
+}
+
+.reseña-container input[type='text'],
+.reseña-container input[type='number'],
+.reseña-container select,
+.reseña-container textarea {
+    padding: 10px;
+    margin-top: 5px;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+    transition: border-color var(--transition-fast);
+}
+
+.reseña-container input:focus,
+.reseña-container select:focus,
+.reseña-container textarea:focus {
+    border-color: var(--color-border);
+    outline: none;
+    box-shadow: 0 0 5px var(--color-border);
+}
+
+.reseña-container textarea {
+    grid-column: 1 / -1;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.reseña-container label:has(input[type='checkbox']) {
+    flex-direction: row;
+    align-items: center;
+    grid-column: 1 / -1;
+    color: var(--color-text-tertiary);
+}
+
+.reseña-container input[type='checkbox'] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Botón de envío */
+.reseña-container button[type='submit'] {
+    grid-column: 1 / -1;
+    cursor: pointer;
+    padding: var(--padding-button);
+    font-family: var(--font-title);
+    font-size: var(--font-size-navbar);
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    background: var(--color-text-primary);
+    color: var(--color-bg-accent);
+    border: var(--border-width-normal) solid var(--color-text-secondary);
+    box-shadow: var(--shadow-glow);
+}
+
+.reseña-container button[type='submit']:hover:not(:disabled) {
+    background: var(--color-text-secondary);
+    color: var(--color-bg-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.reseña-container button[type='submit']:disabled {
+    background: var(--color-bg-alt);
+    color: var(--color-text-tertiary);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Mensajes de estado (Error/Éxito) */
+.reseña-container > p { /* Selecciona directamente el párrafo de mensaje */
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+}
+
+/* Estilo para mensaje de éxito */
+/* Nota: Se mantiene la recomendación de usar una clase dinámica si el selector :contains no es compatible */
+.reseña-container > p:contains("✅") {
+    background: var(--color-bg-accept);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-text-primary);
+}
+
+/* Estilo para mensaje de error */
+.reseña-container > p:not(:contains("✅")) {
+    background: var(--color-bg-refused);
+    color: rgb(179, 36, 36);
+    border: 1px solid var(--color-borde-refused);
+}
+
+/* ======================================= */
+/* --- ESTILO PARA RESPUESTAS ANIDADAS --- */
+/* ======================================= */
+
+/* Contenedor de la lista de respuestas (RespuestasList) */
+.reseña-container > .reseña-container {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: var(--color-bg-alt); /* Ligeramente más claro que el fondo del formulario */
+    border: 1px dashed var(--color-outline);
+    border-radius: var(--radius-md);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4); /* Sombra interna para profundidad */
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Elemento individual de respuesta */
+.respuesta-item {
+    padding: 8px 0;
+    font-size: var(--font-size-body-sh);
+    color: var(--color-text-tertiary);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05); /* Separador sutil */
+}
+
+.respuesta-item:last-child {
+    border-bottom: none;
+}
+
+/* Nombre de usuario */
+.respuesta-item strong {
+    color: var(--color-text-secondary); /* Blanco/Plata para el nombre */
+    margin-right: 5px;
+}
+
+/* Título de usuario (entre paréntesis) */
+.respuesta-item strong + span {
+    color: var(--color-text-primary); /* Dorado para el título */
+    font-family: var(--font-ornament); /* Tipografía decorativa para el título */
+    font-size: 0.9em;
+    font-style: italic;
 }

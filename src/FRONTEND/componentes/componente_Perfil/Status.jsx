@@ -121,7 +121,7 @@ function Status() {
 
   const guardarGenero = async (nuevoGenero) => {
     try {
-      const uid = user.id || user._id
+      const uid = user?.id || user?._id
       const response = await fetch(
         `http://localhost:3000/api/dataUser/usuario/${uid}/genero`,
         {
@@ -254,7 +254,6 @@ function Status() {
               <p>{opcion || ' Un Caballero novato'}</p>
             </summary>
             {[
-              'Caballero del Alba',
               'Dwarf de Hierro',
               'DragonMan del Fuego Eterno',
               'Nekomimi de Sombras Suaves',

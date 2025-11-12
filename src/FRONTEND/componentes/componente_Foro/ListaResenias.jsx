@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Loader from '../componente_General/Loading'
 import tiempoCarga3 from './../../../assets/loadingGif/tiempoCarga3.gif'
-import ReseniaDetalle from './FormularioReseña'
 import Respuesta from './Respuesta'
 
 function ListaResenias() {
@@ -13,7 +12,7 @@ function ListaResenias() {
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate()
 
-  // 🔥 Cargar reseñas
+  // Cargar reseñas
   useEffect(() => {
     setLoading(true)
     const timeout = setTimeout(() => setLoading(false), 7000)
@@ -31,13 +30,13 @@ function ListaResenias() {
       .finally(() => clearTimeout(timeout))
   }, [])
 
-  // 🔥 Abrir modal de respuesta
+  // Abrir modal de respuesta
   const abrirModal = (resenia) => {
     setSelectedResenia(resenia)
     setShowModal(true)
   }
 
-  // 🔥 Enviar respuesta desde modal
+  // Enviar respuesta desde modal
   const enviarRespuesta = async (idReseña, respuesta) => {
     const storedUser = localStorage.getItem('user')
     if (!storedUser) {
@@ -62,12 +61,14 @@ function ListaResenias() {
       const data = await res.json()
 
       if (res.ok) {
-        alert('Respuesta enviada correctamente ✅')
-
-        // 🔥 Refrescar lista
-        const resRefetch = await fetch('http://localhost:3000/api/reviews')
-        const updated = await resRefetch.json()
-        setReseñas(updated)
+        // Actualizar la reseña en la lista para mostrar la respuesta inmediatamente
+        setReseñas((prev) =>
+          prev.map((r) =>
+            r._id === idReseña
+              ? { ...r, respuestas: [...(r.respuestas || []), data] }
+              : r
+          )
+        )
       } else {
         console.error('Error al responder:', data.error)
         alert(`Error: ${data.error}`)
@@ -79,6 +80,7 @@ function ListaResenias() {
     }
   }
 
+  // Filtrar reseñas por nombre del juego
   const reseñasFiltradas = reseñas.filter((r) =>
     r.juegoId?.titulo?.toLowerCase().includes(filtro.toLowerCase())
   )
@@ -86,38 +88,91 @@ function ListaResenias() {
   if (loading) return <Loader imagen={tiempoCarga3} />
 
   return (
-    <div className="p-6">
-      <header className="mb-6">
-        <h1 className="text-2xl text-[#d6b26f] font-bold">
-          Foro de Reseñas Globales
-        </h1>
-        <p className="text-gray-400">
+    <div className="lista-reseñas-container">
+      <header className="lista-reseñas-header">
+        <h1 className="lista-reseñas-titulo">Foro de Reseñas Globales</h1>
+        <p className="lista-reseñas-subtitulo">
           Comparte y descubre opiniones de toda la comunidad
         </p>
       </header>
 
-      <div className="mb-4">
+      <div className="lista-reseñas-filtro">
         <input
           type="text"
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
           placeholder="Filtrar por nombre del juego..."
-          className="w-full max-w-md p-2 rounded bg-[#1a1a1a] border border-[#3a2a18] text-gray-300"
+          className="input-filtro"
         />
       </div>
 
       {reseñasFiltradas.length > 0 ? (
-        <div className="space-y-4">
+        <div className="lista-reseñas-items">
           {reseñasFiltradas.map((r) => (
-            <ReseniaDetalle
-              key={r._id}
-              reseña={r}
-              onResponder={() => abrirModal(r)}
-            />
+            <div key={r._id} className="reseña-item">
+              <details className="reseña-details">
+                <summary className="reseña-summary">
+                  <div className="reseña-summary-info">
+                    <img
+                      src={r.juegoId?.imagenPortada}
+                      alt={r.juegoId?.titulo}
+                      className="reseña-imagenPortada"
+                    />
+                    <div>
+                      <strong className="reseña-titulo">
+                        {r.juegoId?.titulo}
+                      </strong>
+                      <p className="reseña-usuario">Por: {r.nombreUsuario}</p>
+                      <p className="reseña-recomendaria">
+                        {r.recomendaria
+                          ? '⭐ Recomienda este juego'
+                          : 'No recomienda'}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    className="btn-responder"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      abrirModal(r)
+                    }}
+                  >
+                    Responder
+                  </button>
+                </summary>
+
+                <div className="reseña-contenido mt-2">
+                  <p className="reseña-texto">{r.textoResenia}</p>
+                  <p
+                    className="reseña-horasJugadas"
+                    style={{ display: 'none' }}
+                  >
+                    Horas jugadas: {r.horasJugadas}
+                  </p>
+                  <p className="reseña-dificultad" style={{ display: 'none' }}>
+                    Dificultad: {r.dificultad || 'No especificada'}
+                  </p>
+
+                  {/* Respuestas */}
+                  {r.respuestas && r.respuestas.length > 0 && (
+                    <div className="reseña-respuestas mt-2">
+                      {r.respuestas.map((resp) => (
+                        <div
+                          key={resp._id}
+                          className="respuesta-item border-l-2 pl-2 mt-1"
+                        >
+                          <strong>{resp.nombreUsuario}</strong>: {resp.texto}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </details>
+            </div>
           ))}
         </div>
       ) : (
-        <p className="text-gray-500">No hay reseñas disponibles.</p>
+        <p>No hay reseñas disponibles.</p>
       )}
 
       {showModal && selectedResenia && (

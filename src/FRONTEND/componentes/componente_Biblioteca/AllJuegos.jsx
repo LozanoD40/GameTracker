@@ -51,73 +51,65 @@ function AllJuegos({ juegos = [], setJuegos }) {
     'Nintendo',
   ]
 
-  // Cargar usuario desde localStorage al montar el componente
   useEffect(() => {
     const userData = localStorage.getItem('user')
+    if (!userData) return
 
-    let parsedUser
     try {
-      parsedUser = JSON.parse(userData)
+      const parsedUser = JSON.parse(userData)
+      if (parsedUser && (parsedUser.id || parsedUser._id)) {
+        setUser(parsedUser)
+      }
     } catch (err) {
       console.error('Error parseando el usuario:', err)
-      return
     }
+  }, [])
 
-    if (!parsedUser || (!parsedUser.id && !parsedUser._id)) {
-      return
-    }
-
-    const userId = parsedUser.id || parsedUser._id
-    setUser(parsedUser)
+  useEffect(() => {
+    if (!user || !Array.isArray(juegos)) return
 
     let cancelled = false
 
     const fetchData = async () => {
       try {
+        const userId = user._id || user.id
         const res = await fetch(
           `http://localhost:3000/api/dataUser/usuario/${userId}`
         )
         if (!res.ok) throw new Error(`Error HTTP ${res.status}`)
-
         const dataUser = await res.json()
-        if (!Array.isArray(dataUser)) {
-          return
-        }
+        if (!Array.isArray(dataUser) || cancelled) return
 
-        if (cancelled) return
-
-        setJuegos((prev) => {
-          if (!Array.isArray(prev)) return prev
-          const actualizados = prev.map((j) => {
+        // Actualiza los juegos, manteniendo los datos previos
+        setJuegos((prev) =>
+          prev.map((j) => {
             const relacion = dataUser.find((d) => {
               const idJuego =
                 typeof d.juegoId === 'object' ? d.juegoId._id : d.juegoId
               return idJuego === j._id
             })
 
-            return relacion
-              ? {
-                  ...j,
-                  misjuegos: relacion.misjuegos,
-                  wishlist: relacion.wishlist,
-                  completado: relacion.completado,
-                }
-              : j
-          })
+            if (!relacion) return j // si no hay relación, no se cambia
 
-          return actualizados
-        })
+            return {
+              ...j,
+              misjuegos: relacion.misjuegos ?? j.misjuegos,
+              wishlist: relacion.wishlist ?? j.wishlist,
+              completado: relacion.completado ?? j.completado,
+            }
+          })
+        )
       } catch (err) {
         console.error('Error al sincronizar DataUser:', err)
       }
     }
 
     fetchData()
-
     return () => {
       cancelled = true
     }
-  }, [setJuegos])
+  }, [user, juegos, setJuegos])
+
 
   // Filtrado y ordenamiento
   const filteredAndSorted = useMemo(() => {
@@ -186,8 +178,8 @@ function AllJuegos({ juegos = [], setJuegos }) {
     query,
     includeGenres,
     excludeGenres,
-    includePlatforms, 
-    excludePlatforms, 
+    includePlatforms,
+    excludePlatforms,
     estadoJuego,
     misJuegosFilter,
     wishlistFilter,
