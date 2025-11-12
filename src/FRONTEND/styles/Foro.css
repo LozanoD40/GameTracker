@@ -1,18 +1,12 @@
-/* ================================================= */
-/* Archivo: ListaResenias.css                        */
-/* Estilo: Dark Fantasy Medieval RPG - Lista Reseñas */
-/* ================================================= */
-
-/* --- Contenedor Principal --- */
+/* --- LISTA RESEÑAS --- */
 .lista-reseñas-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: var(--container-padding);
-  font-family: var(--font-main);
+  max-width: 70vw;
+  align-content: flex-start;
+  padding: var(--padding-card);
   color: var(--color-text-tertiary);
 }
 
-/* --- Encabezado del Foro --- */
+/*  Encabezado del Foro */
 .lista-reseñas-header {
   text-align: center;
   margin-bottom: 40px;
@@ -21,22 +15,22 @@
 .lista-reseñas-titulo {
   font-family: var(--font-title);
   color: var(--color-text-primary);
-  font-size: 3rem;
-  text-shadow: var(--text-shadow-gold);
+  font-size: var(--font-size-body-lg);
   margin-bottom: 10px;
 }
 
 .lista-reseñas-subtitulo {
+  width: 100%;
   font-size: var(--font-size-body);
   color: var(--color-text-secondary);
   opacity: 0.8;
 }
 
-/* --- Filtro de Búsqueda --- */
+/*--------------FILTRO--------------------- */
 .lista-reseñas-filtro {
   margin-bottom: 30px;
   padding: 15px;
-  background-color: var(--color-bg-secondary);
+  background-color: transparent;
   border: 1px solid var(--color-outline);
   border-radius: var(--radius-md);
 }
@@ -44,29 +38,27 @@
 .input-filtro {
   width: 100%;
   padding: 12px 15px;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-main);
   color: var(--color-text-primary);
   border: 2px solid var(--color-outline);
   border-radius: var(--radius-md);
   font-family: var(--font-main);
   font-size: var(--font-size-body);
-  transition: border-color var(--transition-fast);
 }
 
 .input-filtro:focus {
   border-color: var(--color-border);
   outline: none;
-  box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
 }
 
-/* --- Lista de Reseñas --- */
+/* -----------------RESEÑA------------------*/
 .lista-reseñas-items {
   display: flex;
   flex-direction: column;
   gap: var(--gap-cards);
 }
 
-/* --- Item de Reseña (Efecto de Pergamino/Losa) --- */
+/* Item de Reseña  */
 .reseña-item {
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-outline);
@@ -81,12 +73,14 @@
   box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
 }
 
-/* --- Elemento Details (Para el colapsable) --- */
+/*---------------DETAILS----------------------*/
 .reseña-details {
   width: 100%;
+  border-left: 5px solid var(--color-text-primary);
+  border-bottom: 0.8px solid var(--color-text-primary);
 }
 
-/* --- Summary (Encabezado visible de la reseña) --- */
+/* Summary */
 .reseña-summary {
   display: flex;
   justify-content: space-between;
@@ -95,8 +89,6 @@
   cursor: pointer;
   background-color: var(--color-bg-secondary);
   border-radius: var(--radius-lg);
-  list-style: none; /* Oculta el triángulo por defecto */
-  /* Crea un borde inferior al expandirse */
   border-bottom: 1px solid transparent;
   transition: background-color 0.3s;
 }
@@ -104,8 +96,7 @@
 .reseña-details[open] .reseña-summary {
   background-color: var(--color-bg-alt);
   border-bottom: 1px solid var(--color-outline);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: 0;
 }
 
 /* Personaliza el indicador de expansión */
@@ -114,12 +105,13 @@
   color: var(--color-text-primary);
   margin-right: 15px;
   font-size: 1rem;
-  transition: transform 0.3s;
+  transition: var(--transition-medium);
 }
 
 .reseña-details[open] .reseña-summary::before {
-  content: '▼';
-  transform: rotate(0deg);
+  content: '►';
+  transform: rotate(90deg);
+  transition: var(--transition-medium);
 }
 
 .reseña-summary-info {
@@ -130,9 +122,9 @@
 }
 
 .reseña-imagenPortada {
-  width: 60px;
+  width: 80px;
   height: 80px;
-  object-fit: cover;
+  object-fit: fill;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
 }
@@ -396,24 +388,24 @@
   min-height: 120px;
 }
 
-.reseña-container label input[type='checkbox']{
-    appearance: none;
-    display: inline-block;
-    width: 24px; 
-    height: 24px; 
-    border: none;
-    box-shadow: none;
-    cursor: pointer;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-image 0.2s ease;
-    background-image: url(../../assets/Icons/filter-checkbox.png);
+.reseña-container label input[type='checkbox'] {
+  appearance: none;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.2s ease;
+  background-image: url(../../assets/Icons/filter-checkbox.png);
 }
 
 /* 3. Estilo para el estado CHEQUEADO */
-.reseña-container input[type='checkbox']:checked{
-    background-image: url(../../assets/Icons/filter-checkbox-checked.png);
+.reseña-container input[type='checkbox']:checked {
+  background-image: url(../../assets/Icons/filter-checkbox-checked.png);
 }
 
 /* Botón de envío */

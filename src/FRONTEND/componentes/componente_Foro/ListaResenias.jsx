@@ -21,6 +21,7 @@ function ListaResenias() {
       .then((res) => res.json())
       .then((data) => {
         setReseñas(data)
+        console.log('reviews raw:', data)
         setLoading(false)
       })
       .catch((err) => {
@@ -54,21 +55,18 @@ function ListaResenias() {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ respuesta, usuarioId: userId }),
+          body: JSON.stringify({
+            respuesta,
+            usuarioId: userId,
+          }),
         }
       )
 
       const data = await res.json()
 
       if (res.ok) {
-        // Actualizar la reseña en la lista para mostrar la respuesta inmediatamente
-        setReseñas((prev) =>
-          prev.map((r) =>
-            r._id === idReseña
-              ? { ...r, respuestas: [...(r.respuestas || []), data] }
-              : r
-          )
-        )
+        // ✅ data ya contiene la reseña completa y actualizada
+        setReseñas((prev) => prev.map((r) => (r._id === idReseña ? data : r)))
       } else {
         console.error('Error al responder:', data.error)
         alert(`Error: ${data.error}`)
@@ -90,7 +88,7 @@ function ListaResenias() {
   return (
     <div className="lista-reseñas-container">
       <header className="lista-reseñas-header">
-        <h1 className="lista-reseñas-titulo">Foro de Reseñas Globales</h1>
+        <h1 className="lista-reseñas-titulo">Comparte tu experiencia</h1>
         <p className="lista-reseñas-subtitulo">
           Comparte y descubre opiniones de toda la comunidad
         </p>
@@ -114,8 +112,8 @@ function ListaResenias() {
                 <summary className="reseña-summary">
                   <div className="reseña-summary-info">
                     <img
-                      src={r.juegoId?.imagenPortada}
-                      alt={r.juegoId?.titulo}
+                      src={r.juegoId?.imagenPortada || r.juego}
+                      alt={r.juegoId?.titulo || 'Sin título'}
                       className="reseña-imagenPortada"
                     />
                     <div>
@@ -124,9 +122,7 @@ function ListaResenias() {
                       </strong>
                       <p className="reseña-usuario">Por: {r.nombreUsuario}</p>
                       <p className="reseña-recomendaria">
-                        {r.recomendaria
-                          ? '⭐ Recomienda este juego'
-                          : 'No recomienda'}
+                        {r.recomendaria ? 'Recomiendado' : 'No recomiendado'}
                       </p>
                     </div>
                   </div>
@@ -141,27 +137,27 @@ function ListaResenias() {
                   </button>
                 </summary>
 
-                <div className="reseña-contenido mt-2">
+                <div className="reseña-contenido">
                   <p className="reseña-texto">{r.textoResenia}</p>
-                  <p
-                    className="reseña-horasJugadas"
-                    style={{ display: 'none' }}
-                  >
+                  <p className="reseña-horasJugadas">
                     Horas jugadas: {r.horasJugadas}
                   </p>
-                  <p className="reseña-dificultad" style={{ display: 'none' }}>
+                  <p className="reseña-dificultad">
                     Dificultad: {r.dificultad || 'No especificada'}
                   </p>
 
                   {/* Respuestas */}
                   {r.respuestas && r.respuestas.length > 0 && (
-                    <div className="reseña-respuestas mt-2">
+                    <div className="reseña-respuestas">
                       {r.respuestas.map((resp) => (
                         <div
-                          key={resp._id}
-                          className="respuesta-item border-l-2 pl-2 mt-1"
+                          key={resp._id || Math.random()}
+                          className="respuesta-item"
                         >
-                          <strong>{resp.nombreUsuario}</strong>: {resp.texto}
+                          <strong>
+                            {resp.usuarioId?.nombre || 'Usuario anónimo'}
+                          </strong>
+                          : {resp.texto}
                         </div>
                       ))}
                     </div>

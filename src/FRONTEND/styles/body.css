@@ -1,6 +1,6 @@
 body {
   font-family: var(--font-main);
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-main);
   background-image: var(--bg-pattern);
   background-repeat: repeat;
   color: var(--color-text-primary);

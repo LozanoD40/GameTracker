@@ -15,7 +15,7 @@ function Respuesta({ reseña, onClose, onSubmit }) {
     // 1. Clase para el fondo oscuro (Overlay)
     <div className="respuesta-modal-overlay">
       <div className="respuesta-modal-content">
-        <h2 className="">Responder a {reseña.juegoId?.titulo || 'la reseña'}</h2>
+        <h2 className="respuesta">Responder a {reseña.juegoId?.titulo || 'la reseña'}</h2>
         <textarea
           value={texto}
           onChange={(e) => setTexto(e.target.value)}

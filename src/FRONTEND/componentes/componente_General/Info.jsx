@@ -2,6 +2,7 @@ import './../../styles/Info.css'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import FormularioResenias from '../componente_Foro/FormularioResenia'
+import Respuesta from '../componente_Foro/Respuesta'
 import Loader from '../componente_General/Loading'
 import tiempoCarga4 from './../../../assets/loadingGif/tiempoCarga4.gif'
 import iconReview from '../../../assets/Icons/iconReview.png'
@@ -19,6 +20,7 @@ function InfoJuego({ setJuegos }) {
   const [juego, setJuego] = useState(null)
   const [user, setUser] = useState(null)
   const [reseñas, setReseñas] = useState([])
+  const [reseniaSeleccionada, setReseniaSeleccionada] = useState(null)
 
   // Obtener usuario desde localStorage
   useEffect(() => {
@@ -155,9 +157,45 @@ function InfoJuego({ setJuegos }) {
     }
   }
 
-  // Función que actualiza la lista de reseñas al enviar una nueva
+  // Actualiza reseñas al enviar una nueva
   const handleReseniaEnviada = (nuevaResenia) => {
     setReseñas((prev) => [nuevaResenia, ...prev])
+  }
+
+  // 🟢 Maneja el envío de una respuesta
+  const handleEnviarRespuesta = async (reseñaId, textoRespuesta) => {
+    if (!user?._id && !user?.id) {
+      alert('Debes iniciar sesión para responder.')
+      return
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/reviews/${reseñaId}/responder`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            respuesta: textoRespuesta,
+            usuarioId: user._id || user.id,
+          }),
+        }
+      )
+
+      if (!res.ok) throw new Error('Error al enviar respuesta.')
+
+      const dataActualizada = await res.json()
+
+      // 🟢 Actualiza reseñas localmente
+      setReseñas((prev) =>
+        prev.map((r) => (r._id === dataActualizada._id ? dataActualizada : r))
+      )
+
+      setReseniaSeleccionada(null)
+    } catch (err) {
+      console.error('Error enviando respuesta:', err)
+      alert('Hubo un problema al enviar tu respuesta.')
+    }
   }
 
   if (loading) return <Loader imagen={tiempoCarga4} />
@@ -234,26 +272,58 @@ function InfoJuego({ setJuegos }) {
         onReseniaEnviada={handleReseniaEnviada}
       />
 
-      {/* Lista de reseñas existentes */}
+      {/* Lista de reseñas */}
       <div>
         <h3>Reseñas de usuarios</h3>
         {reseñas.length === 0 && <p>No hay reseñas aún.</p>}
+
         {reseñas.map((r) => (
-          <div key={r._id}>
+          <div key={r._id} className="reseña-card">
             <p>
-              <strong>{r.usuarioId?.nombre || 'Anónimo'}</strong> -{' '}
-              {r.puntuacion} <img src={iconReview} alt={iconReview} className='iconReview'/>
+              <strong>{r.usuarioId?.nombre || 'Anónimo'}</strong> - {r.puntuacion}{' '}
+              <img src={iconReview} alt={iconReview} className="iconReview" />
             </p>
             <p>{r.textoResenia}</p>
             <p>
-              Horas jugadas: {r.horasJugadas} | Dificultad: {r.dificultad} |
-              Recomendación: {r.recomendaria ? 'Sí' : 'No'}
+              Horas jugadas: {r.horasJugadas} | Dificultad: {r.dificultad} | Recomendación:{' '}
+              {r.recomendaria ? 'Sí' : 'No'}
             </p>
+
+            {/* 🟢 Botón responder */}
+            <button
+              className="btn-responder"
+              onClick={() => setReseniaSeleccionada(r)}
+            >
+              Responder
+            </button>
+
+            {/* 🟢 Mostrar respuestas */}
+            {r.respuestas && r.respuestas.length > 0 && (
+              <div className="respuestas-lista">
+                {r.respuestas.map((resp, i) => (
+                  <div key={i} className="respuesta-item">
+                    <p>
+                      <strong>{resp.usuarioId?.nombre || 'Anónimo'}:</strong> {resp.texto}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
+
+        {/* 🟢 Modal para responder */}
+        {reseniaSeleccionada && (
+          <Respuesta
+            reseña={reseniaSeleccionada}
+            onClose={() => setReseniaSeleccionada(null)}
+            onSubmit={handleEnviarRespuesta}
+          />
+        )}
       </div>
     </div>
   )
 }
 
 export default InfoJuego
+

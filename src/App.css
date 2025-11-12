@@ -60,7 +60,6 @@
   --color-bg-main: #0b0b0b; /* Fondo general del body */
   --color-bg-secondary: #1a1a1a; /* Fondos degradados o secundarios */
   --color-bg-accent: #000; /* Fondo de navbar y footer */
-  --color-bg: #0b0b0b;
   --color-bg-alt: #111111;
   --color-bg-accept: rgb(211, 181, 82, 0.1);
   --color-bg-refused: rgb(179, 36, 36, 0.1);

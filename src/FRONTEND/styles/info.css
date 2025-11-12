@@ -38,10 +38,10 @@
 }
 
 .info-juego strong {
-    color: var(--color-text-primary); /* Resaltar etiquetas */
+    color: var(--color-text-primary); 
 }
 
-/* --- Portada del Juego --- */
+/*Portada del Juego */
 
 .portada-info {
     width: 100%;
