@@ -24,19 +24,19 @@ function Foro() {
     <div className="foro">
       <ListaResenias />
       <section className="notice">
-        <div>
-          <h2 className="">🕯 Noticias del Reino</h2>
-          <button onClick={subirNoticie}>
+        <div className="header">
+          <h2 className="titulo-noticia">🕯 Noticias del Reino</h2>
+          <button onClick={subirNoticie} className="icon-plus">
             <img src={iconPlus} alt={iconPlus} />
           </button>
         </div>
-        <div className="">
+        <div className="cuerpo-noticia">
           {noticias.map((n) => (
-            <article key={n._id} className="">
-              {n.imagen && <img src={n.imagen} alt="" className="" />}
-              <h3 className="">{n.encabezado}</h3>
-              <p className="">{n.texto}</p>
-              <p className="">{new Date(n.fecha).toLocaleDateString()}</p>
+            <article key={n._id}>
+              {n.imagen && <img src={n.imagen} alt={n.imagen} />}
+              <h3 className="titulo-noticia">{n.encabezado}</h3>
+              <p>{n.texto}</p>
+              <p>{new Date(n.fecha).toLocaleDateString()}</p>
             </article>
           ))}
         </div>

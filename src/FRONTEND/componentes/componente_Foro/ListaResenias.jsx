@@ -116,7 +116,7 @@ function ListaResenias() {
                       alt={r.juegoId?.titulo || 'Sin título'}
                       className="reseña-imagenPortada"
                     />
-                    <div>
+                    <div className="reseña-info">
                       <strong className="reseña-titulo">
                         {r.juegoId?.titulo}
                       </strong>

@@ -1,3 +1,4 @@
+import '../../styles/Noticia.css'
 import { useState, useEffect } from 'react'
 
 function Noticies() {
@@ -25,42 +26,47 @@ function Noticies() {
     setNueva({ encabezado: '', texto: '', imagen: '' })
   }
   return (
-    <section className="">
-      <h2 className="">🕯 Noticias del Reino</h2>
+    <section className="noticia-contenedor">
+      <h2 className="noticia-titulo ">🕯 Noticias del Reino</h2>
 
       {/* Formulario */}
-      <form onSubmit={handleSubmit} className="">
+      <form onSubmit={handleSubmit} className="noticia-formulario">
         <input
-          className=""
+          className="input-noticia"
           type="text"
           placeholder="Encabezado..."
           value={nueva.encabezado}
           onChange={(e) => setNueva({ ...nueva, encabezado: e.target.value })}
         />
         <textarea
-          className=""
+          className="input-noticia"
+          id="text-area-noticia"
           placeholder="Texto..."
           value={nueva.texto}
           onChange={(e) => setNueva({ ...nueva, texto: e.target.value })}
         />
         <input
-          className=""
+          className="input-noticia"
           type="text"
           placeholder="URL de imagen (opcional)"
           value={nueva.imagen}
           onChange={(e) => setNueva({ ...nueva, imagen: e.target.value })}
         />
-        <button className="">Publicar Noticia</button>
+        <button className="btn-publicar-noticia">Publicar Noticia</button>
       </form>
 
       {/* Lista de noticias */}
-      <div className="">
+      <div className="lista-noticias">
         {noticias.map((n) => (
-          <article key={n._id} className="">
-            {n.imagen && <img src={n.imagen} alt="" className="" />}
-            <h3 className="">{n.encabezado}</h3>
-            <p className="">{n.texto}</p>
-            <p className="">📜 {new Date(n.fecha).toLocaleDateString()}</p>
+          <article key={n._id} className="tarjeta-noticia">
+            {n.imagen && (
+              <img src={n.imagen} alt={n.imagen} className="noticia-imagen" />
+            )}
+            <h3 className="noticia-encabezado">{n.encabezado}</h3>
+            <p className="noticia-texto-cuerpo">{n.texto}</p>
+            <p className="noticia-fecha">
+              📜 {new Date(n.fecha).toLocaleDateString()}
+            </p>
           </article>
         ))}
       </div>

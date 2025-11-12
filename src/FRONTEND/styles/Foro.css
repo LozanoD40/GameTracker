@@ -4,12 +4,120 @@
   grid-template-columns: 3fr 1fr;
 }
 
-/*------NOTICE-----------*/
+/*--------NOTICIAS----------*/
 .notice {
-  justify-content: center;
-  align-content: center;
-  width: 20vw;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 20vw;               
+  min-width: 260px;          
+  margin: 40px 0 ;
+  max-height: 80vh;
+  overflow-y: auto;          
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+}
+
+.notice::-webkit-scrollbar {
+  width: 10px; 
+}
+
+.notice::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3); 
+  border-radius: 10px;
+}
+
+.notice::-webkit-scrollbar-thumb {
+  background:rgba(255, 255, 255, 0.1);
+}
+
+/* encabezado de la sección */
+.notice .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--color-bg-secondary);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.titulo-noticia {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+/* botón */
+.icon-plus {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-plus img{
+  width: 28px;
+  height: 28px;
+}
+.icon-plus:hover {
+  transform: scale(1.1) translateX(-5px);
+}
+
+/* contenedor de noticias */
+.cuerpo-noticia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+/* artículo individual */
+.cuerpo-noticia article {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.6rem;
+  overflow: hidden;
+  text-align: start;
+  transition: transform 0.2s ease;
+}
+
+.cuerpo-noticia article:hover {
+  transform: scale(1.02);
+}
+
+/* imagen dentro de la noticia */
+.cuerpo-noticia img {
+  width: 100%;
+  height: 120px;
+  object-fit: fill;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+}
+
+/* encabezado y texto */
+.cuerpo-noticia h3 {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  color: var(--color-text);
+}
+
+.cuerpo-noticia p {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin: 0.2rem 0;
+  line-height: 1.2;
+}
+
+/* fecha */
+.cuerpo-noticia p:last-child {
+  font-size: 0.7rem;
+  text-align: right;
+  color: var(--color-text-muted);
 }
 
 /* --- LISTA RESEÑAS --- */
@@ -92,6 +200,10 @@
   width: 100%;
   border-left: 5px solid var(--color-text-primary);
   border-bottom: 0.8px solid var(--color-text-primary);
+}
+
+.reseña-info{
+  text-align: start;
 }
 
 /* Summary */
@@ -271,7 +383,7 @@
   padding: 10px;
   margin-bottom: 20px;
   background-color: var(--color-bg);
-  color: var(--color-text-primary);
+  color: var(--color-text-secundary);
   border: 1px solid var(--color-outline);
   border-radius: var(--radius-md);
   font-family: var(--font-main);
@@ -284,14 +396,14 @@
   outline: none;
 }
 
-/* --- Contenedor de Botones --- */
+/* ----------------- BOTONES ------------------ */
 .respuesta-modal-acciones {
   display: flex;
   justify-content: flex-end;
   gap: var(--gap-lg);
 }
 
-/* --- Estilo Base de Botones --- */
+/* Estilo Base */
 .respuesta-modal-acciones button {
   cursor: pointer;
   padding: 10px 20px;
