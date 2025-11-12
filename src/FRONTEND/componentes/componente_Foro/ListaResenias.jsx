@@ -138,13 +138,15 @@ function ListaResenias() {
                 </summary>
 
                 <div className="reseña-contenido">
+                  <div className="datos-reseña">
+                    <p id="reseña-dificultad">
+                      Asunto: {r.dificultad || 'No especificada'}
+                    </p>
+                    <p id="reseña-horasJugadas">
+                      Horas jugadas: {r.horasJugadas}
+                    </p>
+                  </div>
                   <p className="reseña-texto">{r.textoResenia}</p>
-                  <p className="reseña-horasJugadas">
-                    Horas jugadas: {r.horasJugadas}
-                  </p>
-                  <p className="reseña-dificultad">
-                    Dificultad: {r.dificultad || 'No especificada'}
-                  </p>
 
                   {/* Respuestas */}
                   {r.respuestas && r.respuestas.length > 0 && (

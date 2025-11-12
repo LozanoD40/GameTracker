@@ -5,6 +5,7 @@ import Footer from './FRONTEND/componentes/componente_General/Footer'
 import Login from './FRONTEND/componentes/componente_General/Login'
 import Info from './FRONTEND/componentes/componente_General/Info'
 import Confi from './FRONTEND/componentes/componente_Perfil/Confi'
+import Noticies from './FRONTEND/componentes/componente_Foro/Noticie'
 import Home from './FRONTEND/pages/Home'
 import Perfil from './FRONTEND/pages/Perfil'
 import Biblioteca from './FRONTEND/pages/Biblioteca'
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Confi" element={<Confi />} />
         <Route path="/biblioteca" element={<Biblioteca />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="/Noticies" element={<Noticies />} />
       </Routes>
       <Footer />
     </>

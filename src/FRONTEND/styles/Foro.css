@@ -1,6 +1,20 @@
+/*--------GENERAL----------*/
+.foro {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
+/*------NOTICE-----------*/
+.notice {
+  justify-content: center;
+  align-content: center;
+  width: 20vw;
+  height: 100%;
+}
+
 /* --- LISTA RESEÑAS --- */
 .lista-reseñas-container {
-  max-width: 70vw;
+  max-width: 100%;
   align-content: flex-start;
   padding: var(--padding-card);
   color: var(--color-text-tertiary);
@@ -99,7 +113,7 @@
   border-radius: 0;
 }
 
-/* Personaliza el indicador de expansión */
+/* Indicador expancion */
 .reseña-summary::before {
   content: '►';
   color: var(--color-text-primary);
@@ -126,7 +140,7 @@
   height: 80px;
   object-fit: fill;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-small);
+  border-radius: var(--border-radius-small);
 }
 
 .reseña-titulo {
@@ -134,22 +148,21 @@
   color: var(--color-text-secondary);
   font-size: 1.2rem;
   display: block;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .reseña-usuario {
-  font-size: var(--font-size-body-sh);
+  font-size: var(--font-main);
   color: var(--color-text-tertiary);
   margin-top: 5px;
 }
 
 .reseña-recomendaria {
-  font-size: var(--font-size-body-sh);
+  font-size: var(--font-main);
   margin-top: 5px;
-  color: var(--color-text-primary); /* Destacar recomendación */
+  color: var(--color-text-primary);
 }
 
-/* --- Botón Responder --- */
+/* Botón Responder */
 .btn-responder {
   cursor: pointer;
   padding: 8px 15px;
@@ -157,44 +170,52 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   border-radius: var(--radius-md);
-  background: var(--color-text-primary);
-  color: var(--color-bg-accent);
-  border: var(--border-width-normal) solid var(--color-text-secondary);
+  background: var(--color-outline);
+  color: var(--color-text-secondary);
+  border: var(--border-width-thick) solid var(--color-bg-accent);
   transition: var(--transition-fast);
 }
 
 .btn-responder:hover {
-  background: var(--color-text-secondary);
+  background: var(--color-text-primary);
   color: var(--color-bg-accent);
-  box-shadow: 0 0 10px var(--color-text-primary);
 }
 
-/* --- Contenido Expandido de la Reseña --- */
+/* Contenido Expandido */
 .reseña-contenido {
-  padding: 10px var(--padding-card) var(--padding-card) var(--padding-card);
-  border-top: 1px solid var(--color-outline); /* Separador visual */
+  padding: 10px;
+  border-top: 1px solid var(--color-outline);
 }
 
 .reseña-texto {
   font-style: italic;
+  text-align: start;
   color: var(--color-text-tertiary);
-  border-left: 3px solid var(--color-text-primary);
-  padding-left: 15px;
-  margin-bottom: 15px;
+  border-bottom: 2px dashed var(--color-outline);
+  margin: 15px;
 }
 
-/* --- Respuestas (Comentarios) --- */
+.datos-reseña {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-text-tertiary);
+}
+
+/* ------------------- RESPUESTA--------------------- */
 .reseña-respuestas {
   margin-top: 20px;
-  padding: 15px;
+  margin-left: var(--gap-lg);
+  text-align: start;
+  padding: 30px;
   background-color: var(--color-bg-alt);
   border-radius: var(--radius-md);
   border: 1px dashed var(--color-outline);
 }
 
 .respuesta-item {
-  font-size: var(--font-size-body-sh);
-  margin-bottom: 8px;
+  font-size: var(--font-size-body);
+  margin-bottom: 5px;
   padding-left: 10px;
   border-left: 3px solid var(--color-outline);
 }
@@ -204,52 +225,46 @@
   margin-right: 5px;
 }
 
-/* ================================================= */
-/* Archivo: Respuesta.css                             */
-/* Estilo: Dark Fantasy Medieval RPG - Modal Respuesta */
-/* ================================================= */
-
-/* --- Contenedor del Modal (Fondo Oscuro) --- */
+/* Modal */
 .respuesta-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Oscurece el fondo */
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Asegura que esté encima de todo */
-  backdrop-filter: blur(3px); /* Efecto de desenfoque */
+  z-index: 1000;
+  backdrop-filter: blur(3px);
   animation: fadeIn 0.3s ease-out;
 }
 
-/* --- Contenido de la Ventana (Pergamino Oscuro) --- */
+/* Contenido de la Ventana  */
 .respuesta-modal-content {
   background-color: var(--color-bg-secondary);
   border: var(--border-width-thick) solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-glow); /* Brillo sutil */
+  box-shadow: var(--shadow-glow);
   padding: var(--padding-card);
   width: 90%;
   max-width: 500px;
   transform: scale(0.9);
-  animation: fadeInScale 0.4s forwards; /* Animación de entrada con escala */
+  animation: fadeInScale 0.4s forwards;
 }
 
-/* --- Título (Encabezado) --- */
+/* Título */
 .respuesta-modal-content h2 {
   font-family: var(--font-title);
   color: var(--color-text-primary);
   font-size: 1.8rem;
   margin-bottom: 20px;
-  text-shadow: var(--text-shadow-gold);
   border-bottom: 1px solid var(--color-outline);
   padding-bottom: 10px;
 }
 
-/* --- Área de Texto --- */
+/* Área de Texto */
 .respuesta-modal-textarea {
   width: 100%;
   min-height: 100px;
@@ -267,7 +282,6 @@
 .respuesta-modal-textarea:focus {
   border-color: var(--color-border);
   outline: none;
-  box-shadow: 0 0 5px var(--color-border);
 }
 
 /* --- Contenedor de Botones --- */
@@ -283,38 +297,26 @@
   padding: 10px 20px;
   font-family: var(--font-title);
   font-size: var(--font-size-navbar);
+  color: var(--color-text-tertiary);
   text-transform: uppercase;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
-  border: var(--border-width-normal) solid;
-}
-
-/* --- Botón CANCELAR --- */
-.btn-cancelar {
   background: var(--color-bg-secondary);
-  color: var(--color-text-tertiary);
-  border-color: var(--color-outline);
+  border: var(--border-width-normal) solid var(--color-border);
 }
 
+/* Botón CANCELAR */
 .btn-cancelar:hover {
   color: var(--color-text-hover);
-  border-color: var(--color-text-tertiary);
-  background: var(--color-bg-alt);
-}
-
-/* --- Botón ENVIAR (Principal Dorado) --- */
-.btn-enviar {
-  background: var(--color-text-primary);
-  color: var(--color-bg-accent);
-  border-color: var(--color-text-secondary);
-  box-shadow: var(--shadow-glow);
-}
-
-.btn-enviar:hover {
-  background: var(--color-text-secondary);
-  color: var(--color-bg-accent);
+  background: var(--color-bg-refused);
   transform: translateY(-2px);
-  box-shadow: 0 0 15px var(--color-text-primary);
+}
+
+/*  Botón ENVIAR  */
+.btn-enviar:hover {
+  background: var(--color-bg-accept);
+  color: var(--color-text-hover);
+  transform: translateY(-2px);
 }
 
 /* ================================================= */
