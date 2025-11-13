@@ -2,10 +2,11 @@ import express from 'express'
 import Review from '../models/Review.js'
 import Datauser from '../models/Datauser.js'
 import Game from '../models/Game.js'
+import fetch from 'node-fetch'
 
 const router = express.Router()
 
-// 🔹 Crear reseña
+// Crear reseña
 router.post('/', async (req, res) => {
   try {
     const {
@@ -49,11 +50,32 @@ router.post('/', async (req, res) => {
       await dataUser.save()
     }
 
-    // ✅ Populate limpio (solo una vez por campo)
+    // Populate limpio (solo una vez por campo)
     const reseñaCompleta = await Review.findById(nueva._id)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
+
+    // Intentar otorgar el logro “Eco del Héroe Caído”
+    try {
+      // Contar cuántas reseñas tiene el usuario (para evitar otorgarlo más de una vez)
+      const cantidadReseñas = await Review.countDocuments({ usuarioId })
+
+      if (cantidadReseñas === 1) {
+        //  Solo se otorga la primera vez
+        await fetch('http://localhost:3000/api/logros/desbloquear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            usuarioId,
+            logroNombre: 'Eco del Héroe Caído',
+          }),
+        })
+        console.log('Logro “Eco del Héroe Caído” otorgado automáticamente.')
+      }
+    } catch (err) {
+      console.error('Error al intentar otorgar logro:', err.message)
+    }
 
     res.status(201).json(reseñaCompleta)
   } catch (err) {
@@ -61,21 +83,16 @@ router.post('/', async (req, res) => {
   }
 })
 
-// 🔹 Agregar respuesta a una reseña
+// Agregar respuesta a una reseña
 router.post('/:id/responder', async (req, res) => {
   try {
     const { respuesta, usuarioId } = req.body
     if (!respuesta || !usuarioId)
       return res.status(400).json({ error: 'Faltan datos' })
-
     const review = await Review.findById(req.params.id)
-    if (!review) return res.status(404).json({ error: 'Reseña no encontrada' })
 
-    review.respuestas.push({
-      texto: respuesta,
-      usuarioId,
-      fecha: new Date(),
-    })
+    if (!review) return res.status(404).json({ error: 'Reseña no encontrada' })
+    review.respuestas.push({ texto: respuesta, usuarioId, fecha: new Date() })
     await review.save()
 
     // ✅ Populate consistente con los demás
@@ -83,13 +100,11 @@ router.post('/:id/responder', async (req, res) => {
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
-
     res.status(200).json(actualizado)
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
 })
-
 // 🔹 Obtener todas las reseñas (con filtros)
 router.get('/', async (req, res) => {
   try {
@@ -104,7 +119,6 @@ router.get('/', async (req, res) => {
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
       .sort({ fechaCreacion: -1 })
-
     res.status(200).json(reviews)
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -112,6 +126,7 @@ router.get('/', async (req, res) => {
 })
 
 // 🔹 Obtener reseñas de un juego específico
+
 router.get('/game/:id', async (req, res) => {
   try {
     const reviews = await Review.find({ juegoId: req.params.id })
@@ -119,7 +134,6 @@ router.get('/game/:id', async (req, res) => {
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
       .sort({ fechaCreacion: -1 })
-
     res.status(200).json(reviews)
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -130,14 +144,14 @@ router.get('/game/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const review = await Review.findById(req.params.id)
-    if (!review) return res.status(404).json({ error: 'Reseña no encontrada' })
+    if (!review) return
+    res.status(404).json({ error: 'Reseña no encontrada' })
 
     // Eliminar relación con Datauser
     await Datauser.updateOne(
       { usuarioId: review.usuarioId, juegoId: review.juegoId },
       { $pull: { interaccion: review._id } }
     )
-
     await review.deleteOne()
     res.status(200).json({ mensaje: 'Reseña eliminada' })
   } catch (err) {
