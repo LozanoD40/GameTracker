@@ -434,6 +434,12 @@ details::-webkit-scrollbar-thumb {
   margin-bottom: 10px;
 }
 
+/*Error*/
+#error{
+  color: var(--color-text-primary);
+  font-size: 1.2rem;
+}
+
 @media (max-width: 768px) {
   .mis-juegos-header .sub-title {
     font-size: 1.1rem;

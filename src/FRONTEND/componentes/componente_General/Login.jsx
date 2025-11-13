@@ -38,7 +38,6 @@ function Login({ isOpen, onClose }) {
       if (isLogin) {
         const userId = userData.id || userData._id
         const logroId = '690f9aa32b89ad388ddc677a'
-        console.log('erorr eadeaf')
         try {
           // Verificamos si ya tiene Datauser (es decir, si ya había iniciado antes)
           const check = await fetch(

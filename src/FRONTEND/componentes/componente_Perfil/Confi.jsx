@@ -198,24 +198,27 @@ function Confi() {
 
   const cerrarSesion = () => {
     localStorage.removeItem('user')
+    window.dispatchEvent(new Event('userChange')) 
     setUser(null)
     setNombre('')
     setEmail('')
     setContrasenia('')
     setJuegos([])
     navigate('/')
+
+    alert('Has cerrado sesión correctamente.')
   }
 
   // --- Logros -------
   useEffect(() => {
     const cargarLogros = async () => {
       try {
-        // 1️⃣ Cargar todos los logros
+        // Cargar todos los logros
         const resAll = await fetch('http://localhost:3000/api/achievements')
         if (!resAll.ok) throw new Error('Error al cargar logros generales')
         const todosLogros = await resAll.json()
 
-        // 2️⃣ Si hay usuario logeado, cargar los desbloqueados
+        // Si hay usuario logeado, cargar los desbloqueados
         const uid = user?.id || user?._id
         if (!uid) {
           setLogros(todosLogros)
@@ -229,7 +232,7 @@ function Confi() {
           throw new Error('Error al cargar logros desbloqueados')
         const logrosDesbloqueados = await resUnlocked.json()
 
-        // 3️⃣ Marcar los desbloqueados
+        // Marcar los desbloqueados
         const idsDesbloqueados = new Set(logrosDesbloqueados.map((l) => l._id))
         const logrosConEstado = todosLogros.map((l) => ({
           ...l,
@@ -377,7 +380,7 @@ function Confi() {
             Eliminar cuenta
           </button>
           <button onClick={cerrarSesion} className="danger">
-            Cerrar cuenta
+            Cerrar sesion
           </button>
         </div>
       </section>
@@ -387,6 +390,7 @@ function Confi() {
         {logros.length > 0 ? (
           logros.map((logro) => (
             <div
+              key={logro._id || logro.id || logro.nombre} 
               className={`item-logro ${
                 logro.desbloqueado ? 'activo' : 'bloqueado'
               }`}

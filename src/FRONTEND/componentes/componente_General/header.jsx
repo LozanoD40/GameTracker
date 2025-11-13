@@ -5,7 +5,6 @@ import iconIngresar from './../../../assets/Icons/iconIngresar.png'
 import iconRegistro from './../../../assets/Icons/iconRegistro.png'
 import Login from './Login'
 
-
 function Headers() {
   const [open, setOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
@@ -18,6 +17,16 @@ function Headers() {
     if (userData) {
       setUser(JSON.parse(userData))
     }
+  }, [])
+
+  useEffect(() => {
+    const handleUserChange = () => {
+      const userData = localStorage.getItem('user')
+      setUser(userData ? JSON.parse(userData) : null)
+    }
+
+    window.addEventListener('userChange', handleUserChange)
+    return () => window.removeEventListener('userChange', handleUserChange)
   }, [])
 
   // cerrar menu hamburguesa

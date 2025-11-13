@@ -12,7 +12,6 @@ function Respuesta({ reseña, onClose, onSubmit }) {
   }
 
   return (
-    // 1. Clase para el fondo oscuro (Overlay)
     <div className="respuesta-modal-overlay">
       <div className="respuesta-modal-content">
         <h2 className="respuesta">

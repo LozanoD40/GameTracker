@@ -9,27 +9,27 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 20vw;               
-  min-width: 260px;          
-  margin: 40px 0 ;
+  width: 20vw;
+  min-width: 260px;
+  margin: 40px 0;
   max-height: 80vh;
-  overflow-y: auto;          
+  overflow-y: auto;
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   padding: 0.5rem 1rem;
 }
 
 .notice::-webkit-scrollbar {
-  width: 10px; 
+  width: 10px;
 }
 
 .notice::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3); 
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 }
 
 .notice::-webkit-scrollbar-thumb {
-  background:rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* encabezado de la sección */
@@ -59,7 +59,7 @@
   transition: all 0.2s ease;
 }
 
-.icon-plus img{
+.icon-plus img {
   width: 28px;
   height: 28px;
 }
@@ -103,12 +103,12 @@
 .cuerpo-noticia h3 {
   font-size: 0.9rem;
   margin: 0.3rem 0;
-  color: var(--color-text);
+  color: var(--color-text-secondary);
 }
 
 .cuerpo-noticia p {
   font-size: 0.8rem;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   margin: 0.2rem 0;
   line-height: 1.2;
 }
@@ -185,7 +185,6 @@
   background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-outline);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
   transition: all var(--transition-medium);
 }
 
@@ -202,7 +201,7 @@
   border-bottom: 0.8px solid var(--color-text-primary);
 }
 
-.reseña-info{
+.reseña-info {
   text-align: start;
 }
 
@@ -431,192 +430,15 @@
   transform: translateY(-2px);
 }
 
-/* ================================================= */
-/* Archivo: FormularioResenias.css (ACTUALIZADO)     */
-/* Estilo: Dark Fantasy Medieval RPG - Formulario    */
-/* ================================================= */
+@media (max-width: 900px) {
+  .foro{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 
-/* --- Contenedor Principal del Formulario --- */
-.reseña-container {
-  margin-top: 40px;
-  padding: var(--padding-section);
-  background-color: var(--color-bg-secondary);
-  border: var(--border-width-thick) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  animation: fadeIn 0.8s ease-out;
-}
-
-.reseña-container h3 {
-  font-family: var(--font-title);
-  color: var(--color-text-primary);
-  font-size: 2rem;
-  margin-bottom: 25px;
-  text-shadow: var(--text-shadow-gold);
-  text-align: center;
-  border-bottom: 1px solid var(--color-outline);
-  padding-bottom: 15px;
-}
-
-/* --- Formulario --- */
-.reseña-container form {
-  display: grid;
-  gap: var(--gap-lg);
-  grid-template-columns: 1fr 1fr;
-  color: var(--color-text-tertiary);
-}
-
-.reseña-container label {
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-main);
-  font-size: var(--font-size-body);
-  color: var(--color-text-secondary);
-}
-
-.reseña-container input[type='text'],
-.reseña-container input[type='number'],
-.reseña-container select,
-.reseña-container textarea {
-  padding: 10px;
-  margin-top: 5px;
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-outline);
-  border-radius: var(--radius-md);
-  font-family: var(--font-main);
-  transition: border-color var(--transition-fast);
-}
-
-.reseña-container input:focus,
-.reseña-container select:focus,
-.reseña-container textarea:focus {
-  border-color: var(--color-border);
-  outline: none;
-  box-shadow: 0 0 5px var(--color-border);
-}
-
-.reseña-container textarea {
-  grid-column: 1 / -1;
-  resize: vertical;
-  min-height: 120px;
-}
-
-.reseña-container label input[type='checkbox'] {
-  appearance: none;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: background-image 0.2s ease;
-  background-image: url(../../assets/Icons/filter-checkbox.png);
-}
-
-/* 3. Estilo para el estado CHEQUEADO */
-.reseña-container input[type='checkbox']:checked {
-  background-image: url(../../assets/Icons/filter-checkbox-checked.png);
-}
-
-/* Botón de envío */
-.reseña-container button[type='submit'] {
-  grid-column: 1 / -1;
-  cursor: pointer;
-  padding: var(--padding-button);
-  font-family: var(--font-title);
-  font-size: var(--font-size-navbar);
-  text-transform: uppercase;
-  border-radius: var(--radius-md);
-  transition: var(--transition-fast);
-  background: var(--color-text-primary);
-  color: var(--color-bg-accent);
-  border: var(--border-width-normal) solid var(--color-text-secondary);
-  box-shadow: var(--shadow-glow);
-}
-
-.reseña-container button[type='submit']:hover:not(:disabled) {
-  background: var(--color-text-secondary);
-  color: var(--color-bg-accent);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-glow);
-}
-
-.reseña-container button[type='submit']:disabled {
-  background: var(--color-bg-alt);
-  color: var(--color-text-tertiary);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Mensajes de estado (Error/Éxito) */
-.reseña-container > p {
-  /* Selecciona directamente el párrafo de mensaje */
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: var(--radius-md);
-  font-family: var(--font-main);
-}
-
-/* Estilo para mensaje de éxito */
-/* Nota: Se mantiene la recomendación de usar una clase dinámica si el selector :contains no es compatible */
-.reseña-container > p:contains('✅') {
-  background: var(--color-bg-accept);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-text-primary);
-}
-
-/* Estilo para mensaje de error */
-.reseña-container > p:not(:contains('✅')) {
-  background: var(--color-bg-refused);
-  color: rgb(179, 36, 36);
-  border: 1px solid var(--color-borde-refused);
-}
-
-/* ======================================= */
-/* --- ESTILO PARA RESPUESTAS ANIDADAS --- */
-/* ======================================= */
-
-/* Contenedor de la lista de respuestas (RespuestasList) */
-.reseña-container > .reseña-container {
-  margin-top: 25px;
-  padding: 15px;
-  background-color: var(
-    --color-bg-alt
-  ); /* Ligeramente más claro que el fondo del formulario */
-  border: 1px dashed var(--color-outline);
-  border-radius: var(--radius-md);
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4); /* Sombra interna para profundidad */
-  animation: fadeIn 0.6s ease-out;
-}
-
-/* Elemento individual de respuesta */
-.respuesta-item {
-  padding: 8px 0;
-  font-size: var(--font-size-body-sh);
-  color: var(--color-text-tertiary);
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.05); /* Separador sutil */
-}
-
-.respuesta-item:last-child {
-  border-bottom: none;
-}
-
-/* Nombre de usuario */
-.respuesta-item strong {
-  color: var(--color-text-secondary); /* Blanco/Plata para el nombre */
-  margin-right: 5px;
-}
-
-/* Título de usuario (entre paréntesis) */
-.respuesta-item strong + span {
-  color: var(--color-text-primary); /* Dorado para el título */
-  font-family: var(--font-ornament); /* Tipografía decorativa para el título */
-  font-size: 0.9em;
-  font-style: italic;
+  .notice {
+    margin: 0 auto;
+    width: 80%;
+  }
 }

@@ -28,12 +28,16 @@ function Status() {
   const [opcion, setOpcion] = useState('')
   const [lvl, setLvl] = useState(0)
   const [titulo, setTitulo] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
+  // Verifica usuario al cargar
   useEffect(() => {
     const userData = localStorage.getItem('user')
     if (!userData) {
       setIsLoginOpen(true)
+      setLoading(false)
       return
     }
     try {
@@ -42,25 +46,28 @@ function Status() {
     } catch (err) {
       console.error('Error parseando user desde localStorage:', err)
       setIsLoginOpen(true)
+      setLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Obtener estadísticas, logros y género del usuario
+  // Cargar datos del backend
   useEffect(() => {
     if (!user) return
 
     const uid = user.id || user._id
-
     const fetchData = async () => {
       try {
+        setLoading(true)
+        setError('')
+
+        const [statsRes, logrosRes, generoRes] = await Promise.all([
+          fetch(`http://localhost:3000/api/dataUser/usuario/${uid}/stats`),
+          fetch(`http://localhost:3000/api/dataUser/usuario/${uid}/logros`),
+          fetch(`http://localhost:3000/api/dataUser/usuario/${uid}`),
+        ])
+
         // Stats
-        const statsRes = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${uid}/stats`
-        )
-        if (!statsRes.ok) {
-          console.warn('No se pudieron obtener stats:', await statsRes.text())
-        } else {
+        if (statsRes.ok) {
           const stats = await statsRes.json()
           const {
             tiempoActivo = 0,
@@ -70,7 +77,6 @@ function Status() {
             logrosObtenidos = 0,
             reseñasDadas = 0,
           } = stats || {}
-
           const total =
             (tiempoActivo +
               cantidaddeamigos +
@@ -79,46 +85,35 @@ function Status() {
               logrosObtenidos +
               reseñasDadas) /
             10
-
           setLvl(Math.min(Math.floor(total) || 0, 120))
         }
 
         // Logros
-        const logrosRes = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${uid}/logros`
-        )
         if (logrosRes.ok) {
           const logros = await logrosRes.json()
           if (Array.isArray(logros) && logros.length > 0) {
-            const ultimoLogro = logros[logros.length - 1]
-            setTitulo(ultimoLogro.nombre || 'Aventurero Novato')
-          } else {
-            setTitulo('Aventurero Novato')
-          }
-        } else {
-          console.warn('No se pudieron obtener logros:', await logrosRes.text())
-          setTitulo('Aventurero Novato')
+            setTitulo(logros[logros.length - 1].nombre || 'Aventurero Novato')
+          } else setTitulo('Aventurero Novato')
         }
 
-        // Género (opción)
-        const generoRes = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${uid}`
-        )
+        // Género
         if (generoRes.ok) {
           const generoData = await generoRes.json()
           const item = Array.isArray(generoData) ? generoData[0] : generoData
           if (item && item.genero) setOpcion(item.genero)
-        } else {
-          console.warn('No se pudo obtener género:', await generoRes.text())
         }
       } catch (err) {
         console.error('Error cargando datos del perfil:', err)
+        setError('No se pudieron cargar tus datos. Intenta nuevamente.')
+      } finally {
+        setLoading(false)
       }
     }
 
     fetchData()
   }, [user])
 
+  // Guardar género
   const guardarGenero = async (nuevoGenero) => {
     try {
       const uid = user?.id || user?._id
@@ -131,8 +126,6 @@ function Status() {
         }
       )
       if (!response.ok) throw new Error(await response.text())
-      const data = await response.json()
-      console.log('Género guardado:', data)
       setOpcion(nuevoGenero)
     } catch (err) {
       console.error('Error al guardar el género:', err)
@@ -140,46 +133,27 @@ function Status() {
   }
 
   const mostrarImagen = () => {
-    switch (opcion) {
-      case 'Caballero del Alba':
-        return perfilKnight
-      case 'Dwarf de Hierro':
-        return perfilDwarf
-      case 'DragonMan del Fuego Eterno':
-        return perfilDragonMan
-      case 'Nekomimi de Sombras Suaves':
-        return perfilCatGirl
-      case 'BearMan del Norte':
-        return perfilBearMan
-      case 'Elfo del gran Bosque':
-        return perfilElf
-      case 'Dark Elf los repudiados por el bosque':
-        return perfilDarkelf
-      case 'Fairy de Luz Pura':
-        return perfilFairy
-      case 'Barbarian del Rugido Antiguo':
-        return perfilBarbarian
-      case 'Wizard del Ojo Arcano':
-        return perfilWizard
-      case 'Bardo de las Mil Canciones':
-        return perfilBard
-      case 'Santa del Sol Blanco':
-        return perfilSaint
-      case 'Asesino del Silencio':
-        return perfilAssesing
-      case 'Necromante de la Tumba':
-        return perfilNecromance
-      case 'Lancero imperial':
-        return perfilLancer
-      case 'Cultista, seguidor heretico':
-        return perfilCultist
-      case 'Mercader del Oro Viejo':
-        return perfilMerchant
-      case 'Homúnculo, la aberracion del mundo':
-        return perfilHomunculus
-      default:
-        return perfilKnight
+    const opciones = {
+      'Caballero del Alba': perfilKnight,
+      'Dwarf de Hierro': perfilDwarf,
+      'DragonMan del Fuego Eterno': perfilDragonMan,
+      'Nekomimi de Sombras Suaves': perfilCatGirl,
+      'BearMan del Norte': perfilBearMan,
+      'Elfo del gran Bosque': perfilElf,
+      'Dark Elf los repudiados por el bosque': perfilDarkelf,
+      'Fairy de Luz Pura': perfilFairy,
+      'Barbarian del Rugido Antiguo': perfilBarbarian,
+      'Wizard del Ojo Arcano': perfilWizard,
+      'Bardo de las Mil Canciones': perfilBard,
+      'Santa del Sol Blanco': perfilSaint,
+      'Asesino del Silencio': perfilAssesing,
+      'Necromante de la Tumba': perfilNecromance,
+      'Lancero imperial': perfilLancer,
+      'Cultista, seguidor heretico': perfilCultist,
+      'Mercader del Oro Viejo': perfilMerchant,
+      'Homúnculo, la aberracion del mundo': perfilHomunculus,
     }
+    return opciones[opcion] || perfilKnight
   }
 
   const rango = () => {
@@ -194,7 +168,8 @@ function Status() {
     return 'Leyenda Eterna'
   }
 
-  if (!user)
+  // Mostrar login si no hay usuario
+  if (!user) {
     return (
       <Login
         isOpen={isLoginOpen}
@@ -206,20 +181,31 @@ function Status() {
         }}
       />
     )
+  }
 
+  // Mostrar loading o error
+  if (loading) {
+    return <div className="perfil-loading">Cargando tu perfil...</div>
+  }
+
+  if (error) {
+    return (
+      <div className="perfil-error">
+        ⚠️ {error}
+        <button onClick={() => window.location.reload()}>Reintentar</button>
+      </div>
+    )
+  }
+
+  // Render principal
   return (
     <>
       <div className="title">
         <span></span> <h1>STATUS</h1>
-        <button
-          className="btn-logout"
-          onClick={() => {
-            navigate('/Confi')
-          }}
-        >
+        <button className="btn-logout" onClick={() => navigate('/Confi')}>
           <img
             src={iconConfiguracion}
-            alt="boton de configuracion"
+            alt="configuración"
             className="iconConfi"
           />
         </button>
@@ -251,7 +237,7 @@ function Status() {
           <details className="atribute" id="genero-Selection">
             <summary id="summary">
               <h2>Género:</h2>
-              <p>{opcion || ' Un Caballero novato'}</p>
+              <p>{opcion || 'Un Caballero novato'}</p>
             </summary>
             {[
               'Dwarf de Hierro',
@@ -279,10 +265,10 @@ function Status() {
           </details>
 
           <h2 className="atribute">
-            Título:<p>{titulo}</p>
+            Título: <p>{titulo}</p>
           </h2>
           <h2 className="atribute">
-            Rango:<p>{rango()}</p>
+            Rango: <p>{rango()}</p>
           </h2>
         </div>
       </div>

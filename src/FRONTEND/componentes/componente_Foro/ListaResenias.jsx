@@ -122,7 +122,7 @@ function ListaResenias() {
                       </strong>
                       <p className="reseña-usuario">Por: {r.nombreUsuario}</p>
                       <p className="reseña-recomendaria">
-                        {r.recomendaria ? 'Recomiendado' : 'No recomiendado'}
+                        {r.recomendaria ? 'Recomendado' : 'No recomendado'}
                       </p>
                     </div>
                   </div>

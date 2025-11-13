@@ -5,7 +5,8 @@ import FormularioResenias from '../componente_Foro/FormularioResenia'
 import Respuesta from '../componente_Foro/Respuesta'
 import Loader from '../componente_General/Loading'
 import tiempoCarga4 from './../../../assets/loadingGif/tiempoCarga4.gif'
-import iconReview from '../../../assets/Icons/iconReview.png'
+import iconGrimorio from '../../../assets/Icons/iconGrimorio.png'
+import iconGrimorioVacio from '../../../assets/Icons/iconGrimorioVacio.png'
 import iconNoWishlist from '../../../assets/Icons/iconNoWishlist.png'
 import iconWishlist from '../../../assets/Icons/iconWishlist.png'
 import iconMisJuegos from '../../../assets/Icons/iconMisJuegos.png'
@@ -45,7 +46,6 @@ function InfoJuego({ setJuegos }) {
 
     const fetchData = async () => {
       try {
-        // 1. Datos del juego
         const resJuego = await fetch(
           `http://localhost:3000/api/games/games/${id}`
         )
@@ -53,7 +53,6 @@ function InfoJuego({ setJuegos }) {
           throw new Error('Error al obtener los datos del juego')
         let dataJuego = await resJuego.json()
 
-        // 2. Relación usuario-juego
         const resUserRelacion = await fetch(
           `http://localhost:3000/api/dataUser/usuario/${userId}`
         )
@@ -162,7 +161,7 @@ function InfoJuego({ setJuegos }) {
     setReseñas((prev) => [nuevaResenia, ...prev])
   }
 
-  // 🟢 Maneja el envío de una respuesta
+  // Maneja el envío de una respuesta
   const handleEnviarRespuesta = async (reseñaId, textoRespuesta) => {
     if (!user?._id && !user?.id) {
       alert('Debes iniciar sesión para responder.')
@@ -186,7 +185,7 @@ function InfoJuego({ setJuegos }) {
 
       const dataActualizada = await res.json()
 
-      // 🟢 Actualiza reseñas localmente
+      // Actualiza reseñas localmente
       setReseñas((prev) =>
         prev.map((r) => (r._id === dataActualizada._id ? dataActualizada : r))
       )
@@ -209,7 +208,7 @@ function InfoJuego({ setJuegos }) {
         className="portada-info"
       />
       <h1>{juego.titulo}</h1>
-      <p>{juego.descripcion}</p>
+      <p className="subtitle">{juego.descripcion}</p>
       <p>
         <strong>Género:</strong> {juego.genero}
       </p>
@@ -273,46 +272,68 @@ function InfoJuego({ setJuegos }) {
       />
 
       {/* Lista de reseñas */}
-      <div>
+      <div className="reseña">
         <h3>Reseñas de usuarios</h3>
         {reseñas.length === 0 && <p>No hay reseñas aún.</p>}
 
         {reseñas.map((r) => (
-          <div key={r._id} className="reseña-card">
-            <p>
-              <strong>{r.usuarioId?.nombre || 'Anónimo'}</strong> - {r.puntuacion}{' '}
-              <img src={iconReview} alt={iconReview} className="iconReview" />
-            </p>
-            <p>{r.textoResenia}</p>
-            <p>
-              Horas jugadas: {r.horasJugadas} | Dificultad: {r.dificultad} | Recomendación:{' '}
-              {r.recomendaria ? 'Sí' : 'No'}
-            </p>
-
-            {/* 🟢 Botón responder */}
-            <button
-              className="btn-responder"
-              onClick={() => setReseniaSeleccionada(r)}
-            >
-              Responder
-            </button>
-
-            {/* 🟢 Mostrar respuestas */}
-            {r.respuestas && r.respuestas.length > 0 && (
-              <div className="respuestas-lista">
-                {r.respuestas.map((resp, i) => (
-                  <div key={i} className="respuesta-item">
-                    <p>
-                      <strong>{resp.usuarioId?.nombre || 'Anónimo'}:</strong> {resp.texto}
-                    </p>
+          <div key={r._id} className="reseña-item">
+            <details className="reseña-details">
+              <summary className="reseña-summary">
+                  <div className="reseña-info">
+                    <strong className="reseña-titulo">
+                      {r.usuarioId?.nombre || 'Anónimo'}
+                    </strong>
+                    <div className="grimorios-puntuacion">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <img
+                          key={n}
+                          src={
+                            n <= r.puntuacion ? iconGrimorio : iconGrimorioVacio
+                          }
+                          alt={`grimorio ${
+                            n <= r.puntuacion ? 'activo' : 'vacío'
+                          }`}
+                          className="grimorio"
+                        />
+                      ))}
+                    </div>
                   </div>
-                ))}
+
+                  <button
+                    className="btn-responder"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setReseniaSeleccionada(r)
+                    }}
+                  >
+                    Responder
+                  </button>
+              </summary>
+              <div className="reseña-contenido">
+                <div className="info-reseña">
+                  <p>Asunto: {r.dificultad || 'No especificada'}</p>
+                  <p className="hr-jugadas">Horas jugadas: {r.horasJugadas}</p>
+                </div>
+                <p className="reseña-texto">{r.textoResenia}</p>
+
+                {r.respuestas?.length > 0 && (
+                  <div className="reseña-respuestas">
+                    {r.respuestas.map((resp, i) => (
+                      <div key={i} className="respuesta-item">
+                        <strong>
+                          {resp.usuarioId?.nombre || 'Usuario anónimo'}:
+                        </strong>{' '}
+                        {resp.texto}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            </details>
           </div>
         ))}
 
-        {/* 🟢 Modal para responder */}
         {reseniaSeleccionada && (
           <Respuesta
             reseña={reseniaSeleccionada}
@@ -326,4 +347,3 @@ function InfoJuego({ setJuegos }) {
 }
 
 export default InfoJuego
-

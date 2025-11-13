@@ -51,7 +51,10 @@ function MisJuegos() {
 
   if (error) return <div className="mis-juegos">Error{error}</div>
   if (juegos.length === 0)
-    return <div className="mis-juegos">No tienes juegos aún.</div>
+    return (
+      <div className="mis-juegos" id="error">No tienes juegos aún.
+      </div>
+    )
 
   return (
     <div className="mis-juegos">
@@ -119,7 +122,7 @@ function MisJuegos() {
         <button
           className="button-navegate"
           onClick={(e) => {
-            e.stopPropagation() // Evita que se dispare el onClick del slide
+            e.stopPropagation() 
             navigate(`/biblioteca`)
           }}
         >

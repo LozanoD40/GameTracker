@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import iconGrimorio from '../../../assets/Icons/iconGrimorio.png'
+import iconGrimorioVacio from '../../../assets/Icons/iconGrimorioVacio.png'
 
 function FormularioResenias({
   juegoId,
@@ -6,15 +8,14 @@ function FormularioResenias({
   nombreUsuario,
   onReseniaEnviada,
 }) {
-  const [puntuacion, setPuntuacion] = useState(5)
+  const [puntuacion, setPuntuacion] = useState(0)
   const [textoResenia, setTextoResenia] = useState('')
   const [horasJugadas, setHorasJugadas] = useState(0)
   const [dificultad, setDificultad] = useState('')
   const [recomendaria, setRecomendaria] = useState(true)
   const [mensaje, setMensaje] = useState('')
   const [cargando, setCargando] = useState(false)
-  const [respuestas, setRespuestas] = useState([]) // Respuestas asociadas a la reseña
-
+  const [respuestas, setRespuestas] = useState([])
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (textoResenia.trim().length < 5) {
@@ -44,10 +45,10 @@ function FormularioResenias({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al enviar resenia')
 
-      setMensaje('Reseña enviada correctamente ✅')
+      setMensaje('Reseña enviada correctamente')
 
       // Limpiar campos
-      setPuntuacion(5)
+      setPuntuacion(0)
       setTextoResenia('')
       setHorasJugadas(0)
       setDificultad('')
@@ -117,20 +118,6 @@ function FormularioResenias({
       <h3>Escribe tu reseña</h3>
       <form onSubmit={handleSubmit}>
         <label>
-          Puntuación:
-          <select
-            value={puntuacion}
-            onChange={(e) => setPuntuacion(Number(e.target.value))}
-          >
-            {[1, 2, 3, 4, 5].map((n) => (
-              <option key={n} value={n}>
-                {n} ⭐
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
           Reseña:
           <textarea
             value={textoResenia}
@@ -139,35 +126,52 @@ function FormularioResenias({
           />
         </label>
 
-        <label>
-          Horas jugadas:
-          <input
-            type="number"
-            value={horasJugadas}
-            onChange={(e) => setHorasJugadas(Number(e.target.value))}
-            min={0}
-          />
-        </label>
+        <div className="datos-juego">
+          <label>
+            Asunto:
+            <input
+              type="text"
+              value={dificultad}
+              onChange={(e) => setDificultad(e.target.value)}
+              placeholder="Explicacion"
+            />
+          </label>
+          <label>
+            Horas jugadas:
+            <input
+              type="number"
+              value={horasJugadas}
+              onChange={(e) => setHorasJugadas(Number(e.target.value))}
+              min={0}
+            />
+          </label>
+        </div>
 
-        <label>
-          Asunto:
-          <input
-            type="text"
-            value={dificultad}
-            onChange={(e) => setDificultad(e.target.value)}
-            placeholder="Explicacion"
-          />
-        </label>
-
-        <label>
-          <input
-            type="checkbox"
-            checked={recomendaria}
-            onChange={(e) => setRecomendaria(e.target.checked)}
-            className='checkbox-magic'
-          />
-          Recomendaría el juego
-        </label>
+        <div className="recomendarias">
+          <label className="label-puntuacion">
+            Puntuación:
+            <div className="rating">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <img
+                  key={n}
+                  src={n <= puntuacion ? iconGrimorio : iconGrimorioVacio}
+                  alt={`${n} grmorio`}
+                  onClick={() => setPuntuacion(n)}
+                  className="grimorio"
+                />
+              ))}
+            </div>
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={recomendaria}
+              onChange={(e) => setRecomendaria(e.target.checked)}
+              className="checkbox-magic"
+            />
+            Recomendaría el juego
+          </label>
+        </div>
 
         <button type="submit" disabled={cargando}>
           {cargando ? 'Enviando...' : 'Enviar reseña'}
