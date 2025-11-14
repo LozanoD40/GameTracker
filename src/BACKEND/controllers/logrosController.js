@@ -1,4 +1,3 @@
-// controllers/logrosController.js
 import Datauser from '../models/Datauser.js'
 import Achievement from '../models/Achievement.js'
 

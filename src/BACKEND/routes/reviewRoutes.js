@@ -84,17 +84,23 @@ router.post('/:id/responder', async (req, res) => {
     const { respuesta, usuarioId } = req.body
     if (!respuesta || !usuarioId)
       return res.status(400).json({ error: 'Faltan datos' })
-    const review = await Review.findById(req.params.id)
 
+    const review = await Review.findById(req.params.id)
     if (!review) return res.status(404).json({ error: 'Reseña no encontrada' })
+
+    // Guardar la respuesta
     review.respuestas.push({ texto: respuesta, usuarioId, fecha: new Date() })
     await review.save()
 
-    // Populate consistente con los demás
+    // Desbloquear logro de "Consejero Real"
+    await procesarLogrosAutomaticos(usuarioId, 'respuestaComentario')
+
+    // Populate consistente
     const actualizado = await Review.findById(req.params.id)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
+
     res.status(200).json(actualizado)
   } catch (err) {
     res.status(500).json({ error: err.message })

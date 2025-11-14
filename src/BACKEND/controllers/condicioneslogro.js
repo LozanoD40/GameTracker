@@ -99,3 +99,4 @@ export const procesarLogrosAutomaticos = async (
     console.error('❌ Error verificando logros automáticos:', err)
   }
 }
+
