@@ -2,7 +2,7 @@ import express from 'express'
 import Review from '../models/Review.js'
 import Datauser from '../models/Datauser.js'
 import Game from '../models/Game.js'
-import fetch from 'node-fetch'
+import { procesarLogrosAutomaticos } from '../controllers/condicioneslogro.js'
 
 const router = express.Router()
 
@@ -50,32 +50,19 @@ router.post('/', async (req, res) => {
       await dataUser.save()
     }
 
+    // Logro por NUEVA reseña
+    await procesarLogrosAutomaticos(usuarioId, 'nuevaReseña')
+
+    // Logro por 10 reseñas
+    if (dataUser.interaccion.length === 10) {
+      await procesarLogrosAutomaticos(usuarioId, 'muchaReseña')
+    }
+
     // Populate limpio (solo una vez por campo)
     const reseñaCompleta = await Review.findById(nueva._id)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
-
-    // Intentar otorgar el logro “Eco del Héroe Caído”
-    try {
-      // Contar cuántas reseñas tiene el usuario (para evitar otorgarlo más de una vez)
-      const cantidadReseñas = await Review.countDocuments({ usuarioId })
-
-      if (cantidadReseñas === 1) {
-        //  Solo se otorga la primera vez
-        await fetch('http://localhost:3000/api/logros/desbloquear', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            usuarioId,
-            logroNombre: 'Eco del Héroe Caído',
-          }),
-        })
-        console.log('Logro “Eco del Héroe Caído” otorgado automáticamente.')
-      }
-    } catch (err) {
-      console.error('Error al intentar otorgar logro:', err.message)
-    }
 
     res.status(201).json(reseñaCompleta)
   } catch (err) {
@@ -95,7 +82,7 @@ router.post('/:id/responder', async (req, res) => {
     review.respuestas.push({ texto: respuesta, usuarioId, fecha: new Date() })
     await review.save()
 
-    // ✅ Populate consistente con los demás
+    // Populate consistente con los demás
     const actualizado = await Review.findById(req.params.id)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
@@ -105,7 +92,8 @@ router.post('/:id/responder', async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 })
-// 🔹 Obtener todas las reseñas (con filtros)
+
+// Obtener todas las reseñas (con filtros)
 router.get('/', async (req, res) => {
   try {
     const { juego, usuario } = req.query
@@ -113,7 +101,7 @@ router.get('/', async (req, res) => {
     if (juego) filtro.juegoId = juego
     if (usuario) filtro.usuarioId = usuario
 
-    // ✅ Populate limpio y uniforme
+    // Populate limpio y uniforme
     const reviews = await Review.find(filtro)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
@@ -126,7 +114,6 @@ router.get('/', async (req, res) => {
 })
 
 // 🔹 Obtener reseñas de un juego específico
-
 router.get('/game/:id', async (req, res) => {
   try {
     const reviews = await Review.find({ juegoId: req.params.id })

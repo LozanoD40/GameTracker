@@ -1,4 +1,3 @@
-// routes/logrosRoutes.js
 import express from 'express'
 import {
   otorgarLogro,
