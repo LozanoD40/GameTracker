@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import iconGrimorio from '../../../assets/Icons/iconGrimorio.png'
 import iconGrimorioVacio from '../../../assets/Icons/iconGrimorioVacio.png'
 
@@ -16,6 +16,7 @@ function FormularioResenias({
   const [mensaje, setMensaje] = useState('')
   const [cargando, setCargando] = useState(false)
   const [respuestas, setRespuestas] = useState([])
+  
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (textoResenia.trim().length < 5) {
@@ -66,52 +67,7 @@ function FormularioResenias({
     }
   }
 
-  // Función para obtener el título de un usuario
-  const obtenerTituloUsuario = async (usuarioId) => {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/dataUser/usuario/${usuarioId}/logros`
-      )
-      if (!res.ok) return 'Aventurero Novato'
-      const logros = await res.json()
-      if (Array.isArray(logros) && logros.length > 0) {
-        const ultimoLogro = logros[logros.length - 1]
-        return ultimoLogro.nombre || 'Aventurero Novato'
-      }
-      return 'Aventurero Novato'
-    } catch (err) {
-      console.error('Error al obtener título:', err)
-      return 'Aventurero Novato'
-    }
-  }
 
-  // Componente para renderizar respuestas
-  const RespuestasList = ({ respuestas }) => {
-    const [respuestasConTitulo, setRespuestasConTitulo] = useState([])
-
-    useEffect(() => {
-      const fetchTitulos = async () => {
-        const updated = await Promise.all(
-          respuestas.map(async (r) => {
-            const titulo = await obtenerTituloUsuario(r.usuarioId)
-            return { ...r, tituloUsuario: titulo }
-          })
-        )
-        setRespuestasConTitulo(updated)
-      }
-      if (respuestas.length > 0) fetchTitulos()
-    }, [respuestas])
-
-    return (
-      <div className="reseña-container">
-        {respuestasConTitulo.map((r) => (
-          <div key={r._id} className="respuesta-item">
-            <strong>{r.nombreUsuario}</strong> ({r.tituloUsuario}): {r.texto}
-          </div>
-        ))}
-      </div>
-    )
-  }
 
   return (
     <div className="reseña-container">

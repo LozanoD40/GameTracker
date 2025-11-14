@@ -7,7 +7,7 @@ import {
 
 const router = express.Router()
 
-// Otorgar un logro manualmente
+// Otorgar un logro 
 router.post('/usuario/:usuarioId/logros/:logroId', otorgarLogro)
 
 // Desbloquear logro por nombre

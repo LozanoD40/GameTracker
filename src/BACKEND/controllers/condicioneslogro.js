@@ -14,7 +14,7 @@ const reglasLogros = {
   },
 
   'Sabiduría del Archivo Perdido': {
-    evento: 'muchaReseña',
+    evento: 'muchaResena',
     condicion: (data) => (data.totalResenas || 0) >= 10,
   },
 
@@ -58,7 +58,8 @@ const reglasLogros = {
 export const procesarLogrosAutomaticos = async (
   usuarioId,
   evento,
-  juegoId = null
+  juegoId = null,
+  dataExtra = {}
 ) => {
   try {
     const filtro = juegoId ? { usuarioId, juegoId } : { usuarioId }
@@ -82,8 +83,8 @@ export const procesarLogrosAutomaticos = async (
 
       const cumple =
         logro.nombre === 'Coleccionador de logros'
-          ? regla.condicion(data, logros.length)
-          : regla.condicion(data)
+          ? regla.condicion({ ...data.toObject(), ...dataExtra }, logros.length)
+          : regla.condicion({ ...data.toObject(), ...dataExtra })
 
       if (cumple) {
         data.logrosDesbloqueados.push(logro._id)

@@ -39,7 +39,7 @@ function Perfil() {
           <Estadisticas stats={stats} />
         </div>
       ) : (
-        <p className="cargando">cargando ...</p>
+        <p className="cargando">Cargando tus estadisticas ...</p>
       )}
       <div className="hr"></div>
       <MisJuegos />

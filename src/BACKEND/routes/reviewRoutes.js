@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
     const dataUser = await Datauser.findOne({ usuarioId, juegoId })
     if (!dataUser)
       return res.status(400).json({
-        error: 'El usuario no tiene datos asociados a este juego',
+        error: 'Solo puede reseñar un juego si lo ha jugado',
       })
 
     // Crear reseña
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 
     await nueva.save()
 
-    // Asociar reseña al dataUser
+    // Asociar reseña al DataUser
     if (!dataUser.interaccion.includes(nueva._id)) {
       dataUser.interaccion.push(nueva._id)
       await dataUser.save()
@@ -53,12 +53,19 @@ router.post('/', async (req, res) => {
     // Logro por NUEVA reseña
     await procesarLogrosAutomaticos(usuarioId, 'nuevaReseña')
 
-    // Logro por 10 reseñas
-    const totalResenasUsuario = await Review.countDocuments({ usuarioId })
-    
-    await procesarLogrosAutomaticos(usuarioId, 'muchaReseña', {
-      totalResenas: totalResenasUsuario,
+    // Obtener estadísticas del usuario desde Datauser
+    const statsRes = await fetch(
+      `http://localhost:3000/api/dataUser/usuario/${usuarioId}/stats`
+    )
+    const stats = await statsRes.json()
+
+    const totalResenas = stats.reseñasDadas || 0 
+
+    // Logro por 10 reseñas usando totalResenas
+    await procesarLogrosAutomaticos(usuarioId, 'muchaResena', null, {
+      totalResenas,
     })
+
     // Populate limpio (solo una vez por campo)
     const reseñaCompleta = await Review.findById(nueva._id)
       .populate('usuarioId', 'nombre')
@@ -114,7 +121,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// 🔹 Obtener reseñas de un juego específico
+// Obtener reseñas de un juego específico
 router.get('/game/:id', async (req, res) => {
   try {
     const reviews = await Review.find({ juegoId: req.params.id })
@@ -128,7 +135,7 @@ router.get('/game/:id', async (req, res) => {
   }
 })
 
-// 🔹 Eliminar reseña
+// Eliminar reseña
 router.delete('/:id', async (req, res) => {
   try {
     const review = await Review.findById(req.params.id)

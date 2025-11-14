@@ -21,7 +21,7 @@ function Estadisticas({ stats }) {
       stats.tiempoActivo / 100,
       stats.misionesCompletadas / 100,
       stats.cantidaddeamigos / 100,
-      stats.logrosObtenidos / 50,
+      stats.logrosObtenidos / 100,
       stats.reseñasDadas / 100,
     ]
 
@@ -84,7 +84,7 @@ function Estadisticas({ stats }) {
             Misiones completadas: {stats.misionesCompletadas}
           </div>
           <div className="stat-box glow">
-            Tesoros descubiertos: {stats.tesorosDescubiertos}
+            Reseña Escritas: {stats.reseñasDadas}
           </div>
           <div className="stat-box glow">
             Logros obtenidos: {stats.logrosObtenidos}
