@@ -14,8 +14,8 @@ const reglasLogros = {
   },
 
   'Sabiduría del Archivo Perdido': {
-    evento: 'nuevaReseña',
-    condicion: (data) => (data.interaccion?.length || 0) >= 10,
+    evento: 'muchaReseña',
+    condicion: (data) => (data.totalResenas || 0) >= 10,
   },
 
   'Jugador principiante': {

@@ -62,7 +62,7 @@ function Status() {
 
         const [statsRes, logrosRes, generoRes] = await Promise.all([
           fetch(`http://localhost:3000/api/dataUser/usuario/${uid}/stats`),
-          fetch(`http://localhost:3000/api/dataUser/usuario/${uid}/logros`),
+          fetch(`http://localhost:3000/api/usuario/${uid}/logros`),
           fetch(`http://localhost:3000/api/dataUser/usuario/${uid}`),
         ])
 
@@ -223,7 +223,7 @@ function Status() {
             Level: {lvl}
             <progress
               className="level-progress"
-              max={120}
+              max={80}
               value={lvl}
             ></progress>
           </div>

@@ -13,9 +13,7 @@ function MisLogros() {
       return
     }
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/dataUser/usuario/${uid}/logros`
-      )
+      const res = await fetch(`http://localhost:3000/api/usuario/${uid}/logros`)
       if (!res.ok) throw new Error(await res.text())
 
       const data = await res.json()

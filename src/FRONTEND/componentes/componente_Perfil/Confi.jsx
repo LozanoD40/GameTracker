@@ -226,7 +226,7 @@ function Confi() {
         }
 
         const resUnlocked = await fetch(
-          `http://localhost:3000/api/dataUser/usuario/${uid}/logros`
+          `http://localhost:3000/api/usuario/${uid}/logros`
         )
         if (!resUnlocked.ok)
           throw new Error('Error al cargar logros desbloqueados')

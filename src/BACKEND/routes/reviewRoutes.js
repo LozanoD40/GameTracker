@@ -54,10 +54,11 @@ router.post('/', async (req, res) => {
     await procesarLogrosAutomaticos(usuarioId, 'nuevaReseña')
 
     // Logro por 10 reseñas
-    if (dataUser.interaccion.length === 10) {
-      await procesarLogrosAutomaticos(usuarioId, 'muchaReseña')
-    }
-
+    const totalResenasUsuario = await Review.countDocuments({ usuarioId })
+    
+    await procesarLogrosAutomaticos(usuarioId, 'muchaReseña', {
+      totalResenas: totalResenasUsuario,
+    })
     // Populate limpio (solo una vez por campo)
     const reseñaCompleta = await Review.findById(nueva._id)
       .populate('usuarioId', 'nombre')

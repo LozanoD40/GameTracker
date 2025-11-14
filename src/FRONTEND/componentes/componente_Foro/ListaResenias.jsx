@@ -21,7 +21,6 @@ function ListaResenias() {
       .then((res) => res.json())
       .then((data) => {
         setReseñas(data)
-        console.log('reviews raw:', data)
         setLoading(false)
       })
       .catch((err) => {
@@ -65,7 +64,7 @@ function ListaResenias() {
       const data = await res.json()
 
       if (res.ok) {
-        // ✅ data ya contiene la reseña completa y actualizada
+        // data ya contiene la reseña completa y actualizada
         setReseñas((prev) => prev.map((r) => (r._id === idReseña ? data : r)))
       } else {
         console.error('Error al responder:', data.error)
