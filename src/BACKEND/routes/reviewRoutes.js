@@ -20,17 +20,18 @@ router.post('/', async (req, res) => {
       recomendaria,
     } = req.body
 
-    // Verificar existencia del juego y usuario
+    // Validación de juego
     const game = await Game.findById(juegoId)
     if (!game) return res.status(404).json({ error: 'Juego no encontrado' })
 
+    // Validar que existe DataUser
     const dataUser = await Datauser.findOne({ usuarioId, juegoId })
     if (!dataUser)
       return res.status(400).json({
         error: 'Solo puede reseñar un juego si lo ha jugado',
       })
 
-    // Crear reseña
+    // Crear la reseña
     const nueva = new Review({
       juegoId,
       usuarioId,
@@ -44,39 +45,37 @@ router.post('/', async (req, res) => {
 
     await nueva.save()
 
-    // Asociar reseña al DataUser
+    // Evitar duplicados en interaccion
     if (!dataUser.interaccion.includes(nueva._id)) {
       dataUser.interaccion.push(nueva._id)
       await dataUser.save()
     }
+    
+    const totalResenas = dataUser.interaccion.length
 
-    // Logro por NUEVA reseña
-    await procesarLogrosAutomaticos(usuarioId, 'nuevaReseña')
+    // Logros por reseña
+    await procesarLogrosAutomaticos(usuarioId, 'nuevaResena', null, {
+      totalResenas,
+    })
 
-    // Obtener estadísticas del usuario desde Datauser
-    const statsRes = await fetch(
-      `http://localhost:3000/api/dataUser/usuario/${usuarioId}/stats`
-    )
-    const stats = await statsRes.json()
-
-    const totalResenas = stats.reseñasDadas || 0 
-
-    // Logro por 10 reseñas usando totalResenas
     await procesarLogrosAutomaticos(usuarioId, 'muchaResena', null, {
       totalResenas,
     })
 
-    // Populate limpio (solo una vez por campo)
+    // Populate final
     const reseñaCompleta = await Review.findById(nueva._id)
       .populate('usuarioId', 'nombre')
       .populate('juegoId', 'titulo imagenPortada')
       .populate('respuestas.usuarioId', 'nombre')
 
     res.status(201).json(reseñaCompleta)
+
   } catch (err) {
+    console.error(err)
     res.status(400).json({ error: err.message })
   }
 })
+
 
 // Agregar respuesta a una reseña
 router.post('/:id/responder', async (req, res) => {
@@ -92,8 +91,15 @@ router.post('/:id/responder', async (req, res) => {
     review.respuestas.push({ texto: respuesta, usuarioId, fecha: new Date() })
     await review.save()
 
-    // Desbloquear logro de "Consejero Real"
-    await procesarLogrosAutomaticos(usuarioId, 'respuestaComentario')
+    // 🔥 Contar cuántas respuestas ha hecho el usuario en TODAS las reseñas
+    const respuestasTotales = await Review.countDocuments({
+      'respuestas.usuarioId': usuarioId,
+    })
+
+    // LOGRO: Responder comentario (pasamos respuestasTotales)
+    await procesarLogrosAutomaticos(usuarioId, 'respuestaComentario', null, {
+      respuestasTotales,
+    })
 
     // Populate consistente
     const actualizado = await Review.findById(req.params.id)

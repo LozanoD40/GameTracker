@@ -1,10 +1,10 @@
-/*--------GENERAL----------*/
+/*------------------------GENERAL------------------------------*/
 .foro {
   display: grid;
   grid-template-columns: 3fr 1fr;
 }
 
-/*--------NOTICIAS----------*/
+/*-----------------------NOTICIAS------------------------------*/
 .notice {
   display: flex;
   flex-direction: column;
@@ -120,7 +120,7 @@
   color: var(--color-text-muted);
 }
 
-/* --- LISTA RESEÑAS --- */
+/* ----------------- LISTA RESEÑAS ------------------------- */
 .lista-reseñas-container {
   max-width: 100%;
   align-content: flex-start;
@@ -148,7 +148,50 @@
   opacity: 0.8;
 }
 
-/*--------------FILTRO--------------------- */
+.btn-amigo {
+  display: flex;
+  flex-direction: row;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.btn-amigo:hover {
+  transform: translateX(5px);
+}
+
+.btn-amigo p:hover {
+  color: var(--color-text-hover);
+}
+
+.btn-amigo::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1;
+  background: var(--color-outline);
+  color: var(--color-text-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  transform: translateX(90%) translateY(-5%);
+  z-index: 50;
+}
+
+.btn-amigo:focus {
+  outline: 2px solid rgba(0, 120, 212, 0.3);
+  outline-offset: 2px;
+}
+.btn-amigo:hover::after,
+.btn-amigo:focus::after {
+  opacity: 1;
+}
+
+/*------------------FILTRO--------------------- */
 .lista-reseñas-filtro {
   margin-bottom: 30px;
   padding: 15px;
@@ -431,7 +474,7 @@
 }
 
 @media (max-width: 900px) {
-  .foro{
+  .foro {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
