@@ -6,8 +6,29 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores(['dist']),
+
+  // ----------------------------
+  // CONFIGURACIÓN PARA BACKEND
+  // ----------------------------
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['src/BACKEND/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      globals: {
+        ...globals.node, 
+      },
+    },
+    rules: {
+      // Puedes agregar reglas específicas del backend aquí
+    },
+  },
+
+  // ----------------------------
+  // CONFIGURACIÓN PARA FRONTEND
+  // ----------------------------
+  {
+    files: ['src/FRONTEND/**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs['recommended-latest'],
@@ -15,11 +36,13 @@ export default defineConfig([
     ],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+      },
+      globals: {
+        ...globals.browser, 
       },
     },
     rules: {
